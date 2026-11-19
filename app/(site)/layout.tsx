@@ -27,6 +27,8 @@ export async function generateMetadata(): Promise<Metadata> {
   const l = lang;
   return {
     metadataBase: new URL(siteUrl),
+    // Trial copy: keep it out of search results so it never competes with ndesc.com.
+    robots: { index: false, follow: false },
     title: { default: tr(site.name, l), template: `%s | ${tr(site.name, l)}` },
     icons: {
       icon: [

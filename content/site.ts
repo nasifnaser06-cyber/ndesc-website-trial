@@ -47,7 +47,8 @@ export const site = {
    * notice. Set false (live) on 20 Nov 2026, using the sheet in nasifnaser06@gmail.com.
    */
   registration: {
-    endpoint: "https://script.google.com/macros/s/AKfycby5E_2gLVJd30XMD5YUu3iQ_eyZdWfl3UXnWXrpU6yVcGMa8G_pszExSbXE8TAP-KuW/exec" as string | null,
+    // Trial copy: disconnected so test sign-ups never reach the real registration sheet.
+    endpoint: null as string | null,
     trial: false,
     bkash: "[club bKash number]",
     nagad: null as string | null,
