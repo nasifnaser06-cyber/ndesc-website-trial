@@ -14,6 +14,8 @@ export const photosphereBanner = {
 
 export const photosphere = {
   name: "Photosphere 7.0",
+  brief:
+    "Photography, poster design and AI art about the Earth and the cosmos. Submit your best work online for free. Selected pieces are framed and shown to everyone at NESSX.",
   intro: [
     "Photosphere 7.0 is the visual art competition and exhibition of NESSX, the 10th National Earth and Space Summit. The artworks and photographs you submit go on display for everyone at the summit. Photography, design or AI art: choose how you express yourself, and show us how you capture our universe.",
     "As the visual heart of NESSX, Photosphere brings the wonders of nature and outer space to a wider audience through the lens and imagination of talented photographers and artists.",

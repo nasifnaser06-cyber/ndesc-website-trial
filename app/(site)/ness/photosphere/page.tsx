@@ -3,7 +3,7 @@ import { type Locale, path } from "@/lib/i18n";
 import { meta } from "@/lib/view";
 import { site } from "@/content/site";
 import { photosphere, photosphereBanner } from "@/content/photosphere";
-import { Banner, ExternalLink, FormButton, PageHead } from "@/components/bits";
+import { Banner, ExternalLink, FormButton, Stars } from "@/components/bits";
 
 const title = { en: "Photosphere 7.0", bn: "Photosphere 7.0" };
 const lead = {
@@ -23,13 +23,27 @@ export default async function Photosphere() {
 
   return (
     <>
-      <PageHead
-        lang={lang}
-        kicker={{ en: "NESSX 2027", bn: "NESSX ২০২৭" }}
-        title={title}
-        lead={lead}
-        crumbs={[{ label: { en: "NESS 2027", bn: "NESS ২০২৭" }, to: "/ness" }]}
-      />
+      {/* Hero, laid out like the NESS 2027 page: a short brief, key facts, then the two actions. */}
+      <section className="sky" aria-labelledby="ps-h1">
+        <Stars />
+        <div className="wrap sky-inner" style={{ paddingBlock: "var(--s8) var(--s7)" }}>
+          <div className="sky-copy">
+            <p className="label">Visual art competition and exhibition of NESSX, 2027</p>
+            <h1 id="ps-h1">{p.name}</h1>
+            <p>{p.brief}</p>
+            <dl className="facts">
+              <div><dt>Exhibition</dt><dd>28–30 January 2027</dd></div>
+              <div><dt>Venue</dt><dd>Notre Dame College, Motijheel, Dhaka</dd></div>
+              <div><dt>Entry</dt><dd>Free to submit</dd></div>
+            </dl>
+            <div className="actions">
+              <a className="btn" href="#ps-submit">Register now</a>
+              <Link className="btn btn-secondary" href={`${path(lang, "/ness")}#segments`}>See other segments</Link>
+            </div>
+            <p className="small">Up to 5 works per segment. JPG files, up to 20 MB each.</p>
+          </div>
+        </div>
+      </section>
 
       <div className="wrap ps-page">
         <figure className="banner-figure">
@@ -37,18 +51,8 @@ export default async function Photosphere() {
         </figure>
 
         <section aria-labelledby="ps-about" className="ps-intro">
-          <h2 id="ps-about" className="visually-hidden">About Photosphere 7.0</h2>
+          <h2 id="ps-about">About Photosphere 7.0</h2>
           {p.intro.map((t) => <p key={t}>{t}</p>)}
-          <dl className="facts">
-            <div><dt>Entry</dt><dd>Free to submit</dd></div>
-            <div><dt>How many</dt><dd>Up to 5 per segment</dd></div>
-            <div><dt>Files</dt><dd>JPG, up to 20 MB each</dd></div>
-            <div><dt>Exhibition</dt><dd>At NESSX, 28–30 January 2027</dd></div>
-          </dl>
-          <div className="actions">
-            <a className="btn" href="#ps-submit">Submit your work</a>
-            <a className="btn btn-secondary" href="#ps-rules">Read the rules</a>
-          </div>
         </section>
 
         <section aria-labelledby="ps-cats">

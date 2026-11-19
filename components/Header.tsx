@@ -9,14 +9,14 @@ import { site } from "@/content/site";
 import { Logo } from "./bits";
 import IceButton from "./IceButton";
 
+// Gallery and Resources left the header on 20 Nov 2026 (the pages still exist).
 const navItems = [
-  { key: "about", to: "/about" },
-  { key: "executives", to: "/executives" },
   { key: "ness", to: "/ness" },
+  { key: "photosphere", to: "/ness/photosphere" },
   { key: "events", to: "/events" },
-  { key: "resources", to: "/resources" },
   { key: "news", to: "/news" },
-  { key: "gallery", to: "/gallery" },
+  { key: "executives", to: "/executives" },
+  { key: "about", to: "/about" },
 ] as const;
 
 /** Strip the language from the current URL, e.g. /bn/events/ -> /events (English pages have no prefix). */
@@ -69,7 +69,10 @@ export default function Header({ lang }: { lang: Locale }) {
   }, []);
   useEffect(() => setHidden(false), [sub]);
 
-  const isActive = (to: string) => sub === to || sub.startsWith(`${to}/`);
+  // The longest matching item wins, so /ness/photosphere marks Photosphere, not NESS 2027.
+  const matches = (to: string) => sub === to || sub.startsWith(`${to}/`);
+  const best = [...navItems.map((i) => i.to as string), "/contact"].filter(matches).sort((a, b) => b.length - a.length)[0];
+  const isActive = (to: string) => to === best;
 
   return (
     <header className="site-header" ref={header} data-hidden={hidden && !open}>

@@ -5,6 +5,7 @@ export const ui = {
   nav: {
     about: { en: "About", bn: "আমাদের কথা" },
     ness: { en: "NESS 2027", bn: "NESS ২০২৭" },
+    photosphere: { en: "Photosphere 7.0", bn: "Photosphere 7.0" },
     events: { en: "Events", bn: "ইভেন্ট" },
     resources: { en: "Resources", bn: "রিসোর্স" },
     news: { en: "News", bn: "খবর" },
