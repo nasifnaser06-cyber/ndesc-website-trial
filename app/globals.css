@@ -233,10 +233,7 @@ body:has(.ness-bg) .site-footer {
   --line: rgba(15, 30, 54, 0.16);
   --edge: #5f7192;
   color: var(--starlight);
-  /* Soft white glow behind text, so it stays readable over the darker parts of the picture. */
-  text-shadow: 0 0 2px rgba(255, 255, 255, 0.55), 0 0 14px rgba(255, 255, 255, 0.6);
 }
-body:has(.ness-bg) main .btn { text-shadow: none; }
 body:has(.ness-bg) main .btn { background: #8fd3a6; border-color: #8fd3a6; color: var(--night); }
 body:has(.ness-bg) main .btn:hover { background: #b9e6c8; border-color: #b9e6c8; color: var(--night); }
 body:has(.ness-bg) main .btn-secondary { background: rgba(255, 255, 255, 0.45); border-color: var(--sprout); color: var(--sprout); }
