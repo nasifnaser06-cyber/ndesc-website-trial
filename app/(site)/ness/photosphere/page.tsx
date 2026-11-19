@@ -3,7 +3,7 @@ import { type Locale, path } from "@/lib/i18n";
 import { meta } from "@/lib/view";
 import { site } from "@/content/site";
 import { photosphere, photosphereBanner } from "@/content/photosphere";
-import { Banner, ExternalLink, FormButton, Stars } from "@/components/bits";
+import { ExternalLink, FormButton, Stars } from "@/components/bits";
 
 const title = { en: "Photosphere 7.0", bn: "Photosphere 7.0" };
 const lead = {
@@ -29,7 +29,18 @@ export default async function Photosphere() {
         <div className="wrap sky-inner" style={{ paddingBlock: "var(--s8) var(--s7)" }}>
           <div className="sky-copy">
             <p className="label">Visual art competition and exhibition of NESSX, 2027</p>
-            <h1 id="ps-h1">{p.name}</h1>
+            <h1 id="ps-h1" className="ps-logo-h1">
+              {/* The Photosphere 7.0 logo stands in for the heading; its alt text is the heading's name. */}
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={`${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}/ness/ps7-logo-192.webp`}
+                srcSet={[96, 192, 288].map((h) => `${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}/ness/ps7-logo-${h}.webp ${h / 96}x`).join(", ")}
+                alt={p.name}
+                width={577}
+                height={96}
+                fetchPriority="high"
+              />
+            </h1>
             <p>{p.brief}</p>
             <dl className="facts">
               <div><dt>Exhibition</dt><dd>28–30 January 2027</dd></div>
@@ -40,16 +51,11 @@ export default async function Photosphere() {
               <a className="btn" href="#ps-submit">Register now</a>
               <Link className="btn btn-secondary" href={`${path(lang, "/ness")}#segments`}>See other segments</Link>
             </div>
-            <p className="small">Up to 5 works per segment. JPG files, up to 20 MB each.</p>
           </div>
         </div>
       </section>
 
       <div className="wrap ps-page">
-        <figure className="banner-figure">
-          <Banner lang={lang} {...photosphereBanner} priority />
-        </figure>
-
         <section aria-labelledby="ps-about" className="ps-intro">
           <h2 id="ps-about">About Photosphere 7.0</h2>
           {p.intro.map((t) => <p key={t}>{t}</p>)}
