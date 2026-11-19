@@ -11,7 +11,7 @@ import IceButton from "./IceButton";
 
 // Gallery and Resources left the header on 20 Nov 2026 (the pages still exist).
 const navItems = [
-  { key: "ness", to: "/ness" },
+  { key: "nessX", to: "/ness" },
   { key: "photosphere", to: "/ness/photosphere" },
   { key: "events", to: "/events" },
   { key: "news", to: "/news" },
@@ -69,7 +69,7 @@ export default function Header({ lang }: { lang: Locale }) {
   }, []);
   useEffect(() => setHidden(false), [sub]);
 
-  // The longest matching item wins, so /ness/photosphere marks Photosphere, not NESS 2027.
+  // The longest matching item wins, so /ness/photosphere marks Photosphere, not NESS X.
   const matches = (to: string) => sub === to || sub.startsWith(`${to}/`);
   const best = [...navItems.map((i) => i.to as string), "/contact"].filter(matches).sort((a, b) => b.length - a.length)[0];
   const isActive = (to: string) => to === best;

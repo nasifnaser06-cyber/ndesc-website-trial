@@ -5,6 +5,8 @@ export const ui = {
   nav: {
     about: { en: "About", bn: "আমাদের কথা" },
     ness: { en: "NESS 2027", bn: "NESS ২০২৭" },
+    /** Header label for the NESS page (Mahmud, 20 Nov 2026, trial). The footer keeps "NESS 2027". */
+    nessX: { en: "NESS X", bn: "NESS X" },
     photosphere: { en: "PS 7.0", bn: "PS 7.0" },
     events: { en: "Events", bn: "ইভেন্ট" },
     resources: { en: "Resources", bn: "রিসোর্স" },
