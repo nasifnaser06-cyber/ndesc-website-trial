@@ -2,7 +2,7 @@ import Link from "next/link";
 import { type Locale, tr, path } from "@/lib/i18n";
 import { meta } from "@/lib/view";
 import { site } from "@/content/site";
-import { PageHead, T, ExternalLink } from "@/components/bits";
+import { ContactLink, PageHead, T, ExternalLink } from "@/components/bits";
 
 const title = { en: "Contact", bn: "যোগাযোগ" };
 const lead = { en: "Questions about the summit, exhibiting, membership or press.", bn: "সামিট, প্রদর্শনী, সদস্যপদ বা সংবাদমাধ্যম বিষয়ে প্রশ্ন।" };
@@ -25,12 +25,14 @@ export default async function Contact() {
         <div className="contact-list">
           <div>
             <p className="label">{en ? "Email" : "ইমেইল"}</p>
-            <p>{site.email ? <a href={`mailto:${site.email}`}>{site.email}</a> : <T lang={lang} text={{ en: "[Club email, monitored by the moderator]", bn: "[ক্লাবের ইমেইল, মডারেটর দেখবেন]" }} />}</p>
+            <p>{site.email ? <ContactLink kind="email" value={site.email} lang={lang} /> : <T lang={lang} text={{ en: "[Club email, monitored by the moderator]", bn: "[ক্লাবের ইমেইল, মডারেটর দেখবেন]" }} />}</p>
           </div>
           <div>
             <p className="label">{en ? "Social" : "সোশ্যাল মিডিয়া"}</p>
-            <p><ExternalLink href={site.social.facebook} lang={lang}>Facebook: ndesc.official</ExternalLink></p>
-            <p><ExternalLink href={site.social.instagram} lang={lang}>Instagram: @ndesc.official</ExternalLink></p>
+            <ul className="contact-links">
+              <li><ContactLink kind="facebook" value={site.social.facebook} lang={lang} /></li>
+              <li><ContactLink kind="instagram" value={site.social.instagram} lang={lang} /></li>
+            </ul>
           </div>
           <div>
             <p className="label">{en ? "Address" : "ঠিকানা"}</p>

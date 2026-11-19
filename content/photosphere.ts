@@ -75,8 +75,8 @@ export const photosphere = {
     "How to pay will be announced after selection. Selected participants are told by email, at the address they gave in the form.",
   ],
   organizers: [
-    { name: "Avoy Sen Paean", role: "Organizer", phone: "+880 1572-928028", facebook: "https://www.facebook.com/share/1CLSD22oPH/" },
-    { name: "Farhan Labib Oykko", role: "Organizer", phone: "+880 1625-318144", facebook: "https://www.facebook.com/share/18k4XpfHXo/" },
+    { name: "Avoy Sen Paean", role: "Organizer", phone: "+880 1572-928028", facebook: "https://www.facebook.com/AvoySenPaean" },
+    { name: "Farhan Labib Oykko", role: "Organizer", phone: "+880 1625-318144", facebook: "https://www.facebook.com/FarhanOykko" },
   ],
   nessxFacebook: "https://www.facebook.com/share/1CEGvd4m2G/",
 };

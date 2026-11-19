@@ -196,3 +196,61 @@ export function Banner({ name, widths, alt, lang, sizes = "(min-width: 1280px) 1
     />
   );
 }
+
+/* Contact links with an icon (Lucide icons, ISC licence). Phone opens the dial pad, email opens a new
+   message, and Facebook and Instagram use normal https links: phones open the app when it is installed
+   and the website when it is not. */
+type ContactKind = "phone" | "email" | "facebook" | "instagram";
+
+const contactIcons: Record<ContactKind, ReactNode> = {
+  phone: <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />,
+  email: <><rect width="20" height="16" x="2" y="4" rx="2" /><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" /></>,
+  facebook: <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z" />,
+  instagram: <><rect width="20" height="20" x="2" y="2" rx="5" ry="5" /><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" /><line x1="17.5" x2="17.51" y1="6.5" y2="6.5" /></>,
+};
+
+const contactNames: Record<ContactKind, L> = {
+  phone: { en: "Call", bn: "কল করুন" },
+  email: { en: "Email", bn: "ইমেইল" },
+  facebook: { en: "Facebook", bn: "ফেসবুক" },
+  instagram: { en: "Instagram", bn: "ইনস্টাগ্রাম" },
+};
+
+export function ContactIcon({ kind }: { kind: ContactKind }) {
+  return (
+    <svg className="contact-icon" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" focusable="false">
+      {contactIcons[kind]}
+    </svg>
+  );
+}
+
+/** The username part of a Facebook or Instagram address, e.g. "ndesc.official". */
+export function handleOf(url: string) {
+  return url.replace(/^https?:\/\/(www\.)?[^/]+\//, "").replace(/[/?#].*$/, "");
+}
+
+export function ContactLink({ kind, value, lang, className }: { kind: ContactKind; value: string; lang: Locale; className?: string }) {
+  const cls = `contact-link${className ? ` ${className}` : ""}`;
+  const name = <span className="visually-hidden">{tr(contactNames[kind], lang)}: </span>;
+  if (kind === "phone") {
+    return <a className={cls} href={`tel:${value.replace(/[^+\d]/g, "")}`}><ContactIcon kind="phone" />{name}<span>{value}</span></a>;
+  }
+  if (kind === "email") {
+    // Never split the address mid-word: it fits on one line, or breaks once, after the @.
+    const [user, domain] = value.split("@");
+    return (
+      <a className={`${cls} contact-email`} href={`mailto:${value}`}>
+        <ContactIcon kind="email" />{name}
+        <span><span>{user}@</span><wbr /><span>{domain}</span></span>
+      </a>
+    );
+  }
+  const handle = handleOf(value);
+  return (
+    <a className={cls} href={value} target="_blank" rel="noopener noreferrer">
+      <ContactIcon kind={kind} />{name}
+      <span>{kind === "instagram" ? `@${handle}` : handle}</span>
+      <span className="visually-hidden"> {tr(ui.newTab, lang)}</span>
+    </a>
+  );
+}

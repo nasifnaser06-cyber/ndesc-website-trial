@@ -3,7 +3,7 @@ import { type Locale, path } from "@/lib/i18n";
 import { meta } from "@/lib/view";
 import { site } from "@/content/site";
 import { photosphere, photosphereBanner } from "@/content/photosphere";
-import { ExternalLink, FormButton } from "@/components/bits";
+import { ContactLink, FormButton } from "@/components/bits";
 
 const title = { en: "Photosphere 7.0", bn: "Photosphere 7.0" };
 const lead = {
@@ -19,7 +19,6 @@ export async function generateMetadata() {
 export default async function Photosphere() {
   const lang: Locale = "en";
   const p = photosphere;
-  const tel = (s: string) => `tel:${s.replace(/[^+\d]/g, "")}`;
 
   return (
     <>
@@ -131,14 +130,18 @@ export default async function Photosphere() {
               <div className="surface organizer" key={o.name}>
                 <h3>{o.name}</h3>
                 <p className="muted small">{o.role}</p>
-                <p><a href={tel(o.phone)}>{o.phone}</a></p>
-                <p><ExternalLink href={o.facebook} lang={lang}>Facebook</ExternalLink></p>
+                <ul className="contact-links">
+                  <li><ContactLink kind="phone" value={o.phone} lang={lang} /></li>
+                  <li><ContactLink kind="facebook" value={o.facebook} lang={lang} /></li>
+                </ul>
               </div>
             ))}
           </div>
-          <p className="small muted ps-note">
-            Or email the club at <a href={`mailto:${site.email}`}>{site.email}</a>.
-          </p>
+          {site.email && (
+            <p className="small muted ps-note contact-note">
+              Or email the club: <ContactLink kind="email" value={site.email} lang={lang} />
+            </p>
+          )}
         </section>
       </div>
     </>

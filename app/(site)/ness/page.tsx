@@ -6,7 +6,7 @@ import { ui } from "@/content/ui";
 import { getEvent, ness2027Banner } from "@/content/events";
 import { nessSchedule, nessPast, nessFaq } from "@/content/club";
 import { nessx, passes, passNote, registerWays, categories, categoryNote, winnersNote, soloSegments, teamSegments, specialSegments, programmes, organizers, type Segment } from "@/content/ness2027";
-import { ExternalLink, FormButton, Stars, T, RegisterButton } from "@/components/bits";
+import { ContactLink, ExternalLink, FormButton, Stars, T, RegisterButton } from "@/components/bits";
 
 const title = { en: "NESS 2027", bn: "NESS ২০২৭" };
 const description = {
@@ -209,14 +209,18 @@ export default async function Ness() {
               <div className="surface organizer" key={o.name}>
                 <h3>{o.name}</h3>
                 <p className="muted small">{o.role}</p>
-                <p><a href={`tel:${o.phone.replace(/[^+\d]/g, "")}`}>{o.phone}</a></p>
-                <p><ExternalLink href={o.facebook} lang={lang}>Facebook</ExternalLink></p>
+                <ul className="contact-links">
+                  <li><ContactLink kind="phone" value={o.phone} lang={lang} /></li>
+                  <li><ContactLink kind="facebook" value={o.facebook} lang={lang} /></li>
+                </ul>
               </div>
             ))}
           </div>
-          <p className="small muted" style={{ marginTop: "var(--s4)" }}>
-            {en ? "Or email the club at " : "অথবা ক্লাবকে ইমেইল করুন "}<a href={`mailto:${site.email}`}>{site.email}</a>.
-          </p>
+          {site.email && (
+            <p className="small muted contact-note" style={{ marginTop: "var(--s4)" }}>
+              {en ? "Or email the club: " : "অথবা ক্লাবকে ইমেইল করুন: "}<ContactLink kind="email" value={site.email} lang={lang} />
+            </p>
+          )}
         </section>
 
         <section aria-labelledby="past">

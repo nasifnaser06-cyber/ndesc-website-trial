@@ -2,7 +2,7 @@ import Link from "next/link";
 import { type Locale, tr, path } from "@/lib/i18n";
 import { ui } from "@/content/ui";
 import { site } from "@/content/site";
-import { CollegeCrest, ExternalLink, Logo } from "./bits";
+import { CollegeCrest, ContactLink, Logo } from "./bits";
 
 export default function Footer({ lang }: { lang: Locale }) {
   const year = new Date().getFullYear();
@@ -37,19 +37,10 @@ export default function Footer({ lang }: { lang: Locale }) {
         </div>
         <div>
           <p className="label">{tr(ui.follow, lang)}</p>
-          <ul>
-            <li><ExternalLink href={site.social.facebook} lang={lang}>Facebook</ExternalLink></li>
-            <li><ExternalLink href={site.social.instagram} lang={lang}>Instagram</ExternalLink></li>
-            {site.email && (
-              <li>
-                {/* Never split the address mid-word: it fits on one line, or breaks once, after the @. */}
-                <a className="footer-email" href={`mailto:${site.email}`}>
-                  <span>{site.email.split("@")[0]}@</span>
-                  <wbr />
-                  <span>{site.email.split("@")[1]}</span>
-                </a>
-              </li>
-            )}
+          <ul className="contact-links">
+            <li><ContactLink kind="facebook" value={site.social.facebook} lang={lang} /></li>
+            <li><ContactLink kind="instagram" value={site.social.instagram} lang={lang} /></li>
+            {site.email && <li><ContactLink kind="email" value={site.email} lang={lang} /></li>}
           </ul>
         </div>
       </div>
