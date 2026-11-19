@@ -732,3 +732,28 @@ body:has(.ps-bg) main .surface {
 .footer-grid .contact-link { color: var(--starlight); }
 .footer-grid .contact-link .contact-icon { color: var(--sprout); }
 .contact-note { display: flex; flex-wrap: wrap; align-items: center; column-gap: 0.5em; }
+
+/* Register page on the NESS X look (trial, 20 Nov 2026): light ice inputs and pass cards on the icy background. */
+body:has(.ness-bg) main .form :is(input:not([type="checkbox"]):not([type="radio"]), select, textarea) {
+  color: var(--starlight);
+  background: rgba(255, 255, 255, 0.55);
+  border-color: rgba(15, 30, 54, 0.28);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+}
+body:has(.ness-bg) main .form :is(input, select, textarea):focus-visible { border-color: var(--sprout); background: rgba(255, 255, 255, 0.8); }
+body:has(.ness-bg) main .form select option { color: #0f1e36; background: #fff; }
+body:has(.ness-bg) main .form .reg-pass {
+  background: linear-gradient(145deg, rgba(255, 255, 255, 0.38) 0%, rgba(224, 241, 250, 0.22) 55%, rgba(255, 255, 255, 0.3) 100%);
+  border: 1.5px solid rgba(255, 255, 255, 0.7);
+  box-shadow: 0 10px 30px rgba(15, 30, 54, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.85);
+  -webkit-backdrop-filter: blur(22px) saturate(160%);
+  backdrop-filter: blur(22px) saturate(160%);
+}
+body:has(.ness-bg) main .form .reg-pass[data-on="true"] { border-color: var(--sprout); box-shadow: 0 10px 30px rgba(15, 30, 54, 0.12), inset 0 0 0 1px var(--sprout); background: rgba(255, 255, 255, 0.6); }
+body:has(.ness-bg) main .reg-step { color: #fff; }
+body:has(.ness-bg) main .reg-draft { color: var(--starlight); background: rgba(255, 244, 222, 0.7); border-color: #b9781c; }
+body:has(.ness-bg) main .reg-errors { background: rgba(255, 235, 230, 0.8); border-color: #b3261e; }
+body:has(.ness-bg) main .sky-copy .label a { color: var(--sprout); }
+.reg-page { padding-bottom: var(--s4); }
+body:has(.ness-bg) main { color-scheme: light; } /* light checkboxes and dropdowns */

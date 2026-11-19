@@ -1,14 +1,15 @@
-import { type Locale, path } from "@/lib/i18n";
+import Link from "next/link";
+import { type Locale, path, formatDateRange } from "@/lib/i18n";
 import { meta } from "@/lib/view";
 import { site } from "@/content/site";
-import { categories, soloSegments, teamSegments } from "@/content/ness2027";
-import { PageHead } from "@/components/bits";
+import { categories, soloSegments, teamSegments, nessx } from "@/content/ness2027";
+import { getEvent } from "@/content/events";
 import RegisterForm, { type SegOption } from "@/components/RegisterForm";
 
 const title = { en: "Register for NESS X", bn: "NESS X-এ নিবন্ধন" };
 const lead = {
-  en: "Pick your pass, choose your segments, pay by bKash, and get your pass by email.",
-  bn: "পাস বেছে নিন, সেগমেন্ট বাছুন, বিকাশে পেমেন্ট করুন, ইমেইলে পাস পান।",
+  en: "Pick your pass, pay by bKash, and get your pass by email.",
+  bn: "পাস বেছে নিন, বিকাশে পেমেন্ট করুন, ইমেইলে পাস পান।",
 };
 
 export async function generateMetadata() {
@@ -19,14 +20,38 @@ export async function generateMetadata() {
 
 export default async function Register() {
   const lang: Locale = "en";
+  const bp = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
+  const ness = getEvent("ness-2027");
   const segments: SegOption[] = [
     ...soloSegments.map((s) => ({ name: s.name, cats: s.cats, online: !!s.online, team: false })),
     ...teamSegments.map((s) => ({ name: s.name, cats: s.cats, online: !!s.online, team: true })),
   ];
   return (
     <>
-      <PageHead lang={lang} title={title} lead={lead} crumbs={[{ label: { en: "NESS 2027", bn: "NESS ২০২৭" }, to: "/ness" }]} />
-      <div className="wrap">
+      {/* Same look as the NESS X page (Mahmud, 20 Nov 2026, trial): icy polar-bear background, clear hero, ice boxes. */}
+      <div
+        className="ness-bg"
+        aria-hidden="true"
+        style={{
+          ["--bg-lg" as string]: `url("${bp}/ness/ness-bg-2400.webp")`,
+          ["--bg-sm" as string]: `url("${bp}/ness/ness-bg-1600.webp")`,
+        }}
+      />
+      <section className="sky sky-clear" aria-labelledby="reg-h1">
+        <div className="wrap sky-inner" style={{ paddingBlock: "var(--s8) var(--s6)" }}>
+          <div className="sky-copy">
+            <p className="label"><Link href={path(lang, "/ness")}>{nessx.name}</Link> · {nessx.fullName}, 2027</p>
+            <h1 id="reg-h1">{title.en}</h1>
+            <p>{lead.en}</p>
+            <dl className="facts">
+              <div><dt>Dates</dt><dd>{ness ? formatDateRange(ness.start, ness.end, lang, "long") : "28–30 January 2027"}</dd></div>
+              <div><dt>Venue</dt><dd>Notre Dame College, Motijheel, Dhaka</dd></div>
+              <div><dt>Online segments</dt><dd>Free</dd></div>
+            </dl>
+          </div>
+        </div>
+      </section>
+      <div className="wrap reg-page">
         <RegisterForm
           endpoint={site.registration.endpoint}
           trial={site.registration.trial}
