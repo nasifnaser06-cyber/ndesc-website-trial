@@ -10,7 +10,7 @@ import { ExternalLink, FormButton, Stars, T, RegisterButton } from "@/components
 
 const title = { en: "NESS 2027", bn: "NESS ২০২৭" };
 const description = {
-  en: "NESSX, the 10th National Earth and Space Summit: 28–30 January 2027 at Notre Dame College, Dhaka. Olympiads, quizzes, team contests, exhibitions and talks. Register now.",
+  en: "NESS X, the 10th National Earth and Space Summit: 28–30 January 2027 at Notre Dame College, Dhaka. Olympiads, quizzes, team contests, exhibitions and talks. Register now.",
   bn: "ন্যাশনাল আর্থ অ্যান্ড স্পেস সামিট ২০২৭, ২৮–৩০ জানুয়ারি, নটর ডেম কলেজ, ঢাকা। অলিম্পিয়াড, কুইজ, দলীয় প্রতিযোগিতা, আলোচনা ও প্রদর্শনী।",
 };
 
@@ -70,7 +70,7 @@ export default async function Ness() {
           <div className="sky-copy">
             <p className="label">{nessx.fullName}, 2027</p>
             <h1 id="ness-h1" className="ness-logo-h1">
-              {/* The NESS logo stands in for the "NESSX" heading; its alt text is the heading's name. */}
+              {/* The NESS logo stands in for the "NESS X" heading; its alt text is the heading's name. */}
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 src={`${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}/ness/nessx-logo-dark-360.webp`}
@@ -119,7 +119,7 @@ export default async function Ness() {
             ))}
           </ol>
           <div className="actions" style={{ marginTop: "var(--s5)" }}>
-            <RegisterButton lang={lang}>{en ? "Register for NESSX" : "নিবন্ধন করুন"}</RegisterButton>
+            <RegisterButton lang={lang}>{en ? "Register for NESS X" : "নিবন্ধন করুন"}</RegisterButton>
           </div>
           <p className="small muted" style={{ marginTop: "var(--s3)" }}>{en ? "Pick your pass, pay by bKash Send Money, type the TrxID, and your pass arrives by email." : "পাস বেছে নিন, বিকাশে পেমেন্ট করুন, TrxID লিখুন, পাস ইমেইলে পাবেন।"}</p>
         </section>

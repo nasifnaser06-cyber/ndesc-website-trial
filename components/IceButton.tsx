@@ -1,7 +1,7 @@
 import Link from "next/link";
 
 /**
- * "Register for NESSX" with ice that forms on the button.
+ * "Register for NESS X" with ice that forms on the button.
  * Crystals draw themselves out from their centres (stroke), grow and settle, then a frost sheen
  * crosses the button once. Hover re-forms the ice. Idle: a faint, slow twinkle.
  * Reduced motion: the frost is simply there, nothing moves.
@@ -36,7 +36,7 @@ const crystals: Crystal[] = [
   { x: "0", y: "100%", dx: 34, dy: -6, r: 3.6, spin: 30, cls: "c4" },
 ];
 
-export default function IceButton({ href, external, label = "Register for NESSX", note }: {
+export default function IceButton({ href, external, label = "Register for NESS X", note }: {
   href: string;
   external?: boolean;
   label?: string;

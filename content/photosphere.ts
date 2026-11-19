@@ -1,4 +1,4 @@
-// Photosphere 7.0, the visual art competition and exhibition of NESSX (10th National Earth and Space Summit).
+// Photosphere 7.0, the visual art competition and exhibition of NESS X (10th National Earth and Space Summit).
 // Source: the club's Photosphere 7.0 announcement, 19 Nov 2026.
 
 export const photosphereBanner = {
@@ -15,10 +15,10 @@ export const photosphereBanner = {
 export const photosphere = {
   name: "Photosphere 7.0",
   brief:
-    "Photography, poster design and AI art about the Earth and the cosmos. Submit your best work online for free. Selected pieces are framed and shown to everyone at NESSX.",
+    "Photography, poster design and AI art about the Earth and the cosmos. Submit your best work online for free. Selected pieces are framed and shown to everyone at NESS X.",
   intro: [
-    "Photosphere 7.0 is the visual art competition and exhibition of NESSX, the 10th National Earth and Space Summit. The artworks and photographs you submit go on display for everyone at the summit. Photography, design or AI art: choose how you express yourself, and show us how you capture our universe.",
-    "As the visual heart of NESSX, Photosphere brings the wonders of nature and outer space to a wider audience through the lens and imagination of talented photographers and artists.",
+    "Photosphere 7.0 is the visual art competition and exhibition of NESS X, the 10th National Earth and Space Summit. The artworks and photographs you submit go on display for everyone at the summit. Photography, design or AI art: choose how you express yourself, and show us how you capture our universe.",
+    "As the visual heart of NESS X, Photosphere brings the wonders of nature and outer space to a wider audience through the lens and imagination of talented photographers and artists.",
   ],
   categories: [
     { code: "PS-J", name: "Photosphere Junior", who: "Class 6 to 10" },
@@ -70,7 +70,7 @@ export const photosphere = {
   fee: [
     "Submitting is free. There is no registration fee for the first round.",
     "After the selection round, selected participants pay a registration fee to show their selected work in the Photosphere exhibition.",
-    "Registered participants also get a team pass for NESSX.",
+    "Registered participants also get a team pass for NESS X.",
     "The frames are returned to the photographers after the exhibition.",
     "How to pay will be announced after selection. Selected participants are told by email, at the address they gave in the form.",
   ],

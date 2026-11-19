@@ -53,7 +53,7 @@ export const events: ClubEvent[] = [
     title: { en: "National Earth and Space Summit 2027", bn: "ন্যাশনাল আর্থ অ্যান্ড স্পেস সামিট ২০২৭" },
     venue: ndc,
     summary: {
-      en: "NESSX, the 10th summit: three days of olympiads, quizzes, team contests, exhibitions and talks for students from Nursery to Class 12.",
+      en: "NESS X, the 10th summit: three days of olympiads, quizzes, team contests, exhibitions and talks for students from Nursery to Class 12.",
       bn: "১০ম আসর: সারা দেশের শিক্ষার্থীদের জন্য তিন দিনের অলিম্পিয়াড, কুইজ, দলীয় প্রতিযোগিতা, আলোচনা আর প্রদর্শনী।",
     },
     todo: { en: "day-by-day schedule", bn: "দিনভিত্তিক সময়সূচি" },

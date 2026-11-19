@@ -137,7 +137,7 @@ export default function RegisterForm({
             {done.newTeam && <span className="small muted"> Share this with your teammates. They type it in when they register.</span>}
           </p>
         )}
-        <p><a href={nessHref}>Back to NESSX</a></p>
+        <p><a href={nessHref}>Back to NESS X</a></p>
       </div>
     );
   }
@@ -220,7 +220,7 @@ export default function RegisterForm({
               </ul>
             </>
           )}
-          <p className="small muted" style={{ marginTop: "var(--s3)" }}>The UNOOSA special committee has its own registration form. Full rules for each segment are on the <a href={nessHref}>NESSX page</a>.</p>
+          <p className="small muted" style={{ marginTop: "var(--s3)" }}>The UNOOSA special committee has its own registration form. Full rules for each segment are on the <a href={nessHref}>NESS X page</a>.</p>
         </fieldset>
 
         {pass === "team" && (
@@ -274,7 +274,7 @@ export default function RegisterForm({
         <div className="actions">
           <button className="btn" type="submit" disabled={busy || !live.open}>{busy ? "Sending..." : pass === "online" ? "Register" : "Register and confirm payment"}</button>
         </div>
-        <p className="small muted reg-privacy">We use these details only to run NESSX. <a href={privacyHref}>Privacy</a></p>
+        <p className="small muted reg-privacy">We use these details only to run NESS X. <a href={privacyHref}>Privacy</a></p>
       </form>
 
       <StatusCheck endpoint={endpoint} />

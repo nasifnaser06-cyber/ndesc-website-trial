@@ -23,13 +23,13 @@ export const site = {
   /**
    * Where every "Register" button goes (header, home page, NESS page):
    *   "page" = the website's own Register page, /en/ness/register/ (since 20 Nov 2026)
-   *   "form" = the NESSX Google Form below (kept so it can come back at any time)
+   *   "form" = the NESS X Google Form below (kept so it can come back at any time)
    */
   registerWith: "page" as "page" | "form",
 
   /** Links to the club's forms (Google Forms or similar). */
   forms: {
-    /** NESSX Google Form. Not linked anywhere while registerWith is "page", but kept here. */
+    /** NESS X Google Form. Not linked anywhere while registerWith is "page", but kept here. */
     nessRegister: "https://forms.gle/QAYuy9RbyRtvFyzC7" as string | null,
     nessExhibit: null as string | null,
     join: null as string | null,
@@ -38,7 +38,7 @@ export const site = {
   },
 
   /**
-   * NESSX automatic registration (registration/README.md explains the setup).
+   * NESS X automatic registration (registration/README.md explains the setup).
    * endpoint: the Apps Script web app address. While it is null the Register page is a draft:
    * people can see it, but it sends them to the Google Form instead.
    * The payment numbers and prices shown on the page come live from the sheet's Settings tab once

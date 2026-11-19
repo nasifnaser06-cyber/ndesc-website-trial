@@ -673,7 +673,9 @@ details[open] > summary::after { transform: rotate(45deg); }
 body:has(.ps-bg) main { font-family: "Montserrat", system-ui, sans-serif; font-weight: 600; }
 body:has(.ps-bg) main :is(.btn, button, input, select, textarea, table) { font-family: inherit; }
 /* Veroland has letters only; numbers and punctuation fall back to Montserrat. */
-body:has(.ps-bg) main :is(h1, h2, h3) { font-family: "Veroland", "Montserrat", system-ui, sans-serif; font-weight: 400; letter-spacing: 0.01em; }
+body:has(.ps-bg) main :is(h1, h2, h3) { font-family: "Veroland", "Montserrat", system-ui, sans-serif; font-weight: 400; letter-spacing: 0.02em; text-transform: uppercase; }
+/* Table dividers in white at 60% so they show against the picture. */
+body:has(.ps-bg) main :is(th, td) { border-top-color: rgba(255, 255, 255, 0.6); }
 body:has(.ps-bg) main .surface {
   background: rgba(15, 30, 54, 0.6);
   border-color: rgba(233, 238, 246, 0.2);

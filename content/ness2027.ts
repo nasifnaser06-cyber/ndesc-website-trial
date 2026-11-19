@@ -1,12 +1,12 @@
-// NESSX: the 10th National Earth and Space Summit, 28 to 30 January 2027.
+// NESS X: the 10th National Earth and Space Summit, 28 to 30 January 2027.
 // From the club's official announcement (sent by Mahmud, 18 Nov 2026).
 // The site is English only for now, so these are plain English strings.
 
 export const nessx = {
-  name: "NESSX",
+  name: "NESS X",
   fullName: "10th National Earth and Space Summit",
   intro:
-    "NESSX opens a portal between the terrestrial and the cosmic. From the microscopic wonders of Earth's biology to the mysteries of distant nebulae, it brings dreamers, thinkers and innovators together to redefine the future.",
+    "NESS X opens a portal between the terrestrial and the cosmic. From the microscopic wonders of Earth's biology to the mysteries of distant nebulae, it brings dreamers, thinkers and innovators together to redefine the future.",
   registerUrl: "https://forms.gle/QAYuy9RbyRtvFyzC7",
 };
 
@@ -24,7 +24,7 @@ export const passNote = "Either pass also gets you into the exhibitions and prog
 
 export const registerWays: { who: string; how: string }[] = [
   { who: "Notre Dame College students", how: "Register in person at the registration booths in front of the Archbishop Ganguly Building." },
-  { who: "Students from other institutions", how: "Register through our club partners, campus ambassadors, or the NESSX booth at your institution (if there is one)." },
+  { who: "Students from other institutions", how: "Register through our club partners, campus ambassadors, or the NESS X booth at your institution (if there is one)." },
   { who: "Anyone, online", how: "Fill in the online registration form." },
 ];
 
@@ -50,7 +50,7 @@ export const soloSegments: Segment[] = [
     name: "Astronomy Olympiad",
     cats: ["J", "S", "HS"],
     desc: [
-      "The crown jewel of NESSX. Solve theoretical and mathematical questions on astrophysics and astronomy, plus questions on stars and constellations. Set by national winners and participants of the BDOAA and the IOAA.",
+      "The crown jewel of NESS X. Solve theoretical and mathematical questions on astrophysics and astronomy, plus questions on stars and constellations. Set by national winners and participants of the BDOAA and the IOAA.",
     ],
   },
   {
@@ -148,7 +148,7 @@ export const soloSegments: Segment[] = [
     online: true,
     page: "/ness/photosphere",
     desc: [
-      "The visual art competition and exhibition of NESSX. Free to submit, up to 5 works per segment, through each segment's Google Form. PS-J is Class 6 to 10, PS-S is Class 11, 12 and university, and PS-C is everyone competing together. Selected work is shown at the summit.",
+      "The visual art competition and exhibition of NESS X. Free to submit, up to 5 works per segment, through each segment's Google Form. PS-J is Class 6 to 10, PS-S is Class 11, 12 and university, and PS-C is everyone competing together. Selected work is shown at the summit.",
     ],
     parts: [
       { name: "Astro Photography", cats: ["PS-J", "PS-S"], desc: "Star trails, constellations, galaxies, nebulae: whatever in the night sky has mesmerised you most." },

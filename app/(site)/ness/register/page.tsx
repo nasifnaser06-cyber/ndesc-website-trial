@@ -5,7 +5,7 @@ import { categories, soloSegments, teamSegments } from "@/content/ness2027";
 import { PageHead } from "@/components/bits";
 import RegisterForm, { type SegOption } from "@/components/RegisterForm";
 
-const title = { en: "Register for NESSX", bn: "NESSX-এ নিবন্ধন" };
+const title = { en: "Register for NESS X", bn: "NESS X-এ নিবন্ধন" };
 const lead = {
   en: "Pick your pass, choose your segments, pay by bKash, and get your pass by email.",
   bn: "পাস বেছে নিন, সেগমেন্ট বাছুন, বিকাশে পেমেন্ট করুন, ইমেইলে পাস পান।",

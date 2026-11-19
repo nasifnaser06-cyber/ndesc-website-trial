@@ -7,8 +7,8 @@ import { ExternalLink, FormButton } from "@/components/bits";
 
 const title = { en: "Photosphere 7.0", bn: "Photosphere 7.0" };
 const lead = {
-  en: "The visual art competition and exhibition of NESSX. Astro and eco photography, poster design and AI art. Free to submit.",
-  bn: "NESSX-এর দৃশ্যশিল্প প্রতিযোগিতা ও প্রদর্শনী। অ্যাস্ট্রো ও ইকো ফটোগ্রাফি, পোস্টার ডিজাইন ও এআই আর্ট। জমা দেওয়া বিনামূল্যে।",
+  en: "The visual art competition and exhibition of NESS X. Astro and eco photography, poster design and AI art. Free to submit.",
+  bn: "NESS X-এর দৃশ্যশিল্প প্রতিযোগিতা ও প্রদর্শনী। অ্যাস্ট্রো ও ইকো ফটোগ্রাফি, পোস্টার ডিজাইন ও এআই আর্ট। জমা দেওয়া বিনামূল্যে।",
 };
 
 export async function generateMetadata() {
@@ -36,7 +36,7 @@ export default async function Photosphere() {
       <section className="sky sky-clear" aria-labelledby="ps-h1">
         <div className="wrap sky-inner" style={{ paddingBlock: "var(--s8) var(--s7)" }}>
           <div className="sky-copy">
-            <p className="label">Visual art competition and exhibition of NESSX, 2027</p>
+            <p className="label">Visual art competition and exhibition of NESS X, 2027</p>
             <h1 id="ps-h1" className="ps-logo-h1">
               {/* The Photosphere 7.0 logo stands in for the heading; its alt text is the heading's name. */}
               {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -65,7 +65,7 @@ export default async function Photosphere() {
 
       <div className="wrap ps-page">
         <section aria-labelledby="ps-about" className="ps-intro">
-          <h2 id="ps-about">About Photosphere 7.0</h2>
+          <h2 id="ps-about">About Photosphere</h2>
           {p.intro.map((t) => <p key={t}>{t}</p>)}
         </section>
 
@@ -139,18 +139,6 @@ export default async function Photosphere() {
           <p className="small muted ps-note">
             Or email the club at <a href={`mailto:${site.email}`}>{site.email}</a>.
           </p>
-        </section>
-
-        <section className="surface panel-band" aria-labelledby="ps-main">
-          <div>
-            <p className="label">Don&apos;t forget the main event</p>
-            <h2 id="ps-main">NESSX, the 10th National Earth and Space Summit</h2>
-            <p className="muted">28–30 January 2027 at Notre Dame College, Dhaka. Olympiads, quizzes, team contests, exhibitions and talks.</p>
-          </div>
-          <div className="actions">
-            <Link className="btn" href={path(lang, "/ness")}>See NESSX</Link>
-            <ExternalLink className="btn btn-secondary" href={p.nessxFacebook} lang={lang}>NESSX on Facebook</ExternalLink>
-          </div>
         </section>
       </div>
     </>
