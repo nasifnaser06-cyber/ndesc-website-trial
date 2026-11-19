@@ -6,7 +6,7 @@ import { ui } from "@/content/ui";
 import { getEvent, ness2027Banner } from "@/content/events";
 import { nessSchedule, nessPast, nessFaq } from "@/content/club";
 import { nessx, passes, passNote, registerWays, categories, categoryNote, winnersNote, soloSegments, teamSegments, specialSegments, programmes, organizers, type Segment } from "@/content/ness2027";
-import { Banner, ExternalLink, FormButton, Stars, T, RegisterButton } from "@/components/bits";
+import { ExternalLink, FormButton, Stars, T, RegisterButton } from "@/components/bits";
 
 const title = { en: "NESS 2027", bn: "NESS ২০২৭" };
 const description = {
@@ -55,7 +55,16 @@ export default async function Ness() {
 
   return (
     <>
-      <section className="sky" aria-labelledby="ness-h1">
+      {/* Page background (trial, 20 Nov 2026): polar bears under the aurora, behind a dark veil for readable text. */}
+      <div
+        className="ness-bg"
+        aria-hidden="true"
+        style={{
+          ["--bg-lg" as string]: `url("${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}/ness/ness-bg-2400.webp")`,
+          ["--bg-sm" as string]: `url("${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}/ness/ness-bg-1600.webp")`,
+        }}
+      />
+      <section className="sky sky-clear" aria-labelledby="ness-h1">
         <Stars />
         <div className="wrap sky-inner" style={{ paddingBlock: "var(--s8) var(--s7)" }}>
           <div className="sky-copy">
@@ -88,9 +97,6 @@ export default async function Ness() {
       </section>
 
       <div className="wrap" style={{ display: "flex", flexDirection: "column", gap: "var(--s9)", paddingTop: "var(--s8)" }}>
-        <figure className="banner-figure">
-          <Banner lang={lang} {...ness2027Banner} />
-        </figure>
         <section aria-labelledby="passes-h">
           <h2 id="passes-h" style={{ marginBottom: "var(--s5)" }}>{en ? "Passes" : "পাস"}</h2>
           <div className="cards-3">

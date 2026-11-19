@@ -202,6 +202,24 @@ main:focus { outline: none; }
 /* Banners and posters (NESS 2027) */
 .banner { display: block; width: 100%; height: auto; aspect-ratio: var(--banner-ratio, 16 / 9); object-fit: cover; border-radius: 16px; background: var(--deep); border: 1px solid var(--line); }
 .banner-figure { margin: 0; }
+
+/* NESS page background (trial, 20 Nov 2026). Fixed behind the page; the veil keeps text readable. */
+.ness-bg {
+  position: fixed; inset: 0; z-index: -1; pointer-events: none;
+  background:
+    linear-gradient(180deg, rgba(12, 26, 48, 0.5) 0%, rgba(12, 26, 48, 0.72) 45%, rgba(12, 26, 48, 0.86) 100%),
+    var(--bg-lg) center 42% / cover no-repeat,
+    var(--night);
+}
+@media (max-width: 900px) {
+  .ness-bg {
+    background:
+      linear-gradient(180deg, rgba(12, 26, 48, 0.5) 0%, rgba(12, 26, 48, 0.72) 45%, rgba(12, 26, 48, 0.86) 100%),
+      var(--bg-sm) center 40% / cover no-repeat,
+      var(--night);
+  }
+}
+.sky.sky-clear { background: transparent; }
 .panel-band.has-banner { padding-top: var(--s5); }
 .band-banner { flex: 1 1 100%; display: block; border-radius: 12px; overflow: hidden; border: 1px solid var(--line); }
 .band-banner .banner { border-radius: 0; border: 0; }
