@@ -256,6 +256,23 @@ body:has(.ness-bg) main .surface {
 @media (prefers-reduced-transparency: reduce) {
   body:has(.ness-bg) main .surface { background: rgba(245, 250, 253, 0.94); -webkit-backdrop-filter: none; backdrop-filter: none; }
 }
+/* NESS page open/close icon (Mahmud, 20 Nov 2026, trial): a triangle instead of "+".
+   Points down while closed, flips to point up when the section is open. */
+body:has(.ness-bg) summary::after {
+  content: "";
+  flex: none;
+  width: 0.85rem;
+  height: 0.6rem;
+  background: var(--sprout);
+  clip-path: polygon(0 0, 100% 0, 50% 100%);
+  transition: transform 0.25s var(--ease);
+}
+body:has(.ness-bg) details[open] > summary::after { transform: rotate(180deg); }
+body:has(.ness-bg) details.segment > summary::after { top: 0.62rem; right: 0.3rem; }
+@media (prefers-reduced-motion: reduce) {
+  body:has(.ness-bg) summary::after { transition: none; }
+}
+
 .panel-band.has-banner { padding-top: var(--s5); }
 .band-banner { flex: 1 1 100%; display: block; border-radius: 12px; overflow: hidden; border: 1px solid var(--line); }
 .band-banner .banner { border-radius: 0; border: 0; }
