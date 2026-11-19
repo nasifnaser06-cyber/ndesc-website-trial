@@ -126,7 +126,7 @@ export default async function Ness() {
               <thead><tr><th scope="col">{en ? "Code" : "কোড"}</th><th scope="col">{en ? "Category" : "বিভাগ"}</th><th scope="col">{en ? "Who" : "কারা"}</th></tr></thead>
               <tbody>
                 {categories.map((c) => (
-                  <tr key={c.code}><td style={{ fontFamily: "var(--font-head)", fontWeight: 600 }}>{c.code}</td><td>{c.name}</td><td>{c.who}</td></tr>
+                  <tr key={c.code}><td style={{ fontFamily: "var(--font-head)", fontWeight: "var(--weight-head)" }}>{c.code}</td><td>{c.name}</td><td>{c.who}</td></tr>
                 ))}
               </tbody>
             </table>
@@ -221,7 +221,7 @@ export default async function Ness() {
               <tbody>
                 {nessPast.map((p) => (
                   <tr key={p.edition.en}>
-                    <td style={{ fontFamily: "var(--font-head)", fontWeight: 600 }}>
+                    <td style={{ fontFamily: "var(--font-head)", fontWeight: "var(--weight-head)" }}>
                       {p.slug ? <Link href={path(lang, `/events/${p.slug}`)}>{tr(p.edition, lang)}</Link> : tr(p.edition, lang)}
                     </td>
                     <td style={{ whiteSpace: "nowrap" }}><T text={{ en: p.year, bn: num(p.year, "bn") }} lang={lang} /></td>

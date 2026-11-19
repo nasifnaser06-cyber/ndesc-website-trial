@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
-import "@fontsource/bitter/600.css";
-import "@fontsource/atkinson-hyperlegible/400.css";
+import "@fontsource-variable/inter/wght.css";
 import "./globals.css";
 
 const bp = process.env.NEXT_PUBLIC_BASE_PATH ?? "";

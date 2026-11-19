@@ -52,7 +52,7 @@ export default async function EventPage({ params }: Props) {
                 <div key={f.label.en}><dt>{tr(f.label, lang)}</dt><dd>{tr(f.value, lang)}</dd></div>
               ))}
               {e.partners && (
-                <div><dt>{en ? "Partners" : "সহযোগী"}</dt><dd style={{ fontWeight: 400 }}>{e.partners}</dd></div>
+                <div><dt>{en ? "Partners" : "সহযোগী"}</dt><dd style={{ fontWeight: "var(--weight-body)" }}>{e.partners}</dd></div>
               )}
             </dl>
             {e.todo && <p className="small"><T lang={lang} text={{ en: `[${e.todo.en}]`, bn: `[${e.todo.bn}]` }} /></p>}

@@ -12,8 +12,12 @@
   --sprout: #8fd3a6; /* the one accent: links, buttons, focus, 9.6:1 */
   --sprout-light: #b9e6c8;
 
-  --font-body: "Atkinson Hyperlegible", system-ui, sans-serif;
-  --font-head: "Bitter", Georgia, serif;
+  /* Fonts (Mahmud, 20 Nov 2026, trial): Inter ExtraBold for headlines, Inter SemiBold for
+     body text and interface. One variable font file covers every weight. */
+  --font-body: "Inter Variable", "Inter", system-ui, sans-serif;
+  --font-head: "Inter Variable", "Inter", system-ui, sans-serif;
+  --weight-head: 800; /* ExtraBold */
+  --weight-body: 600; /* SemiBold */
 
   --s1: 0.25rem; --s2: 0.5rem; --s3: 0.75rem; --s4: 1rem; --s5: 1.5rem;
   --s6: 2rem; --s7: 3rem; --s8: 4rem; --s9: 6rem; --s10: 8rem;
@@ -33,6 +37,7 @@ body {
   background: var(--night);
   color: var(--starlight);
   font-family: var(--font-body);
+  font-weight: var(--weight-body);
   font-size: 1.125rem;
   line-height: 1.6;
 }
@@ -40,7 +45,7 @@ html[data-lang="bn"] body { line-height: 1.75; }
 img, svg { max-width: 100%; }
 h1, h2, h3 {
   font-family: var(--font-head);
-  font-weight: 600;
+  font-weight: var(--weight-head);
   margin: 0;
   text-wrap: balance;
 }
@@ -85,7 +90,7 @@ main:focus { outline: none; }
 .btn-small { min-height: 44px; padding-inline: var(--s4); font-size: 0.9375rem; }
 .btn.is-disabled { background: transparent; border: 1.5px dashed var(--edge); color: var(--haze); cursor: default; flex-direction: column; gap: 0; }
 .btn.is-disabled:active { transform: none; }
-.btn-note { font-weight: 400; font-size: 0.75rem; }
+.btn-note { font-weight: var(--weight-body); font-size: 0.75rem; }
 .actions { display: flex; flex-wrap: wrap; gap: var(--s4); }
 
 /* Header */
@@ -103,7 +108,7 @@ main:focus { outline: none; }
 .header-row { display: flex; align-items: center; gap: var(--s5); min-height: 72px; }
 .brand { display: flex; align-items: center; gap: var(--s3); color: var(--starlight); text-decoration: none; margin-right: auto; }
 .brand:hover { color: var(--starlight); }
-.brand-name { font-family: var(--font-head); font-weight: 600; font-size: 0.9375rem; line-height: 1.15; }
+.brand-name { font-family: var(--font-head); font-weight: var(--weight-head); font-size: 0.9375rem; line-height: 1.15; }
 .main-nav ul { list-style: none; padding: 0; display: flex; gap: var(--s4); }
 .main-nav a { color: var(--starlight); text-decoration: none; padding: var(--s2) var(--s1); display: inline-block; }
 .main-nav a:hover { color: var(--sprout); }
@@ -153,7 +158,7 @@ main:focus { outline: none; }
 @media (min-width: 1000px) { .footer-grid { grid-template-columns: 1fr 1fr 1fr 1.45fr; } }
 .footer-email span { white-space: nowrap; }
 .footer-about { display: grid; gap: var(--s2); align-content: start; }
-.footer-name { font-family: var(--font-head); font-weight: 600; }
+.footer-name { font-family: var(--font-head); font-weight: var(--weight-head); }
 .footer-base { margin-top: var(--s6); display: flex; flex-wrap: wrap; gap: var(--s4); justify-content: space-between; }
 
 /* Sky hero (the green ground strip and its line were removed, 20 Nov 2026) */
@@ -213,10 +218,10 @@ main:focus { outline: none; }
 /* Timeline: a real sequence */
 .timeline { list-style: none; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(min(10rem, 100%), 1fr)); gap: var(--s5); }
 .timeline li { border-top: 2px solid var(--line); padding-top: var(--s4); display: flex; flex-direction: column; gap: var(--s2); }
-.timeline .year { font-family: var(--font-head); font-weight: 600; font-size: 1.5rem; font-variant-numeric: tabular-nums; }
+.timeline .year { font-family: var(--font-head); font-weight: var(--weight-head); font-size: 1.5rem; font-variant-numeric: tabular-nums; }
 .timeline-v { list-style: none; padding: 0; }
 .timeline-v li { display: grid; grid-template-columns: 6rem minmax(0, 1fr); gap: var(--s5); padding: var(--s5) 0; border-top: 1px solid var(--line); }
-.timeline-v .year { font-family: var(--font-head); font-weight: 600; font-size: 1.25rem; }
+.timeline-v .year { font-family: var(--font-head); font-weight: var(--weight-head); font-size: 1.25rem; }
 @media (max-width: 480px) { .timeline-v li { grid-template-columns: 1fr; gap: var(--s1); } }
 
 /* Event list */
@@ -246,7 +251,7 @@ main:focus { outline: none; }
 /* Tables */
 table { border-collapse: collapse; width: 100%; }
 th, td { text-align: left; padding: var(--s3) var(--s4) var(--s3) 0; border-top: 1px solid var(--line); vertical-align: top; }
-th { font-weight: 400; font-size: 0.9375rem; color: var(--haze); }
+th { font-weight: var(--weight-body); font-size: 0.9375rem; color: var(--haze); }
 .table-scroll { overflow-x: auto; }
 .at-a-glance th { width: 12rem; }
 
@@ -301,13 +306,13 @@ details.segment > summary::after { position: absolute; right: 0.25rem; top: 0.1r
 .segment-parts { margin: var(--s3) 0 0; padding-left: 1.2rem; color: var(--haze); display: grid; gap: var(--s2); }
 .segment-parts strong { color: var(--starlight); }
 .pass, .organizer { padding: var(--s5); display: flex; flex-direction: column; gap: var(--s2); }
-.pass-price { font-family: var(--font-head); font-size: 1.75rem; font-weight: 600; color: var(--sprout); line-height: 1.2; }
+.pass-price { font-family: var(--font-head); font-size: 1.75rem; font-weight: var(--weight-head); color: var(--sprout); line-height: 1.2; }
 
 /* NESSX Register page */
 .reg { display: flex; flex-direction: column; gap: var(--s8); max-width: 52rem; }
 .reg-draft { border: 1.5px solid #f2c27b; border-radius: 12px; padding: var(--s4) var(--s5); color: var(--starlight); background: rgba(242, 194, 123, 0.08); }
 .reg-form fieldset { border: 0; padding: 0; margin: 0; display: flex; flex-direction: column; gap: var(--s4); }
-.reg-form legend { font-family: var(--font-head); font-size: 1.375rem; font-weight: 600; margin-bottom: var(--s4); display: flex; align-items: center; gap: var(--s3); }
+.reg-form legend { font-family: var(--font-head); font-size: 1.375rem; font-weight: var(--weight-head); margin-bottom: var(--s4); display: flex; align-items: center; gap: var(--s3); }
 .reg-step { display: inline-grid; place-items: center; width: 2rem; height: 2rem; border-radius: 50%; background: var(--sprout); color: var(--night); font-size: 1rem; font-family: var(--font-body); font-weight: 700; flex: none; }
 .reg-passes { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(14rem, 100%), 1fr)); gap: var(--s4); }
 .form .reg-pass { position: relative; display: flex; margin: 0; flex-direction: column; gap: var(--s1); padding: var(--s4) var(--s5); border: 1.5px solid var(--edge); border-radius: 14px; background: var(--deep); cursor: pointer; }
@@ -338,7 +343,7 @@ details.segment > summary::after { position: absolute; right: 0.25rem; top: 0.1r
 
 /* Lists of steps and programme groups */
 .steps { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(13rem, 100%), 1fr)); gap: var(--s5); padding-left: 1.2rem; }
-.steps li::marker { font-family: var(--font-head); font-weight: 600; color: var(--sprout); }
+.steps li::marker { font-family: var(--font-head); font-weight: var(--weight-head); color: var(--sprout); }
 .groups { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(19rem, 100%), 1fr)); gap: var(--s5) var(--s7); }
 .groups > div { border-top: 1px solid var(--line); padding-top: var(--s4); display: flex; flex-direction: column; gap: var(--s2); }
 .cards-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(17rem, 100%), 1fr)); gap: var(--s5); }
@@ -569,7 +574,7 @@ details[open] > summary::after { transform: rotate(45deg); }
 .ps-page > section > h2 { margin-bottom: var(--s4); }
 .ps-intro { display: flex; flex-direction: column; gap: var(--s4); max-width: 72ch; }
 .ps-note { max-width: 70ch; margin-bottom: var(--s5); }
-.ps-code { font-family: var(--font-head); font-weight: 600; white-space: nowrap; }
+.ps-code { font-family: var(--font-head); font-weight: var(--weight-head); white-space: nowrap; }
 .ps-segments { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(24rem, 100%), 1fr)); gap: var(--s5); }
 .ps-segment { padding: var(--s5); display: flex; flex-direction: column; gap: var(--s3); align-items: flex-start; }
 .ps-segment p { flex: 1; }

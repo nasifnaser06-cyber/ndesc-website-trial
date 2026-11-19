@@ -1,8 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import "@fontsource/bitter/500.css";
-import "@fontsource/bitter/600.css";
-import "@fontsource/atkinson-hyperlegible/400.css";
-import "@fontsource/atkinson-hyperlegible/700.css";
+import "@fontsource-variable/inter/wght.css";
 import "../globals.css";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
