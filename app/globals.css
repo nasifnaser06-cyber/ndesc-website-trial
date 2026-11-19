@@ -204,18 +204,18 @@ main:focus { outline: none; }
 .banner-figure { margin: 0; }
 
 /* NESS page background (trial, 20 Nov 2026). Fixed behind the page under a white veil
-   (Mahmud: white fade, not blue). The page switches to dark text so it stays readable. */
+   (Mahmud: white fade, not blue; then halved to 0.3-0.4). The page switches to dark text so it stays readable. */
 .ness-bg {
   position: fixed; inset: 0; z-index: -1; pointer-events: none;
   background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.6) 0%, rgba(255, 255, 255, 0.7) 50%, rgba(255, 255, 255, 0.8) 100%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.3) 0%, rgba(255, 255, 255, 0.35) 50%, rgba(255, 255, 255, 0.4) 100%),
     var(--bg-lg) center 42% / cover no-repeat,
     #eef1f7;
 }
 @media (max-width: 900px) {
   .ness-bg {
     background:
-      linear-gradient(180deg, rgba(255, 255, 255, 0.6) 0%, rgba(255, 255, 255, 0.7) 50%, rgba(255, 255, 255, 0.8) 100%),
+      linear-gradient(180deg, rgba(255, 255, 255, 0.3) 0%, rgba(255, 255, 255, 0.35) 50%, rgba(255, 255, 255, 0.4) 100%),
       var(--bg-sm) center 40% / cover no-repeat,
       #eef1f7;
   }
@@ -227,31 +227,37 @@ main:focus { outline: none; }
 body:has(.ness-bg) main,
 body:has(.ness-bg) .site-footer {
   --starlight: #0f1e36; /* text */
-  --haze: #33435e; /* muted text */
-  --sprout: #0d522d; /* links and accents */
-  --sprout-light: #0a3f22;
+  --haze: #24324a; /* muted text */
+  --sprout: #0a4527; /* links and accents */
+  --sprout-light: #072f1a;
   --line: rgba(15, 30, 54, 0.16);
   --edge: #5f7192;
   color: var(--starlight);
+  /* Soft white glow behind text, so it stays readable over the darker parts of the picture. */
+  text-shadow: 0 0 2px rgba(255, 255, 255, 0.55), 0 0 14px rgba(255, 255, 255, 0.6);
 }
+body:has(.ness-bg) main .btn { text-shadow: none; }
 body:has(.ness-bg) main .btn { background: #8fd3a6; border-color: #8fd3a6; color: var(--night); }
 body:has(.ness-bg) main .btn:hover { background: #b9e6c8; border-color: #b9e6c8; color: var(--night); }
 body:has(.ness-bg) main .btn-secondary { background: rgba(255, 255, 255, 0.45); border-color: var(--sprout); color: var(--sprout); }
 body:has(.ness-bg) main .btn-secondary:hover { background: rgba(255, 255, 255, 0.75); color: var(--sprout-light); }
 
-/* Glass boxes on the NESS page. */
+/* Ice boxes on the NESS page: semi-transparent, heavily blurred, a cool frosty tint and a bright rim. */
 body:has(.ness-bg) main .surface {
-  background: rgba(255, 255, 255, 0.42);
-  border: 1px solid rgba(255, 255, 255, 0.7);
-  box-shadow: 0 8px 32px rgba(15, 30, 54, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.6);
-  -webkit-backdrop-filter: blur(16px) saturate(150%);
-  backdrop-filter: blur(16px) saturate(150%);
+  background: linear-gradient(145deg, rgba(255, 255, 255, 0.34) 0%, rgba(224, 241, 250, 0.2) 55%, rgba(255, 255, 255, 0.28) 100%);
+  border: 1px solid rgba(255, 255, 255, 0.65);
+  box-shadow:
+    0 10px 36px rgba(15, 30, 54, 0.12),
+    inset 0 1px 0 rgba(255, 255, 255, 0.85),
+    inset 0 0 22px rgba(255, 255, 255, 0.28);
+  -webkit-backdrop-filter: blur(22px) saturate(160%) brightness(1.06);
+  backdrop-filter: blur(22px) saturate(160%) brightness(1.06);
 }
 @supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
-  body:has(.ness-bg) main .surface { background: rgba(255, 255, 255, 0.82); }
+  body:has(.ness-bg) main .surface { background: rgba(240, 248, 252, 0.85); }
 }
 @media (prefers-reduced-transparency: reduce) {
-  body:has(.ness-bg) main .surface { background: rgba(255, 255, 255, 0.92); -webkit-backdrop-filter: none; backdrop-filter: none; }
+  body:has(.ness-bg) main .surface { background: rgba(245, 250, 253, 0.94); -webkit-backdrop-filter: none; backdrop-filter: none; }
 }
 .panel-band.has-banner { padding-top: var(--s5); }
 .band-banner { flex: 1 1 100%; display: block; border-radius: 12px; overflow: hidden; border: 1px solid var(--line); }
