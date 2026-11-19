@@ -4,7 +4,7 @@ import { meta, eventRow, eventLabels } from "@/lib/view";
 import { ui } from "@/content/ui";
 import { site } from "@/content/site";
 import { sortedEvents, getEvent, ness2027Banner } from "@/content/events";
-import { timeline, partnersPast } from "@/content/club";
+import { timeline } from "@/content/club";
 import { posts, newsCategories } from "@/content/news";
 import { Banner, FormButton, PhotoSlot, SectionHead, Stars, T, RegisterButton } from "@/components/bits";
 import { EventRows } from "@/components/EventList";
@@ -126,15 +126,6 @@ export default async function Home() {
               <p className="muted small">{tr(p.summary, lang)}</p>
             </Link>
           ))}
-        </div>
-      </section>
-
-      <section className="wrap section" aria-labelledby="partners-title">
-        <div className="stack">
-          <h2 id="partners-title" style={{ fontSize: "1.5rem" }}>{en ? "Past summit partners" : "আগের সামিটের সহযোগীরা"}</h2>
-          <p className="muted" style={{ maxWidth: "70ch" }}>
-            {partnersPast}. <T lang={lang} text={{ en: "[Logos only with each partner's permission]", bn: "[প্রত্যেক সহযোগীর অনুমতি নিয়েই লোগো]" }} />
-          </p>
         </div>
       </section>
     </>

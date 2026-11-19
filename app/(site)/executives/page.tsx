@@ -22,7 +22,6 @@ export default async function Executives() {
   const lang: Locale = "en";
   const en = lang === "en";
   const current = executiveSessions.find((s) => s.current) ?? executiveSessions[0];
-  const former = executiveSessions.filter((s) => s !== current);
 
   const officersPanel = (
     <div className="tab-section" role="region" aria-labelledby="h-officers">
@@ -60,33 +59,6 @@ export default async function Executives() {
     </div>
   );
 
-  const formerPanel = (
-    <div className="stack" style={{ gap: "var(--s5)" }}>
-      <h2 className="tab-heading">{en ? "Former executives" : "সাবেক কার্যনির্বাহী"}</h2>
-      {former.length === 0 ? (
-        <p className="empty">{en ? "Earlier sessions will be added here." : "আগের সেশনগুলো এখানে যোগ হবে।"}</p>
-      ) : (
-        <Tabs
-          small
-          label={en ? "Session" : "সেশন"}
-          initial={former[0].session}
-          tabs={former.map((s) => ({
-            id: s.session,
-            label: sessionLabel(s.session, lang),
-            content: (
-              <div className="tab-section" role="region" aria-label={`${en ? "Session" : "সেশন"} ${s.session}`}>
-                <h3 className="tab-heading small-heading"><Txt>{sessionLabel(s.session, lang)}</Txt></h3>
-                <div className="people">
-                  {s.members.map((p, i) => <PersonCard key={i} lang={lang} {...p} />)}
-                </div>
-              </div>
-            ),
-          }))}
-        />
-      )}
-    </div>
-  );
-
   return (
     <>
       <PageHead lang={lang} kicker={{ en: "Meet the team", bn: "আমাদের দল" }} title={title} lead={lead} />
@@ -98,7 +70,6 @@ export default async function Executives() {
           tabs={[
             { id: "officers", label: en ? "Officers" : "উপদেষ্টা", content: officersPanel },
             { id: "current", label: en ? "Current" : "বর্তমান", content: currentPanel },
-            { id: "former", label: en ? "Former" : "সাবেক", content: formerPanel },
           ]}
         />
         <p className="small muted">{tr(ui.consentNote, lang)}</p>

@@ -9,6 +9,7 @@ export const timeline: { year: string; text: L }[] = [
   { year: "2018", text: { en: "Renamed the Notre Dame Eco and Space Club [confirm date].", bn: "নাম বদলে নটর ডেম ইকো অ্যান্ড স্পেস ক্লাব [তারিখ নিশ্চিত করুন]।" } },
   { year: "2022", text: { en: "The 5th summit returns to campus after an online year.", bn: "অনলাইনে এক বছরের পর ৫ম সামিট আবার ক্যাম্পাসে।" } },
   { year: "2025", text: { en: "8th summit: nearly 2,000 participants from more than 60 institutions.", bn: "৮ম সামিট: ৬০টির বেশি প্রতিষ্ঠানের প্রায় ২,০০০ অংশগ্রহণকারী।" } },
+  { year: "2026", text: { en: "9th summit, 4–10 April.", bn: "৯ম সামিট, ৪–১০ এপ্রিল।" } },
   { year: "2027", text: { en: "10th summit, 28–30 January.", bn: "১০ম সামিট, ২৮–৩০ জানুয়ারি।" } },
 ];
 
@@ -19,7 +20,7 @@ export const nessSchedule: { day: L; plan: L }[] = [
 ];
 
 export const nessPast: { edition: L; year: string; slug?: string; note: L }[] = [
-  { edition: { en: "9th", bn: "৯ম" }, year: "2026", note: { en: "[Dates and highlights to add]", bn: "[তারিখ ও উল্লেখযোগ্য দিক যোগ করতে হবে]" } },
+  { edition: { en: "9th", bn: "৯ম" }, year: "2026", note: { en: "4–10 April 2026. [Highlights to add]", bn: "৪–১০ এপ্রিল ২০২৬। [উল্লেখযোগ্য দিক যোগ করতে হবে]" } },
   { edition: { en: "8th", bn: "৮ম" }, year: "2025", slug: "ness-2025", note: { en: "Nearly 2,000 participants from 60+ institutions. Formula IUT car unveiled.", bn: "৬০টির বেশি প্রতিষ্ঠানের প্রায় ২,০০০ অংশগ্রহণকারী। ফর্মুলা আইইউটি গাড়ি উন্মোচন।" } },
   { edition: { en: "7th", bn: "৭ম" }, year: "2024", slug: "ness-2024", note: { en: "About 2,500 participants and 6,000 visitors. Hybrid rocket engine test.", bn: "প্রায় ২,৫০০ অংশগ্রহণকারী ও ৬,০০০ দর্শনার্থী। হাইব্রিড রকেট ইঞ্জিন পরীক্ষা।" } },
   { edition: { en: "6th", bn: "৬ষ্ঠ" }, year: "[2023?]", note: { en: "[Details to add]", bn: "[তথ্য যোগ করতে হবে]" } },
