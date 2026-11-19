@@ -650,4 +650,36 @@ details[open] > summary::after { transform: rotate(45deg); }
 
 /* Photosphere page: the PS 7.0 logo in place of the heading */
 .ps-logo-h1 { margin: var(--s2) 0 var(--s3); line-height: 0; }
-.ps-logo-h1 img { display: block; width: min(100%, 36rem); height: auto; }
+.ps-logo-h1 img { display: block; width: min(60%, 21.6rem); height: auto; }
+
+/* Photosphere page (trial, 20 Nov 2026): picture background, Veroland titles, Montserrat SemiBold text. */
+@font-face { font-family: "Veroland"; src: url("./fonts/veroland.woff2") format("woff2"); font-weight: 400; font-style: normal; font-display: swap; }
+@font-face { font-family: "Montserrat"; src: url("./fonts/montserrat-600.woff2") format("woff2"); font-weight: 600; font-style: normal; font-display: swap; }
+.ps-bg {
+  position: fixed; inset: 0; z-index: -1; pointer-events: none;
+  background:
+    linear-gradient(180deg, rgba(8, 18, 36, 0.5) 0%, rgba(8, 18, 36, 0.42) 45%, rgba(8, 18, 36, 0.68) 100%),
+    var(--bg-lg) center 55% / cover no-repeat,
+    var(--night);
+}
+@media (max-width: 900px) {
+  .ps-bg {
+    background:
+      linear-gradient(180deg, rgba(8, 18, 36, 0.5) 0%, rgba(8, 18, 36, 0.42) 45%, rgba(8, 18, 36, 0.68) 100%),
+      var(--bg-sm) center 55% / cover no-repeat,
+      var(--night);
+  }
+}
+body:has(.ps-bg) main { font-family: "Montserrat", system-ui, sans-serif; font-weight: 600; }
+body:has(.ps-bg) main :is(.btn, button, input, select, textarea, table) { font-family: inherit; }
+/* Veroland has letters only; numbers and punctuation fall back to Montserrat. */
+body:has(.ps-bg) main :is(h1, h2, h3) { font-family: "Veroland", "Montserrat", system-ui, sans-serif; font-weight: 400; letter-spacing: 0.01em; }
+body:has(.ps-bg) main .surface {
+  background: rgba(15, 30, 54, 0.6);
+  border-color: rgba(233, 238, 246, 0.2);
+  -webkit-backdrop-filter: blur(14px) saturate(140%);
+  backdrop-filter: blur(14px) saturate(140%);
+}
+@media (prefers-reduced-transparency: reduce) {
+  body:has(.ps-bg) main .surface { background: rgba(15, 30, 54, 0.92); -webkit-backdrop-filter: none; backdrop-filter: none; }
+}
