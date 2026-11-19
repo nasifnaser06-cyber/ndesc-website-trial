@@ -165,7 +165,7 @@ export default function RegisterForm({
             {([
               ["solo", "Solo pass", `${live.prices.solo} Tk`, "All solo segments in your category"],
               ["team", "Team pass", `${live.prices.team} Tk per person`, "Every segment, solo and team. Up to 3 per team, each registers"],
-              ["online", "Online only", "Free", "All online submission segments"],
+              ["online", "Online segments", "Free", "All online submission segments"],
             ] as const).map(([val, name, cost, note]) => (
               <label key={val} className="reg-pass" data-on={pass === val}>
                 <input type="radio" name="pass" value={val} checked={pass === val} onChange={() => setPass(val)} />
@@ -206,7 +206,7 @@ export default function RegisterForm({
                 {pass === "team"
                   ? "Your team pass includes every segment open to your category, solo and team. You don't need to pick."
                   : pass === "online"
-                    ? "Your online pass includes every online submission segment open to your category. You don't need to pick."
+                    ? "This covers every online submission segment open to your category. You don't need to pick."
                     : "Your solo pass includes every solo segment open to your category. You don't need to pick."}
               </p>
               <ul className="reg-included">
@@ -309,8 +309,8 @@ function StatusCheck({ endpoint }: { endpoint: string | null }) {
       <form className="form" onSubmit={(e) => check(e)}>
         <div className="reg-grid">
           <div><label htmlFor="sphone">Mobile number</label><input id="sphone" name="sphone" inputMode="tel" /></div>
-          <div><label htmlFor="strx">TrxID (or leave blank and use email)</label><input id="strx" name="strx" style={{ textTransform: "uppercase" }} /></div>
-          <div className="reg-wide"><label htmlFor="semail">Email (for free online registrations)</label><input id="semail" name="semail" type="email" /></div>
+          <div><label htmlFor="strx">TrxID (if you paid)</label><input id="strx" name="strx" style={{ textTransform: "uppercase" }} /></div>
+          <div className="reg-wide"><label htmlFor="semail">Email (if you registered for online segments)</label><input id="semail" name="semail" type="email" /></div>
         </div>
         <label className="reg-seg"><input type="checkbox" name="resend" /><span>Email my pass again if I'm verified</span></label>
         <div className="actions">
