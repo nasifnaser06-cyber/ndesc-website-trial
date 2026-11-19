@@ -55,7 +55,7 @@ export default async function Ness() {
 
   return (
     <>
-      {/* Page background (trial, 20 Nov 2026): polar bears under the aurora, behind a dark veil for readable text. */}
+      {/* Page background (trial, 20 Nov 2026): polar bears under the aurora, behind a white veil; the page uses dark text. */}
       <div
         className="ness-bg"
         aria-hidden="true"
@@ -73,8 +73,8 @@ export default async function Ness() {
               {/* The NESS logo stands in for the "NESSX" heading; its alt text is the heading's name. */}
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
-                src={`${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}/ness/nessx-logo-360.webp`}
-                srcSet={[180, 360, 540].map((h) => `${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}/ness/nessx-logo-${h}.webp ${h}x`.replace(`${h}x`, `${h / 180}x`)).join(", ")}
+                src={`${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}/ness/nessx-logo-dark-360.webp`}
+                srcSet={[180, 360, 540].map((h) => `${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}/ness/nessx-logo-dark-${h}.webp ${h}x`.replace(`${h}x`, `${h / 180}x`)).join(", ")}
                 alt={nessx.name}
                 width={166}
                 height={180}

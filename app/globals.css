@@ -203,23 +203,56 @@ main:focus { outline: none; }
 .banner { display: block; width: 100%; height: auto; aspect-ratio: var(--banner-ratio, 16 / 9); object-fit: cover; border-radius: 16px; background: var(--deep); border: 1px solid var(--line); }
 .banner-figure { margin: 0; }
 
-/* NESS page background (trial, 20 Nov 2026). Fixed behind the page; the veil keeps text readable. */
+/* NESS page background (trial, 20 Nov 2026). Fixed behind the page under a white veil
+   (Mahmud: white fade, not blue). The page switches to dark text so it stays readable. */
 .ness-bg {
   position: fixed; inset: 0; z-index: -1; pointer-events: none;
   background:
-    linear-gradient(180deg, rgba(12, 26, 48, 0.5) 0%, rgba(12, 26, 48, 0.72) 45%, rgba(12, 26, 48, 0.86) 100%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.6) 0%, rgba(255, 255, 255, 0.7) 50%, rgba(255, 255, 255, 0.8) 100%),
     var(--bg-lg) center 42% / cover no-repeat,
-    var(--night);
+    #eef1f7;
 }
 @media (max-width: 900px) {
   .ness-bg {
     background:
-      linear-gradient(180deg, rgba(12, 26, 48, 0.5) 0%, rgba(12, 26, 48, 0.72) 45%, rgba(12, 26, 48, 0.86) 100%),
+      linear-gradient(180deg, rgba(255, 255, 255, 0.6) 0%, rgba(255, 255, 255, 0.7) 50%, rgba(255, 255, 255, 0.8) 100%),
       var(--bg-sm) center 40% / cover no-repeat,
-      var(--night);
+      #eef1f7;
   }
 }
 .sky.sky-clear { background: transparent; }
+.sky.sky-clear .stars { display: none; }
+
+/* Light colours for the NESS page body and footer (the header stays dark). */
+body:has(.ness-bg) main,
+body:has(.ness-bg) .site-footer {
+  --starlight: #0f1e36; /* text */
+  --haze: #33435e; /* muted text */
+  --sprout: #0d522d; /* links and accents */
+  --sprout-light: #0a3f22;
+  --line: rgba(15, 30, 54, 0.16);
+  --edge: #5f7192;
+  color: var(--starlight);
+}
+body:has(.ness-bg) main .btn { background: #8fd3a6; border-color: #8fd3a6; color: var(--night); }
+body:has(.ness-bg) main .btn:hover { background: #b9e6c8; border-color: #b9e6c8; color: var(--night); }
+body:has(.ness-bg) main .btn-secondary { background: rgba(255, 255, 255, 0.45); border-color: var(--sprout); color: var(--sprout); }
+body:has(.ness-bg) main .btn-secondary:hover { background: rgba(255, 255, 255, 0.75); color: var(--sprout-light); }
+
+/* Glass boxes on the NESS page. */
+body:has(.ness-bg) main .surface {
+  background: rgba(255, 255, 255, 0.42);
+  border: 1px solid rgba(255, 255, 255, 0.7);
+  box-shadow: 0 8px 32px rgba(15, 30, 54, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.6);
+  -webkit-backdrop-filter: blur(16px) saturate(150%);
+  backdrop-filter: blur(16px) saturate(150%);
+}
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  body:has(.ness-bg) main .surface { background: rgba(255, 255, 255, 0.82); }
+}
+@media (prefers-reduced-transparency: reduce) {
+  body:has(.ness-bg) main .surface { background: rgba(255, 255, 255, 0.92); -webkit-backdrop-filter: none; backdrop-filter: none; }
+}
 .panel-band.has-banner { padding-top: var(--s5); }
 .band-banner { flex: 1 1 100%; display: block; border-radius: 12px; overflow: hidden; border: 1px solid var(--line); }
 .band-banner .banner { border-radius: 0; border: 0; }
