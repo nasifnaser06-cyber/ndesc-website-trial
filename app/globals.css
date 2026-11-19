@@ -655,6 +655,7 @@ details[open] > summary::after { transform: rotate(45deg); }
 /* Photosphere page (trial, 20 Nov 2026): picture background, Veroland titles, Montserrat SemiBold text. */
 @font-face { font-family: "Veroland"; src: url("./fonts/veroland.woff2") format("woff2"); font-weight: 400; font-style: normal; font-display: swap; }
 @font-face { font-family: "Montserrat"; src: url("./fonts/montserrat-600.woff2") format("woff2"); font-weight: 600; font-style: normal; font-display: swap; }
+@font-face { font-family: "Montserrat"; src: url("./fonts/montserrat-800.woff2") format("woff2"); font-weight: 800; font-style: normal; font-display: swap; }
 .ps-bg {
   position: fixed; inset: 0; z-index: -1; pointer-events: none;
   background:
@@ -674,6 +675,8 @@ body:has(.ps-bg) main { font-family: "Montserrat", system-ui, sans-serif; font-w
 body:has(.ps-bg) main :is(.btn, button, input, select, textarea, table) { font-family: inherit; }
 /* Veroland has letters only; numbers and punctuation fall back to Montserrat. */
 body:has(.ps-bg) main :is(h1, h2, h3) { font-family: "Veroland", "Montserrat", system-ui, sans-serif; font-weight: 400; letter-spacing: 0.02em; text-transform: uppercase; }
+/* Organizer names in Montserrat ExtraBold, normal case. */
+body:has(.ps-bg) main .organizer h3 { font-family: "Montserrat", system-ui, sans-serif; font-weight: 800; text-transform: none; letter-spacing: 0; }
 /* Table dividers in white at 60% so they show against the picture. */
 body:has(.ps-bg) main :is(th, td) { border-top-color: rgba(255, 255, 255, 0.6); }
 body:has(.ps-bg) main .surface {
