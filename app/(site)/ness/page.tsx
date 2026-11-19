@@ -216,11 +216,6 @@ export default async function Ness() {
               </div>
             ))}
           </div>
-          {site.email && (
-            <p className="small muted contact-note" style={{ marginTop: "var(--s4)" }}>
-              {en ? "Or email the club: " : "অথবা ক্লাবকে ইমেইল করুন: "}<ContactLink kind="email" value={site.email} lang={lang} />
-            </p>
-          )}
         </section>
 
         <section aria-labelledby="past">

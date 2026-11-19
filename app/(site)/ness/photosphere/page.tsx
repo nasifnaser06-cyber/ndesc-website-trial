@@ -1,7 +1,6 @@
 import Link from "next/link";
 import { type Locale, path } from "@/lib/i18n";
 import { meta } from "@/lib/view";
-import { site } from "@/content/site";
 import { photosphere, photosphereBanner } from "@/content/photosphere";
 import { ContactLink, FormButton } from "@/components/bits";
 
@@ -137,11 +136,6 @@ export default async function Photosphere() {
               </div>
             ))}
           </div>
-          {site.email && (
-            <p className="small muted ps-note contact-note">
-              Or email the club: <ContactLink kind="email" value={site.email} lang={lang} />
-            </p>
-          )}
         </section>
       </div>
     </>
