@@ -120,22 +120,11 @@ function handleRegister(b) {
     var dup = rows.filter(function (x) {
       return x.phone === r.phone && x.pass === r.pass && (r.pass === 'online' ? x.email === r.email : x.trxId === r.trxId);
     })[0];
-    if (dup) return { ok: true, regId: dup.id, status: dup.status, teamCode: dup.teamCode, duplicate: true };
+    if (dup) return { ok: true, regId: dup.id, status: dup.status, duplicate: true };
 
-    // Team codes: the first teammate gets a new one, the others type it in.
-    var newTeam = false;
-    if (r.pass === 'team') {
-      if (r.teamCode) {
-        var members = rows.filter(function (x) { return x.teamCode === r.teamCode && x.status !== 'Cancelled'; });
-        if (!members.length) return { ok: false, errors: ['We could not find that team code. Check it with your teammate, or leave it blank to start a new team.'] };
-        if (members.length >= LOGIC.MAX_TEAM) return { ok: false, errors: ['That team already has 3 members.'] };
-      } else {
-        r.teamCode = newCode(6, rows.map(function (x) { return x.teamCode; }));
-        newTeam = true;
-      }
-    } else {
-      r.teamCode = '';
-    }
+    // No team codes (20 Nov 2026): team pass holders form teams of up to 3 at the summit.
+    // The Team code column stays in the sheet, left blank.
+    r.teamCode = '';
 
     var id = 'R' + Utilities.formatDate(new Date(), 'Asia/Dhaka', 'yyMMdd') + '-' + newCode(5, rows.map(function (x) { return x.id; }));
     sh.appendRow([id, new Date(), 'Waiting', r.pass, r.name, r.email, "'" + r.phone, r.institution, r.className,
@@ -149,7 +138,7 @@ function handleRegister(b) {
   if (r.pass !== 'online') sendReceivedEmail(r, id);
   runMatcher(); // pays may already be in; a free pass is verified now
   var now = readRegs().filter(function (x) { return x.id === id; })[0];
-  return { ok: true, regId: id, status: now ? now.status : 'Waiting', teamCode: r.teamCode, newTeam: newTeam };
+  return { ok: true, regId: id, status: now ? now.status : 'Waiting' };
 }
 
 // ---------------------------------------------------------------- status lookup
@@ -269,7 +258,6 @@ function sendReceivedEmail(r, id) {
     '<p>Hi ' + esc(r.name) + ',</p>' +
     '<p>We have your NESSX registration. We are now matching your payment (TrxID <b>' + esc(r.trxId) + '</b>). ' +
     'Your pass usually arrives within a few minutes. Please do not pay again.</p>' +
-    (r.pass === 'team' ? '<p>Your team code is <b>' + esc(r.teamCode) + '</b>. Share it with your teammates so they can join your team.</p>' : '') +
     '<p>Check your status any time: ' + esc(s['Website']) + 'register/</p>' +
     '<p>NESSX Team<br>Notre Dame Eco and Space Club</p>', false);
 }
@@ -302,9 +290,9 @@ function sendPassEmail(r, isResend) {
     row('Category', esc(r.category)) +
     row('Institution', esc(r.institution)) +
     row('Your pass includes', esc(r.segments)) +
-    (r.teamCode ? row('Team code', esc(r.teamCode)) : '') +
     row('Check code', '<span style="font-family:monospace;font-size:18px">' + esc(r.checkCode) + '</span>') +
     '</table>' + qr +
+    (r.pass === 'team' ? '<p>With a team pass you can form a team of up to 3 team pass holders at the summit.</p>' : '') +
     '<p>Show this email (or the QR code) at the gate. Bring your student ID card.</p>' +
     '<p>NESSX Team<br>Notre Dame Eco and Space Club</p></div>';
   var sent = mail(r.email, 'Your NESSX ' + passName + ', ' + r.participantId + (isResend ? ' (sent again)' : ''), html, true);

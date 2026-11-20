@@ -45,11 +45,11 @@ check('review email sent', /checking your payment/.test(mails[mails.length - 1].
 // pay first, register later (Cash In from an agent)
 post({ action: 'sms', key, text: 'Cash In Tk 300.00 from 01622334999 successful. Fee Tk 0.00. Balance Tk 1,035.17. TrxID DKI4MZEC1K at 18/11/2026 17:50. Download App: https://bKa.sh/8app' });
 let team1 = post({ ...base, phone: '01912345678', email: 't1@example.com', pass: 'team', trxId: 'DKI4MZEC1K', sender: '01912345678' });
-check('team: new code, verified from earlier cash in', team1.ok && team1.newTeam && /^[A-Z0-9]{6}$/.test(team1.teamCode) && team1.status === 'Verified', team1);
+check('team: no team code, verified from earlier cash in', team1.ok && !team1.teamCode && team1.status === 'Verified' && sheets.Registrations.data.find(r => r[0] === team1.regId)[11] === '', team1);
 check('team pass includes every segment', /All segments.*solo and team/.test(sheets.Registrations.data.find(r => r[0] === team1.regId)[10]));
 
-let badCode = post({ ...base, phone: '01912345679', email: 't2@example.com', pass: 'team', teamCode: 'ZZZZZZ', trxId: 'DKXXXXXX99', sender: '01912345679' });
-check('unknown team code refused', badCode.ok === false && /team code/.test(badCode.errors[0]), badCode);
+let oldForm = post({ ...base, phone: '01912345679', email: 't2@example.com', pass: 'team', teamCode: 'ZZZZZZ', trxId: 'DKXXXXXX99', sender: '01912345679' });
+check('a team code from an old form is ignored', oldForm.ok && oldForm.status === 'Waiting' && sheets.Registrations.data.find(r => r[0] === oldForm.regId)[11] === '', oldForm);
 
 let online = post({ ...base, phone: '01555555555', email: 'o@example.com', pass: 'online' });
 check('online pass verified immediately', online.ok && online.status === 'Verified', online);

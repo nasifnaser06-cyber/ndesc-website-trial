@@ -72,21 +72,15 @@ check('no payment after 24h to review', d.review.length === 1 && /24 hours/.test
 d = L.decide([reg('r1', { pass: 'online' })], [], P, now);
 check('online verified without payment', d.verify.length === 1, d);
 
-d = L.decide([reg('t1', { pass: 'team', trxId: 'CCCC333333', teamCode: 'ABC123' })], [pay('CCCC333333', 300)], P, now);
-check('team member paying 300 alone', d.verify.length === 1, d);
+d = L.decide([reg('t1', { pass: 'team', trxId: 'CCCC333333' })], [pay('CCCC333333', 300)], P, now);
+check('team pass holder paying 300 verified', d.verify.length === 1, d);
 
-const team = [1, 2, 3].map(i => reg('t' + i, { pass: 'team', trxId: 'CCCC333333', teamCode: 'ABC123', sender: '0171111111' + i, createdMs: now - h + i }));
+const team = [1, 2, 3].map(i => reg('t' + i, { pass: 'team', trxId: 'CCCC333333', sender: '0171111111' + i, createdMs: now - h + i }));
 d = L.decide(team, [pay('CCCC333333', 900, '01711111111')], P, now);
-check('one 900 Tk payment covers 3 teammates', d.verify.length === 3 && d.review.length === 0, d);
+check('no shared team payments: one 900 Tk payment goes to review', d.verify.length === 0 && d.review.length === 3 && /expected 300/.test(d.review[0].reason), d);
 
-d = L.decide([...team, reg('t4', { pass: 'team', trxId: 'CCCC333333', teamCode: 'ABC123', createdMs: now })], [pay('CCCC333333', 900)], P, now);
-check('a 4th on a 900 payment to review', d.verify.length === 3 && d.review.length === 1 && d.review[0].id === 't4', d);
-
-d = L.decide([reg('t1', { pass: 'team', trxId: 'CCCC333333', teamCode: 'ABC123' }), reg('x1', { pass: 'team', trxId: 'CCCC333333', teamCode: 'ZZZ999', createdMs: now })], [pay('CCCC333333', 600)], P, now);
-check('other team cannot share a payment', d.verify.length === 1 && d.review[0].id === 'x1', d);
-
-d = L.decide([reg('t1', { pass: 'team', trxId: 'CCCC333333', teamCode: '' })], [pay('CCCC333333', 600)], P, now);
-check('shared payment without team code to review', d.review.length === 1, d);
+d = L.decide(team.slice(0, 2), [pay('CCCC333333', 300, '01711111111')], P, now);
+check('two team pass holders cannot share one TrxID', d.verify.length === 1 && d.review.length === 1 && d.review[0].id === 't2', d);
 
 d = L.decide([reg('r1', { trxId: 'DDDD444444', status: 'Needs review' })], [pay('DDDD444444', 200)], P, now);
 check('rows already in review are left alone', d.verify.length === 0 && d.review.length === 0, d);

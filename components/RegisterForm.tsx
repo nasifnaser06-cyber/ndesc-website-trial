@@ -5,7 +5,7 @@ import { useEffect, useMemo, useRef, useState, type FormEvent } from "react";
 export type SegOption = { name: string; cats: string[]; online: boolean; team: boolean };
 type Pass = "solo" | "team" | "online";
 type Live = { open: boolean; bkash: string; nagad: string; prices: Record<Pass, number> };
-type Result = { regId: string; status: string; teamCode?: string; newTeam?: boolean };
+type Result = { regId: string; status: string };
 
 const PHONE = /^01[3-9]\d{8}$/;
 const TRX = /^[A-Z0-9]{8,12}$/;
@@ -93,8 +93,7 @@ export default function RegisterForm({
       institution: v("institution"),
       className,
       category,
-      teamCode: normTrx(v("teamCode")),
-      wallet: pass === "online" ? "" : wallet,
+            wallet: pass === "online" ? "" : wallet,
       trxId: pass === "online" ? "" : normTrx(v("trxId")),
       sender: pass === "online" ? "" : normPhone(v("sender")),
       // Registering is the agreement; the privacy note sits by the button. Kept for the sheet script.
@@ -107,7 +106,6 @@ export default function RegisterForm({
     if (!PHONE.test(body.phone)) errs.push("Enter a Bangladeshi mobile number, like 01712345678.");
     if (!body.institution) errs.push("Enter your school or college.");
     if (!category) errs.push("Choose your class.");
-    if (body.teamCode && !/^[A-Z0-9]{6}$/.test(body.teamCode)) errs.push("A team code has 6 letters and numbers.");
     if (pass !== "online") {
       if (!TRX.test(body.trxId)) errs.push("Enter the TrxID from your payment SMS. It has 8 to 12 letters and numbers, like DK481HDVPG.");
       if (!PHONE.test(body.sender)) errs.push("Enter the number you paid from.");
@@ -123,7 +121,7 @@ export default function RegisterForm({
     setBusy(true);
     try {
       const d = await call(endpoint!, body);
-      if (d.ok) setDone({ regId: d.regId, status: d.status, teamCode: d.teamCode, newTeam: d.newTeam });
+      if (d.ok) setDone({ regId: d.regId, status: d.status });
       else { setErrors(d.errors || [d.error || "Something went wrong. Please try again."]); errorBox.current?.focus(); }
     } catch {
       setErrors(["We couldn't reach the registration system. Check your internet and try again. You have not been charged twice: your payment is safe."]);
@@ -144,12 +142,6 @@ export default function RegisterForm({
           <p>We couldn't match your payment automatically, so our team will check it by hand, usually within a day. You don't need to pay again.</p>
         ) : (
           <p>We're matching your payment now. Your pass usually arrives by email within a few minutes. Please don't pay again.</p>
-        )}
-        {done.teamCode && (
-          <p className="reg-code">
-            Team code: <strong>{done.teamCode}</strong>
-            {done.newTeam && <span className="small muted"> Share this with your teammates. They type it in when they register.</span>}
-          </p>
         )}
         <p><a href={nessHref}>Back to NESS X</a></p>
       </div>
@@ -178,7 +170,7 @@ export default function RegisterForm({
           <div className="reg-passes">
             {([
               ["solo", "Solo pass", `${live.prices.solo} Tk`, "All solo segments in your category"],
-              ["team", "Team pass", `${live.prices.team} Tk per person`, "Every segment, solo and team. Up to 3 per team, each registers"],
+              ["team", "Team pass", `${live.prices.team} Tk per person`, "Every segment, solo and team. Teams of up to 3 form at the summit"],
               ["online", "Online segments", "Free", "All online submission segments"],
             ] as const).map(([val, name, cost, note]) => (
               <label key={val} className="reg-pass" data-on={pass === val}>
@@ -226,7 +218,7 @@ export default function RegisterForm({
             <>
               <p>
                 {pass === "team"
-                  ? "Your team pass includes every segment open to your category, solo and team. You don't need to pick."
+                  ? "Your team pass includes every segment open to your category, solo and team. You don't need to pick, and you don't need a team yet: team pass holders can form teams of up to 3 at the summit."
                   : pass === "online"
                     ? "This covers every online submission segment open to your category. You don't need to pick."
                     : "Your solo pass includes every solo segment open to your category. You don't need to pick."}
@@ -245,22 +237,9 @@ export default function RegisterForm({
           <p className="small muted" style={{ marginTop: "var(--s3)" }}>The UNOOSA special committee has its own registration form. Full rules for each segment are on the <a href={nessHref}>NESS X page</a>.</p>
         </fieldset>
 
-        {pass === "team" && (
-          <fieldset>
-            <legend><span className="reg-step">4</span> Your team</legend>
-            <div className="reg-grid">
-              <div className="reg-wide">
-                <label htmlFor="teamCode">Team code (leave blank if you are the first in your team)</label>
-                <input id="teamCode" name="teamCode" maxLength={6} placeholder="e.g. K7Q2MD" style={{ textTransform: "uppercase" }} />
-                <p className="small muted" style={{ marginTop: "var(--s2)" }}>The first teammate gets a code after registering. The other two type it here.</p>
-              </div>
-            </div>
-          </fieldset>
-        )}
-
         {pass !== "online" && (
           <fieldset>
-            <legend><span className="reg-step">{pass === "team" ? 5 : 4}</span> Pay, then enter your TrxID</legend>
+            <legend><span className="reg-step">4</span> Pay, then enter your TrxID</legend>
             <div className="reg-pay surface">
               <p className="reg-pay-amount">Send <strong>{price} Tk</strong> to <strong>{payNumber || "[club number]"}</strong> ({wallet})</p>
               <ol className="small">
@@ -268,7 +247,7 @@ export default function RegisterForm({
                 <li>Enter the number above and exactly {price} Tk.</li>
                 <li>You'll get an SMS with a <strong>TrxID</strong>, like DK481HDVPG. Type it below.</li>
               </ol>
-              <p className="small muted">No screenshots needed. One teammate can pay for the whole team ({live.prices.team * 2} Tk for two, {live.prices.team * 3} Tk for three): everyone then enters the same TrxID and team code.</p>
+              <p className="small muted">No screenshots needed.{pass === "team" ? " Each teammate pays for their own pass." : ""}</p>
             </div>
             <div className="reg-grid">
               <div>
