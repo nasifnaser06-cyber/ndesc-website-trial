@@ -908,3 +908,85 @@ body:has(.ness-three) main .reg-step { background: #0a4a70; color: #ebf5f9; }
 body:has(.ness-three) main .reg-category { border-color: #0a4a70; }
 /* Notices and errors: no red or amber here, so they stand out with a thick deep-blue edge instead. */
 body:has(.ness-three) main :is(.reg-draft, .reg-errors) { color: #0a4a70; background: #ebf5f9; border: 2px solid #0a4a70; border-left-width: 6px; }
+
+/* ---------------------------------------------------------------------------------------------
+   Photosphere 7.0 page in four colours only (Mahmud, 20 Nov 2026, trial):
+   navy #0b1c33 (veil over the picture, boxes, header, text on teal), blue #1d5f8a (lines, box rims,
+   button hover), teal #3ae3d1 (links, buttons, highlights), pale #e2f2fc (text).
+   Marked .ps-four. Contrast: #e2f2fc on #0b1c33 14.9:1, #3ae3d1 on #0b1c33 10.7:1,
+   #e2f2fc on #1d5f8a 6.0:1. #1d5f8a is only used for lines and edges (2.5:1 on navy).
+   --------------------------------------------------------------------------------------------- */
+.ps-bg.ps-four {
+  background:
+    linear-gradient(180deg, rgba(11, 28, 51, 0.5) 0%, rgba(11, 28, 51, 0.42) 45%, rgba(11, 28, 51, 0.7) 100%),
+    var(--bg-lg) center 55% / cover no-repeat,
+    #0b1c33;
+}
+@media (max-width: 900px) {
+  .ps-bg.ps-four {
+    background:
+      linear-gradient(180deg, rgba(11, 28, 51, 0.5) 0%, rgba(11, 28, 51, 0.42) 45%, rgba(11, 28, 51, 0.7) 100%),
+      var(--bg-sm) center 55% / cover no-repeat,
+      #0b1c33;
+  }
+}
+html:has(.ps-four) { background: #0b1c33; }
+
+body:has(.ps-four) main,
+body:has(.ps-four) .site-footer,
+body:has(.ps-four) .site-header {
+  --night: #0b1c33;
+  --dusk: #0b1c33;
+  --deep: #0b1c33;
+  --horizon: #1d5f8a;
+  --starlight: #e2f2fc;
+  --haze: #e2f2fc;
+  --sprout: #3ae3d1;
+  --sprout-light: #e2f2fc;
+  --line: #1d5f8a;
+  --edge: #1d5f8a;
+  color: #e2f2fc;
+}
+body:has(.ps-four) main a:hover { color: #e2f2fc; }
+
+/* Buttons: teal with navy text; blue on hover */
+body:has(.ps-four) main .btn { background: #3ae3d1; border-color: #3ae3d1; color: #0b1c33; }
+body:has(.ps-four) main .btn:hover { background: #1d5f8a; border-color: #1d5f8a; color: #e2f2fc; }
+body:has(.ps-four) main .btn-secondary { background: rgba(11, 28, 51, 0.5); border-color: #3ae3d1; color: #3ae3d1; }
+body:has(.ps-four) main .btn-secondary:hover { background: #1d5f8a; border-color: #1d5f8a; color: #e2f2fc; }
+body:has(.ps-four) main :focus-visible { outline-color: #3ae3d1; }
+
+/* Boxes, table lines, renaming box and file-name code */
+body:has(.ps-four) main .surface { background: rgba(11, 28, 51, 0.62); border-color: #1d5f8a; }
+@media (prefers-reduced-transparency: reduce) {
+  body:has(.ps-four) main .surface { background: #0b1c33; }
+}
+body:has(.ps-four) main :is(th, td) { border-top-color: #1d5f8a; }
+body:has(.ps-four) main .ps-rename { border-color: #3ae3d1; }
+body:has(.ps-four) main :is(.ps-format, .ps-examples) code { background: rgba(29, 95, 138, 0.35); }
+body:has(.ps-four) main .ps-format code { color: #3ae3d1; }
+body:has(.ps-four) main .ps-code { color: #3ae3d1; }
+body:has(.ps-four) main .tag { color: #e2f2fc; border-color: #1d5f8a; background: rgba(29, 95, 138, 0.35); }
+body:has(.ps-four) .todo { color: #3ae3d1; border-bottom-color: #3ae3d1; }
+
+/* Header, footer and skip link on this page */
+body:has(.ps-four) .site-header { background: rgba(11, 28, 51, 0.94); --line: rgba(29, 95, 138, 0.6); }
+@media (prefers-reduced-transparency: reduce) { body:has(.ps-four) .site-header { background: #0b1c33; } }
+body:has(.ps-four) .site-footer { background: rgba(11, 28, 51, 0.6); border-top-color: #1d5f8a; }
+@media (prefers-reduced-transparency: reduce) { body:has(.ps-four) .site-footer { background: #0b1c33; } }
+body:has(.ps-four) .crest-tile { background: #e2f2fc; }
+body:has(.ps-four) .skip-link { background: #3ae3d1; color: #0b1c33; }
+body:has(.ps-four) .ice-btn {
+  background: linear-gradient(135deg, #e2f2fc 0%, #3ae3d1 50%, #e2f2fc 100%);
+  border-color: #3ae3d1;
+  color: #0b1c33;
+  box-shadow: inset 0 0 0 1px rgba(226, 242, 252, 0.5);
+}
+body:has(.ps-four) .ice-btn:hover {
+  background: linear-gradient(135deg, #e2f2fc 0%, #e2f2fc 50%, #3ae3d1 100%);
+  box-shadow: inset 0 0 0 1px rgba(226, 242, 252, 0.7), 0 0 18px 0 rgba(58, 227, 209, 0.4);
+}
+body:has(.ps-four) .ice .crystal path { stroke: #e2f2fc; }
+body:has(.ps-four) .ice { filter: drop-shadow(0 0 0.6px #0b1c33) drop-shadow(0 0 2px rgba(11, 28, 51, 0.4)); }
+body:has(.ps-four) .ice-btn::before,
+body:has(.ps-four) .ice-btn::after { background: linear-gradient(105deg, transparent 30%, rgba(226, 242, 252, 0.6) 48%, rgba(226, 242, 252, 0.1) 56%, transparent 70%); }

@@ -23,7 +23,7 @@ export default async function Photosphere() {
     <>
       {/* Page background (trial, 20 Nov 2026): snowy peaks under the aurora and the Milky Way, behind a dark veil. */}
       <div
-        className="ps-bg"
+        className="ps-bg ps-four"
         aria-hidden="true"
         style={{
           ["--bg-lg" as string]: `url("${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}/ness/ps-bg-2400.webp")`,
