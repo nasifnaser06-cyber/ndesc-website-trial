@@ -232,6 +232,21 @@ body:has(.ness-bg) .site-footer { background: rgba(255, 255, 255, 0.42); border-
   }
 }
 .sky.sky-clear { background: transparent; }
+/* Static picture on phones (Mahmud, 20 Nov 2026). The layer is sized to the largest viewport (100lvh:
+   the screen with the browser bars hidden), so it does not resize or leave a gap when the address bar
+   slides in and out during fast scrolling. It sits on its own compositing layer, and the page canvas
+   behind it takes the picture's colour, so any overscroll edge matches instead of flashing navy. */
+.ness-bg, .ps-bg {
+  inset: 0 0 auto 0;
+  height: 100vh;
+  height: 100lvh;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+}
+html:has(.ness-bg) { background: #6391a8; }
+html:has(.ps-bg) { background: #082846; }
+body:has(.ness-bg), body:has(.ps-bg) { background: transparent; }
+
 .sky.sky-clear .stars { display: none; }
 
 /* Light colours for the NESS page body and footer (the header stays dark). */
