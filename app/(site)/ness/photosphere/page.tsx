@@ -2,7 +2,7 @@ import Link from "next/link";
 import { type Locale, path } from "@/lib/i18n";
 import { meta } from "@/lib/view";
 import { photosphere, photosphereBanner } from "@/content/photosphere";
-import { ContactLink, FormButton } from "@/components/bits";
+import { ContactLink, FormButton, RegisterButton } from "@/components/bits";
 
 const title = { en: "Photosphere 7.0", bn: "Photosphere 7.0" };
 const lead = {
@@ -54,7 +54,7 @@ export default async function Photosphere() {
               <div><dt>Entry</dt><dd>Free to submit</dd></div>
             </dl>
             <div className="actions">
-              <a className="btn" href="#ps-submit">Register now</a>
+              <RegisterButton lang={lang}>Register now</RegisterButton>
               <Link className="btn btn-secondary" href={`${path(lang, "/ness")}#segments`}>See other segments</Link>
             </div>
           </div>
