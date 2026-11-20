@@ -96,16 +96,15 @@ main:focus { outline: none; }
 /* Header */
 .site-header { position: sticky; top: 0; z-index: 20; background: rgba(15, 30, 54, 0.92); backdrop-filter: blur(16px) saturate(160%); -webkit-backdrop-filter: blur(16px) saturate(160%); border-bottom: 1px solid var(--line); }
 @media (prefers-reduced-transparency: reduce) { .site-header { background: var(--night); backdrop-filter: none; } }
-/* Slides away while scrolling down, back on scroll up. Keyboard focus inside always shows it. */
-.site-header { transition: transform 0.32s cubic-bezier(0.22, 1, 0.36, 1); will-change: transform; }
-.site-header[data-hidden="true"] { transform: translateY(-100%); transition-duration: 0.24s; }
+/* Fades out while scrolling down, fades back in on scroll up (Mahmud, 20 Nov 2026: fade, not slide).
+   While faded it ignores taps, so the page underneath stays clickable. */
+.site-header { transition: opacity 0.35s ease; }
+.site-header[data-hidden="true"] { opacity: 0; pointer-events: none; transition-duration: 0.3s; }
 /* Stay visible while a keyboard user is inside the header. Only :focus-visible counts: a link tapped
    with a finger or mouse keeps focus after navigating, and must not pin the header on the next page. */
-.site-header[data-hidden="true"]:has(:focus-visible) { transform: none; }
+.site-header[data-hidden="true"]:has(:focus-visible) { opacity: 1; pointer-events: auto; }
 @media (prefers-reduced-motion: reduce) {
-  .site-header { transition: opacity 0.15s linear; }
-  .site-header[data-hidden="true"] { transform: translateY(-100%); opacity: 0; }
-  .site-header[data-hidden="true"]:has(:focus-visible) { transform: none; opacity: 1; }
+  .site-header, .site-header[data-hidden="true"] { transition-duration: 0.15s; }
 }
 .header-row { display: flex; align-items: center; gap: var(--s5); min-height: 72px; }
 .brand { display: flex; align-items: center; gap: var(--s3); color: var(--starlight); text-decoration: none; margin-right: auto; }
