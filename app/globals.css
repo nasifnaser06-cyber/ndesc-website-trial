@@ -786,3 +786,99 @@ body:has(.ness-bg) main .reg-errors { background: rgba(255, 235, 230, 0.8); bord
 body:has(.ness-bg) main .sky-copy .label a { color: var(--sprout); }
 .reg-page { padding-bottom: var(--s4); }
 body:has(.ness-bg) main { color-scheme: light; } /* light checkboxes and dropdowns */
+
+/* ---------------------------------------------------------------------------------------------
+   NESS X page in three colours only (Mahmud, 20 Nov 2026, trial):
+   deep blue #0a4a70 (text, links, buttons), sky #8ed1e6 (lines, rims, hovers), ice #ebf5f9 (veil,
+   boxes, text on blue). Applies to the NESS page only (marked .ness-three); the Register page keeps
+   the earlier NESS look. Transparency is only ever one of these three colours.
+   Contrast: #0a4a70 on #ebf5f9 8.5:1, on #8ed1e6 5.6:1; #ebf5f9 on #0a4a70 8.5:1.
+   --------------------------------------------------------------------------------------------- */
+.ness-bg.ness-three {
+  background:
+    linear-gradient(rgba(235, 245, 249, 0.6), rgba(235, 245, 249, 0.6)),
+    var(--bg-lg) center 42% / cover no-repeat,
+    #8ed1e6;
+}
+@media (max-width: 900px) {
+  .ness-bg.ness-three {
+    background:
+      linear-gradient(rgba(235, 245, 249, 0.6), rgba(235, 245, 249, 0.6)),
+      var(--bg-sm) center 40% / cover no-repeat,
+      #8ed1e6;
+  }
+}
+html:has(.ness-three) { background: #8ed1e6; }
+
+/* Text and accents */
+body:has(.ness-three) main,
+body:has(.ness-three) .site-footer {
+  --starlight: #0a4a70;
+  --haze: #0a4a70;
+  --sprout: #0a4a70;
+  --sprout-light: #0a4a70;
+  --line: #8ed1e6;
+  --edge: #0a4a70;
+  color: #0a4a70;
+}
+body:has(.ness-three) main a:hover { color: #0a4a70; text-decoration-color: #8ed1e6; }
+
+/* Buttons: deep blue with ice text; sky on hover */
+body:has(.ness-three) main .btn { background: #0a4a70; border-color: #0a4a70; color: #ebf5f9; }
+body:has(.ness-three) main .btn:hover { background: #8ed1e6; border-color: #8ed1e6; color: #0a4a70; }
+body:has(.ness-three) main .btn-secondary { background: rgba(235, 245, 249, 0.6); border-color: #0a4a70; color: #0a4a70; }
+body:has(.ness-three) main .btn-secondary:hover { background: #ebf5f9; border-color: #0a4a70; color: #0a4a70; }
+body:has(.ness-three) main :focus-visible { outline-color: #0a4a70; }
+
+/* Ice boxes */
+body:has(.ness-three) main .surface {
+  background: linear-gradient(145deg, rgba(235, 245, 249, 0.62) 0%, rgba(235, 245, 249, 0.42) 55%, rgba(235, 245, 249, 0.56) 100%);
+  border: 1px solid #8ed1e6;
+  box-shadow:
+    0 10px 36px rgba(10, 74, 112, 0.12),
+    inset 0 1px 0 rgba(235, 245, 249, 0.9),
+    inset 0 0 22px rgba(235, 245, 249, 0.3);
+}
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  body:has(.ness-three) main .surface { background: rgba(235, 245, 249, 0.9); }
+}
+@media (prefers-reduced-transparency: reduce) {
+  body:has(.ness-three) main .surface { background: #ebf5f9; }
+}
+
+/* Footer */
+body:has(.ness-three) .site-footer { background: rgba(235, 245, 249, 0.6); border-top-color: #8ed1e6; }
+@media (prefers-reduced-transparency: reduce) {
+  body:has(.ness-three) .site-footer { background: #ebf5f9; }
+}
+
+/* Header on this page: deep blue bar, ice text, sky accents */
+body:has(.ness-three) .site-header {
+  --starlight: #ebf5f9;
+  --haze: #ebf5f9;
+  --sprout: #8ed1e6;
+  --sprout-light: #ebf5f9;
+  --line: rgba(142, 209, 230, 0.35);
+  background: rgba(10, 74, 112, 0.94);
+}
+@media (prefers-reduced-transparency: reduce) {
+  body:has(.ness-three) .site-header { background: #0a4a70; }
+}
+body:has(.ness-three) .ice-btn {
+  background: linear-gradient(135deg, #ebf5f9 0%, #8ed1e6 50%, #ebf5f9 100%);
+  border-color: #8ed1e6;
+  color: #0a4a70;
+  box-shadow: inset 0 0 0 1px rgba(235, 245, 249, 0.6);
+}
+body:has(.ness-three) .ice-btn:hover {
+  background: linear-gradient(135deg, #ebf5f9 0%, #ebf5f9 50%, #8ed1e6 100%);
+  box-shadow: inset 0 0 0 1px rgba(235, 245, 249, 0.8), 0 0 18px 0 rgba(142, 209, 230, 0.45);
+}
+body:has(.ness-three) .ice .crystal path { stroke: #ebf5f9; }
+body:has(.ness-three) .ice { filter: drop-shadow(0 0 0.6px #0a4a70) drop-shadow(0 0 2px rgba(10, 74, 112, 0.35)); }
+body:has(.ness-three) .ice-btn::before,
+body:has(.ness-three) .ice-btn::after { background: linear-gradient(105deg, transparent 30%, rgba(235, 245, 249, 0.6) 48%, rgba(235, 245, 249, 0.1) 56%, transparent 70%); }
+/* Last pieces on this page: placeholders, the skip link and the college crest tile */
+body:has(.ness-three) .todo { color: #0a4a70; border-bottom-color: #0a4a70; }
+body:has(.ness-three) .skip-link { background: #0a4a70; color: #ebf5f9; }
+body:has(.ness-three) .crest-tile { background: #ebf5f9; }
