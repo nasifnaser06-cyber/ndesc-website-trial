@@ -99,11 +99,13 @@ main:focus { outline: none; }
 /* Slides away while scrolling down, back on scroll up. Keyboard focus inside always shows it. */
 .site-header { transition: transform 0.32s cubic-bezier(0.22, 1, 0.36, 1); will-change: transform; }
 .site-header[data-hidden="true"] { transform: translateY(-100%); transition-duration: 0.24s; }
-.site-header[data-hidden="true"]:focus-within { transform: none; }
+/* Stay visible while a keyboard user is inside the header. Only :focus-visible counts: a link tapped
+   with a finger or mouse keeps focus after navigating, and must not pin the header on the next page. */
+.site-header[data-hidden="true"]:has(:focus-visible) { transform: none; }
 @media (prefers-reduced-motion: reduce) {
   .site-header { transition: opacity 0.15s linear; }
   .site-header[data-hidden="true"] { transform: translateY(-100%); opacity: 0; }
-  .site-header[data-hidden="true"]:focus-within { transform: none; opacity: 1; }
+  .site-header[data-hidden="true"]:has(:focus-visible) { transform: none; opacity: 1; }
 }
 .header-row { display: flex; align-items: center; gap: var(--s5); min-height: 72px; }
 .brand { display: flex; align-items: center; gap: var(--s3); color: var(--starlight); text-decoration: none; margin-right: auto; }
