@@ -30,7 +30,7 @@ export default async function Register() {
     <>
       {/* Same look as the NESS X page (Mahmud, 20 Nov 2026, trial): icy polar-bear background, clear hero, ice boxes. */}
       <div
-        className="ness-bg"
+        className="ness-bg ness-three"
         aria-hidden="true"
         style={{
           ["--bg-lg" as string]: `url("${bp}/ness/ness-bg-2400.webp")`,
