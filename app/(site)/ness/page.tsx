@@ -57,7 +57,7 @@ export default async function Ness() {
     <>
       {/* Page background (trial, 20 Nov 2026): polar bears under the aurora, behind a white veil; the page uses dark text. */}
       <div
-        className="ness-bg"
+        className="ness-bg ness-three"
         aria-hidden="true"
         style={{
           ["--bg-lg" as string]: `url("${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}/ness/ness-bg-2400.webp")`,
