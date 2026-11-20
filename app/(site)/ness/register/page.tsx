@@ -42,11 +42,19 @@ export default async function Register() {
           <div className="sky-copy">
             <p className="label"><Link href={path(lang, "/ness")}>{nessx.name}</Link> · {nessx.fullName}, 2027</p>
             <h1 id="reg-h1">{title.en}</h1>
-            {/* Lead and facts in an ice box (Mahmud, 20 Nov 2026, trial); the venue shows a pin icon, not the word. */}
+            {/* Date and venue in an ice box, each with an icon instead of a label (Mahmud, 20 Nov 2026, trial). */}
             <div className="surface reg-intro">
-              <p>{lead.en}</p>
-              <dl className="facts">
-                <div><dt>Dates</dt><dd>{ness ? formatDateRange(ness.start, ness.end, lang, "long") : "28–30 January 2027"}</dd></div>
+              <dl className="facts facts-icons">
+                <div>
+                  <dt>
+                    <svg className="fact-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" focusable="false">
+                      <rect x="3" y="4" width="18" height="18" rx="2" />
+                      <path d="M16 2v4M8 2v4M3 10h18" />
+                    </svg>
+                    <span className="visually-hidden">Dates</span>
+                  </dt>
+                  <dd>{ness ? formatDateRange(ness.start, ness.end, lang, "long") : "28–30 January 2027"}</dd>
+                </div>
                 <div>
                   <dt>
                     <svg className="fact-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" focusable="false">
@@ -57,7 +65,6 @@ export default async function Register() {
                   </dt>
                   <dd>Notre Dame College, Motijheel, Dhaka</dd>
                 </div>
-                <div><dt>Online segments</dt><dd>Free</dd></div>
               </dl>
             </div>
           </div>
