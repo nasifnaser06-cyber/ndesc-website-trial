@@ -1196,8 +1196,8 @@ body:has(.ps-four) .site-header {
    height and their tops line up with it. Screens 1000px and wider, where the columns sit side by side. */
 @media (min-width: 1000px) {
   .footer-marks { gap: var(--s4); margin-bottom: var(--s3); }
-  .footer-marks .logo-mark { width: 64px; height: 64px; }
-  .crest-tile img { height: 64px; }
+  .footer-marks .logo-mark { width: 100px; height: 100px; }
+  .crest-tile img { height: 100px; }
   .footer-name { font-size: 1.25rem; line-height: 1.3; }
   .footer-about p.small { font-size: 1rem; line-height: 1.55; max-width: 26ch; }
   /* Social links closer together (23 Nov 2026), the first one level with the map's top edge. */
@@ -1206,7 +1206,9 @@ body:has(.ps-four) .site-header {
   .footer-grid .contact-link .contact-icon { width: 24px; height: 24px; }
   .footer-visit .footer-map { margin-top: var(--s3); }
   .footer-grid .label { font-size: 1rem; line-height: 1.5; }
-  /* Logos start on the map's top edge (23 Nov 2026): label line + the visit column's gap + map margin. */
-  .footer-about { padding-top: calc(1.5rem + var(--s1) + var(--s3)); }
+  /* Logos (100px) run from the top of the "Follow us" / "Visit us" headings down to the same line as
+     before, so the name and founding text below stay where they were (23 Nov 2026). The small top pad
+     matches the space above the heading letters inside their line. */
+  .footer-about { padding-top: 0.25rem; }
 }
 
