@@ -1200,10 +1200,13 @@ body:has(.ps-four) .site-header {
   .crest-tile img { height: 64px; }
   .footer-name { font-size: 1.25rem; line-height: 1.3; }
   .footer-about p.small { font-size: 1rem; line-height: 1.55; max-width: 26ch; }
-  .footer-follow ul.contact-links { gap: var(--s3); margin-top: var(--s3); }
-  .footer-grid .contact-link { min-height: 2.75rem; font-size: 1.1875rem; gap: var(--s3); }
+  /* Social links closer together (23 Nov 2026), the first one level with the map's top edge. */
+  .footer-follow ul.contact-links { gap: var(--s1); margin-top: calc(var(--s1) + var(--s3)); }
+  .footer-grid .contact-link { min-height: 2.5rem; font-size: 1.1875rem; gap: var(--s3); }
   .footer-grid .contact-link .contact-icon { width: 24px; height: 24px; }
   .footer-visit .footer-map { margin-top: var(--s3); }
-  .footer-grid .label { font-size: 1rem; }
+  .footer-grid .label { font-size: 1rem; line-height: 1.5; }
+  /* Logos start on the map's top edge (23 Nov 2026): label line + the visit column's gap + map margin. */
+  .footer-about { padding-top: calc(1.5rem + var(--s1) + var(--s3)); }
 }
 
