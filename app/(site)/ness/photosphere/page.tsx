@@ -3,6 +3,7 @@ import { type Locale, path } from "@/lib/i18n";
 import { meta } from "@/lib/view";
 import { photosphere, photosphereBanner } from "@/content/photosphere";
 import { ContactLink, FormButton } from "@/components/bits";
+import BgDrift from "@/components/BgDrift";
 
 const title = { en: "Photosphere 7.0", bn: "Photosphere 7.0" };
 const lead = {
@@ -23,13 +24,14 @@ export default async function Photosphere() {
     <>
       {/* Page background (trial, 20 Nov 2026): snowy peaks under the aurora and the Milky Way, behind a dark veil. */}
       <div
-        className="ps-bg ps-four"
+        className="ps-bg ps-four bg-drift"
         aria-hidden="true"
         style={{
           ["--bg-lg" as string]: `url("${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}/ness/ps-bg-2400.webp")`,
           ["--bg-sm" as string]: `url("${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}/ness/ps-bg-1600.webp")`,
         }}
       />
+      <BgDrift />
       {/* Hero, laid out like the NESS X page: a short brief, key facts, then the two actions. */}
       <section className="sky sky-clear" aria-labelledby="ps-h1">
         <div className="wrap sky-inner" style={{ paddingBlock: "var(--s8) var(--s7)" }}>

@@ -7,6 +7,7 @@ import { getEvent, ness2027Banner } from "@/content/events";
 import { nessSchedule, showNessSchedule } from "@/content/club";
 import { nessx, passes, passNote, registerWays, categories, categoryNote, winnersNote, soloSegments, teamSegments, specialSegments, programmes, organizers, type Segment } from "@/content/ness2027";
 import { ContactLink, ExternalLink, Stars, T, RegisterButton } from "@/components/bits";
+import BgDrift from "@/components/BgDrift";
 
 const title = { en: "NESS X", bn: "NESS X" };
 const description = {
@@ -57,13 +58,14 @@ export default async function Ness() {
     <>
       {/* Page background (trial, 20 Nov 2026): polar bears under the aurora, behind a white veil; the page uses dark text. */}
       <div
-        className="ness-bg ness-three"
+        className="ness-bg ness-three bg-drift"
         aria-hidden="true"
         style={{
           ["--bg-lg" as string]: `url("${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}/ness/ness-bg-2400.webp")`,
           ["--bg-sm" as string]: `url("${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}/ness/ness-bg-1600.webp")`,
         }}
       />
+      <BgDrift />
       <section className="sky sky-clear" aria-labelledby="ness-h1">
         <Stars />
         <div className="wrap sky-inner" style={{ paddingBlock: "var(--s8) var(--s7)" }}>

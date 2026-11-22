@@ -1284,3 +1284,30 @@ body:has(.ps-four) .site-header {
   .footer-about { padding-top: 0.25rem; }
 }
 
+/* ---------------------------------------------------------------------------------------------
+   Background drift on phones, NESS X and Photosphere only (.bg-drift, 23 Nov 2026).
+   Before: the layer was pinned to the top of the viewport, so on Android Chrome it rode up with the
+   address bar during the first few swipes (the bar's height, about 56px) and then stood still.
+   Now: the same distance, --bar (the large minus the small viewport height, i.e. the bar), is spread
+   evenly over the whole scroll by --drift (0 at the top of the page, 1 at the bottom, set by BgDrift.tsx).
+   - Android and most phones: the layer hangs from the bottom of the viewport, which stays put when a top
+     address bar slides away, and is one bar taller so no edge ever shows. translateY goes from +bar to 0.
+   - iPhone (Safari's bar is at the bottom): it stays hung from the top and moves 0 to -bar instead.
+   Desktop, tablets and reduced motion keep the plain fixed layer above. On a screen with no address bar
+   --bar is 0, so nothing moves or resizes.
+   --------------------------------------------------------------------------------------------- */
+@media (prefers-reduced-motion: no-preference) and (hover: none) and (pointer: coarse) and (max-width: 767px),
+       (prefers-reduced-motion: no-preference) and (hover: none) and (pointer: coarse) and (max-height: 500px) {
+  .ness-bg.bg-drift, .ps-bg.bg-drift {
+    --bar: calc(100lvh - 100svh);
+    top: auto; bottom: 0;
+    height: calc(100lvh + var(--bar));
+    transform: translate3d(0, calc((1 - var(--drift, 0)) * var(--bar)), 0);
+  }
+  @supports (-webkit-touch-callout: none) {
+    .ness-bg.bg-drift, .ps-bg.bg-drift {
+      top: 0; bottom: auto;
+      transform: translate3d(0, calc(var(--drift, 0) * var(--bar) * -1), 0);
+    }
+  }
+}
