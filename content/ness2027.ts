@@ -46,6 +46,14 @@ export type Segment = {
   page?: string; name: string; cats: string[]; online?: boolean; desc: string[]; parts?: { name: string; cats: string[]; desc: string }[] };
 
 export const soloSegments: Segment[] = [
+  // First in the list so younger children see their segment straight away (Mahmud, 20 Nov 2026).
+  {
+    name: "Children's Craftwork",
+    cats: ["P"],
+    desc: [
+      "For our youngest scientists, from Nursery to Class 5, to show their interest in the world through hands-on crafting, in a supportive, fun and imaginative setting.",
+    ],
+  },
   {
     name: "Astronomy Olympiad",
     cats: ["J", "S", "HS"],
@@ -133,13 +141,6 @@ export const soloSegments: Segment[] = [
     cats: ["C"],
     desc: [
       "A fun, fast segment of rapid recognition and scientific wit. Identify famous scientists, rare minerals or distant stars from cryptic clues and blurry images.",
-    ],
-  },
-  {
-    name: "Children's Craftwork",
-    cats: ["P"],
-    desc: [
-      "For our youngest scientists, from Nursery to Class 5, to show their interest in the world through hands-on crafting, in a supportive, fun and imaginative setting.",
     ],
   },
   {

@@ -1,8 +1,6 @@
-import Link from "next/link";
-import { type Locale, tr, path } from "@/lib/i18n";
+import { type Locale, tr } from "@/lib/i18n";
 import { meta } from "@/lib/view";
 import { galleryAlbums } from "@/content/club";
-import { ui } from "@/content/ui";
 import { PageHead, PhotoSlot } from "@/components/bits";
 
 const title = { en: "Gallery", bn: "গ্যালারি" };
@@ -30,9 +28,6 @@ export default async function Gallery() {
             </div>
           ))}
         </div>
-        <p className="small muted">
-          {tr(ui.consentNote, lang)} <Link href={path(lang, "/contact")}>{tr(ui.nav.contact, lang)}</Link>
-        </p>
       </div>
     </>
   );

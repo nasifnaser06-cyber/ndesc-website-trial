@@ -56,7 +56,7 @@ export default async function EventPage({ params }: Props) {
               )}
             </dl>
             {e.todo && <p className="small"><T lang={lang} text={{ en: `[${e.todo.en}]`, bn: `[${e.todo.bn}]` }} /></p>}
-            {e.slug === "ness-2027" && (
+            {e.slug === "ness-x" && (
               <div className="actions"><Link className="btn" href={path(lang, "/ness")}>{en ? "Programme and registration" : "অনুষ্ঠানসূচি ও নিবন্ধন"}</Link></div>
             )}
           </div>

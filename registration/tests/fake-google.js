@@ -17,6 +17,7 @@ function makeSheet(name) {
   };
 }
 const mails = [];
+const fetches = [];
 const props = {};
 const ctx = {
   console, Date, Math, JSON, String, Number, Array, Object, encodeURIComponent,
@@ -24,6 +25,7 @@ const ctx = {
   LockService: { getScriptLock: () => ({ waitLock() {}, tryLock: () => true, releaseLock() {} }) },
   PropertiesService: { getScriptProperties: () => ({ getProperty: k => props[k] || null, setProperty: (k, v) => { props[k] = v; } }) },
   CacheService: { getScriptCache: () => ({ get: () => null, put() {}, remove() {} }) },
+  UrlFetchApp: { fetch: (u) => { fetches.push(u); const b = { name: '', setName(n) { this.name = n; return this; }, copyBlob() { return Object.assign({}, this); } }; return { getResponseCode: () => (globalThis.QR_DOWN ? 503 : 200), getBlob: () => b }; } },
   MailApp: { getRemainingDailyQuota: () => 100, sendEmail: m => mails.push(m) },
   Utilities: { formatDate: (d, tz, f) => f === 'H' ? '12' : '181126', getUuid: () => 'aaaabbbb-cccc-dddd-eeee-ffff00001111' },
   ScriptApp: { getProjectTriggers: () => [], newTrigger: () => ({ timeBased: () => ({ everyMinutes: () => ({ create() {} }) }) }) },
@@ -31,6 +33,6 @@ const ctx = {
 };
 vm.createContext(ctx);
 for (const f of ['Logic.gs', 'Code.gs']) vm.runInContext(fs.readFileSync(path.join(__dirname, '../apps-script', f), 'utf8'), ctx);
-  return { ctx, sheets, mails };
+  return { ctx, sheets, mails, fetches };
 }
 module.exports = { makeGoogle };

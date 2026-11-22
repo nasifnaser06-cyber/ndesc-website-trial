@@ -1,13 +1,13 @@
 import Link from "next/link";
-import { type Locale, path, num } from "@/lib/i18n";
+import { type Locale, path } from "@/lib/i18n";
 import { meta } from "@/lib/view";
-import { timeline, moderators } from "@/content/club";
-import { PageHead, PhotoSlot, T } from "@/components/bits";
+import { moderators } from "@/content/club";
+import { PageHead, PersonCard, PhotoSlot } from "@/components/bits";
 
 const title = { en: "Our story", bn: "আমাদের গল্প" };
 const lead = {
-  en: "From an environmental club in 1992 to the club behind one of the country's biggest school science summits.",
-  bn: "১৯৯২ সালের একটি পরিবেশ ক্লাব থেকে দেশের অন্যতম বড় স্কুল-কলেজ বিজ্ঞান সামিটের আয়োজক।",
+  en: "Founded on 28 October 1992, Notre Dame Eco and Space Club (NDESC) is Bangladesh's first national astronomical club at the higher secondary level.",
+  bn: "১৯৯২ সালের ২৮ অক্টোবর প্রতিষ্ঠিত নটর ডেম ইকো অ্যান্ড স্পেস ক্লাব (NDESC) উচ্চমাধ্যমিক পর্যায়ে বাংলাদেশের প্রথম জাতীয় জ্যোতির্বিজ্ঞান ক্লাব।",
 };
 
 export async function generateMetadata() {
@@ -26,33 +26,64 @@ export default async function About() {
 
         <section className="two-worlds">
           <div>
-            <h2>{en ? "Where we started" : "যেভাবে শুরু"}</h2>
+            <h2>{en ? "Who we are" : "আমরা কারা"}</h2>
             <p className="muted">
               {en
-                ? "The club was founded on 28 October 1992 as the Notre Dame Environmental Promotion Club, to conserve ecosystems with a focus on wildlife and biological diversity."
-                : "১৯৯২ সালের ২৮ অক্টোবর নটর ডেম এনভায়রনমেন্টাল প্রমোশন ক্লাব নামে ক্লাবটির প্রতিষ্ঠা। লক্ষ্য ছিল বাস্তুতন্ত্র সংরক্ষণ, বিশেষ করে বন্যপ্রাণী ও জীববৈচিত্র্য রক্ষা।"}
+                ? "Formerly known as the Notre Dame Environmental Promotion Club, the club aims to spread knowledge of Astronomy, Earth Science and Biology and provides a hub for like-minded students to venture beyond their academic syllabus and explore new realms of science."
+                : "আগে নটর ডেম এনভায়রনমেন্টাল প্রমোশন ক্লাব নামে পরিচিত এই ক্লাবের লক্ষ্য জ্যোতির্বিজ্ঞান, ভূবিজ্ঞান ও জীববিজ্ঞানের জ্ঞান ছড়িয়ে দেওয়া, আর সমমনা শিক্ষার্থীদের পাঠ্যসূচির বাইরে বিজ্ঞানের নতুন জগৎ খুঁজে দেখার জায়গা করে দেওয়া।"}
             </p>
           </div>
           <div>
-            <h2>{en ? "What we do now" : "এখন যা করি"}</h2>
+            <h2>{en ? "What we do" : "আমরা যা করি"}</h2>
             <p className="muted">
               {en
-                ? "As members spent more time on astronomy and space, the club took the name Eco and Space Club. It runs workshops, seminars, stargazing camps, field tours and competitions, and organises the National Earth and Space Summit."
-                : "সদস্যরা জ্যোতির্বিজ্ঞান আর মহাকাশ নিয়ে বেশি কাজ শুরু করলে ক্লাবের নাম হয় ইকো অ্যান্ড স্পেস ক্লাব। ক্লাবটি কর্মশালা, সেমিনার, তারা দেখার ক্যাম্প, ফিল্ড ট্যুর ও প্রতিযোগিতা আয়োজন করে, আর আয়োজন করে ন্যাশনাল আর্থ অ্যান্ড স্পেস সামিট।"}
+                ? "In the past 34 years, NDESC has organised more than ten national events and numerous intra events, including the National Earth and Space Summit (NESS), Cosmoterrium, Fruits Fiesta and Botalinnaeus, with each event involving hundreds of students."
+                : "গত ৩৪ বছরে NDESC দশটির বেশি জাতীয় আয়োজন আর অসংখ্য অভ্যন্তরীণ আয়োজন করেছে, যার মধ্যে আছে ন্যাশনাল আর্থ অ্যান্ড স্পেস সামিট (NESS), কসমোটেরিয়াম, ফ্রুটস ফিয়েস্তা ও বোটালিনিয়াস। প্রতিটি আয়োজনে অংশ নেয় শত শত শিক্ষার্থী।"}
             </p>
           </div>
         </section>
 
-        <section aria-labelledby="tl">
-          <h2 id="tl" style={{ marginBottom: "var(--s4)" }}>{en ? "Timeline" : "সময়রেখা"}</h2>
-          <ol className="timeline-v">
-            {timeline.map((t) => (
-              <li key={t.year}>
-                <span className="year">{num(t.year, lang)}</span>
-                <span className="muted"><T text={t.text} lang={lang} /></span>
-              </li>
+        <section aria-labelledby="club-life" className="two-worlds">
+          <div>
+            <h2 id="club-life">{en ? "Club life" : "ক্লাবের দিনগুলো"}</h2>
+            <p className="muted">
+              {en
+                ? "The club also regularly holds weekly meetings and informative sessions, stargazing and solar observation programs with its own telescope and team selection tests for its Olympiad teams and other competitions for members, often in collaboration with various universities and research teams."
+                : "ক্লাবে নিয়মিত সাপ্তাহিক সভা ও তথ্যভিত্তিক সেশন হয়, নিজস্ব টেলিস্কোপে তারা দেখা ও সূর্য পর্যবেক্ষণ হয়, আর অলিম্পিয়াড দল ও অন্যান্য প্রতিযোগিতার জন্য সদস্যদের বাছাই পরীক্ষা হয়, প্রায়ই বিভিন্ন বিশ্ববিদ্যালয় ও গবেষণা দলের সঙ্গে মিলে।"}
+            </p>
+          </div>
+          <div>
+            <h2>{en ? "What we publish" : "আমাদের প্রকাশনা"}</h2>
+            <p className="muted">
+              {en
+                ? "NDESC also has its own annual publication, the DURBIN magazine and a long-running online weekly series of short science articles known as FactsFriday."
+                : "NDESC-এর নিজস্ব বার্ষিক প্রকাশনা দুরবীন ম্যাগাজিন, আর অনলাইনে ছোট বিজ্ঞান লেখার দীর্ঘদিনের সাপ্তাহিক সিরিজ FactsFriday।"}
+            </p>
+          </div>
+        </section>
+
+        <section aria-labelledby="teams">
+          <h2 id="teams" style={{ marginBottom: "var(--s4)" }}>{en ? "Our Olympiad teams" : "আমাদের অলিম্পিয়াড দল"}</h2>
+          <p className="muted" style={{ maxWidth: "48rem", marginBottom: "var(--s6)" }}>
+            {en
+              ? "NDESC also consists of its three renowned Olympiad teams. Under the guidance of experienced and award-winning mentors, team members prepare for these international Olympiads, achieving national and international recognition consistently every year."
+              : "NDESC-এর আছে তিনটি সুপরিচিত অলিম্পিয়াড দল। অভিজ্ঞ ও পুরস্কারজয়ী মেন্টরদের তত্ত্বাবধানে দলের সদস্যরা এই আন্তর্জাতিক অলিম্পিয়াডগুলোর প্রস্তুতি নেয়, আর প্রতি বছর ধারাবাহিকভাবে জাতীয় ও আন্তর্জাতিক স্বীকৃতি অর্জন করে।"}
+          </p>
+          <div className="cards-3">
+            {[
+              { team: "Team Interstellar", olympiad: { en: "International Olympiad on Astronomy and Astrophysics", bn: "ইন্টারন্যাশনাল অলিম্পিয়াড অন অ্যাস্ট্রোনমি অ্যান্ড অ্যাস্ট্রোফিজিক্স" } },
+              { team: "Team Terrestrial", olympiad: { en: "International Earth Science Olympiad", bn: "ইন্টারন্যাশনাল আর্থ সায়েন্স অলিম্পিয়াড" } },
+              { team: "Team Helix", olympiad: { en: "International Biology Olympiad", bn: "ইন্টারন্যাশনাল বায়োলজি অলিম্পিয়াড" }, isNew: true },
+            ].map((t) => (
+              <div className="surface" key={t.team}>
+                <h3>
+                  {t.team}
+                  {t.isNew && <> <span className="tag tag-up" style={{ verticalAlign: "middle", marginLeft: "var(--s2)" }}>{en ? "Newly formed" : "নতুন"}</span></>}
+                </h3>
+                <p className="small muted">{en ? "Prepares for the" : "প্রস্তুতি নেয়"} {en ? t.olympiad.en : t.olympiad.bn}</p>
+              </div>
             ))}
-          </ol>
+          </div>
         </section>
 
         <section aria-labelledby="mods">
@@ -62,11 +93,7 @@ export default async function About() {
           </div>
           <div className="people">
             {moderators.map((m, i) => (
-              <div className="person" key={i}>
-                <PhotoSlot lang={lang} label={{ en: "photo", bn: "ছবি" }} />
-                <h3><T text={m.name} lang={lang} /></h3>
-                <p className="small muted"><T text={m.post} lang={lang} /></p>
-              </div>
+              <PersonCard key={i} name={m.name} post={m.post} photo={m.photo} lang={lang} />
             ))}
           </div>
         </section>
@@ -77,10 +104,11 @@ export default async function About() {
             <tbody>
               <tr><th scope="row">{en ? "Founded" : "প্রতিষ্ঠা"}</th><td>{en ? "28 October 1992" : "২৮ অক্টোবর ১৯৯২"}</td></tr>
               <tr><th scope="row">{en ? "Former name" : "আগের নাম"}</th><td>{en ? "Notre Dame Environmental Promotion Club" : "নটর ডেম এনভায়রনমেন্টাল প্রমোশন ক্লাব"}</td></tr>
-              <tr><th scope="row">{en ? "Renamed" : "নাম পরিবর্তন"}</th><td><T lang={lang} text={{ en: "[23 May 2018? confirm]", bn: "[২৩ মে ২০১৮? নিশ্চিত করুন]" }} /></td></tr>
+              <tr><th scope="row">{en ? "Renamed" : "নাম পরিবর্তন"}</th><td>{en ? "23 May 2018" : "২৩ মে ২০১৮"}</td></tr>
               <tr><th scope="row">{en ? "Home" : "ঠিকানা"}</th><td>{en ? "Notre Dame College, Dhaka" : "নটর ডেম কলেজ, ঢাকা"}</td></tr>
               <tr><th scope="row">{en ? "Signature event" : "প্রধান আয়োজন"}</th><td><Link href={path(lang, "/ness")}>{en ? "National Earth and Space Summit" : "ন্যাশনাল আর্থ অ্যান্ড স্পেস সামিট"}</Link></td></tr>
-              <tr><th scope="row">{en ? "Other events" : "অন্যান্য আয়োজন"}</th><td>{en ? "Cosmoterrium (intra-college), National Space Camp, workshops" : "কসমোটেরিয়াম (আন্তঃকলেজ), ন্যাশনাল স্পেস ক্যাম্প, কর্মশালা"}</td></tr>
+              <tr><th scope="row">{en ? "Other events" : "অন্যান্য আয়োজন"}</th><td>{en ? "Cosmoterrium, Fruits Fiesta, Botalinnaeus, National Space Camp, workshops" : "কসমোটেরিয়াম, ফ্রুটস ফিয়েস্তা, বোটালিনিয়াস, ন্যাশনাল স্পেস ক্যাম্প, কর্মশালা"}</td></tr>
+              <tr><th scope="row">{en ? "Publications" : "প্রকাশনা"}</th><td>{en ? "DURBIN magazine (annual), FactsFriday (weekly, online)" : "দুরবীন ম্যাগাজিন (বার্ষিক), FactsFriday (সাপ্তাহিক, অনলাইন)"}</td></tr>
             </tbody>
           </table>
         </section>

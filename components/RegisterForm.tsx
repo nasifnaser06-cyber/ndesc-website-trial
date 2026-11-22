@@ -5,28 +5,35 @@ import { useEffect, useMemo, useRef, useState, type FormEvent } from "react";
 export type SegOption = { name: string; cats: string[]; online: boolean; team: boolean };
 type Pass = "solo" | "team" | "online";
 type Live = { open: boolean; bkash: string; nagad: string; prices: Record<Pass, number> };
-type Result = { regId: string; status: string };
+type Result = { regId: string; status: string; teamCode?: string; newTeam?: boolean };
 
 const PHONE = /^01[3-9]\d{8}$/;
 const TRX = /^[A-Z0-9]{8,12}$/;
+/** Bangla (০-৯) and Arabic-Indic (٠-٩, ۰-۹) digits from phone keyboards become 0-9. */
+const asciiDigits = (s: string) =>
+  s.replace(/[\u09E6-\u09EF\u0660-\u0669\u06F0-\u06F9]/g, (c) => {
+    const n = c.charCodeAt(0);
+    return String(n - (n >= 0x09e6 ? 0x09e6 : n >= 0x06f0 ? 0x06f0 : 0x0660));
+  });
 const normPhone = (s: string) => {
-  let d = s.replace(/\D/g, "");
+  let d = asciiDigits(s).replace(/\D/g, "");
   if (d.startsWith("880")) d = d.slice(2);
   if (d.length === 10 && d.startsWith("1")) d = "0" + d;
   return d;
 };
-const normTrx = (s: string) => s.toUpperCase().replace(/[^A-Z0-9]/g, "");
+const normTrx = (s: string) => asciiDigits(s).toUpperCase().replace(/[^A-Z0-9]/g, "");
 
 /**
  * Class choices and the category each one belongs to (Mahmud, 20 Nov 2026, trial).
  * Bangladesh levels: pre-primary and Classes 1-5 primary, 6-8 junior secondary,
- * 9-10 secondary (SSC), 11-12 higher secondary (HSC). O Levels/IGCSE count as Class 10,
+ * 9-10 secondary (SSC), 11-12 higher secondary (HSC). SSC 2027 candidates (added 23 Nov 2026)
+ * are Secondary. O Levels/IGCSE count as Class 10,
  * A Levels (AS and A2) as Classes 11-12.
  */
 const CLASS_GROUPS: { category: string; label: string; classes: string[] }[] = [
   { category: "P", label: "Primary (P)", classes: ["Pre-primary (before Class 1)", "Class 1", "Class 2", "Class 3", "Class 4", "Class 5"] },
   { category: "J", label: "Junior (J)", classes: ["Class 6", "Class 7", "Class 8"] },
-  { category: "S", label: "Secondary (S)", classes: ["Class 9", "Class 10 (SSC)", "O Level / IGCSE"] },
+  { category: "S", label: "Secondary (S)", classes: ["Class 9", "Class 10 (SSC)", "SSC 2027", "O Level / IGCSE"] },
   { category: "HS", label: "Higher Secondary (HS)", classes: ["Class 11", "Class 12 (HSC)", "A Level (AS)", "A Level (A2)"] },
 ];
 const CATEGORY_OF: Record<string, string> = Object.fromEntries(CLASS_GROUPS.flatMap((g) => g.classes.map((c) => [c, g.category])));
@@ -44,7 +51,7 @@ async function call(endpoint: string, body: object) {
 }
 
 export default function RegisterForm({
-  endpoint, trial = false, fallback, googleForm, categories, segments, privacyHref, nessHref,
+  endpoint, trial = false, fallback, googleForm, categories, segments, nessHref,
 }: {
   endpoint: string | null;
   trial?: boolean;
@@ -52,7 +59,6 @@ export default function RegisterForm({
   googleForm: string | null;
   categories: { code: string; name: string; who: string }[];
   segments: SegOption[];
-  privacyHref: string;
   nessHref: string;
 }) {
   const [live, setLive] = useState<Live>({ open: true, bkash: fallback.bkash, nagad: fallback.nagad ?? "", prices: fallback.prices });
@@ -93,22 +99,24 @@ export default function RegisterForm({
       institution: v("institution"),
       className,
       category,
-            wallet: pass === "online" ? "" : wallet,
+      teamCode: normTrx(v("teamCode")),
+      wallet: pass === "online" ? "" : wallet,
       trxId: pass === "online" ? "" : normTrx(v("trxId")),
       sender: pass === "online" ? "" : normPhone(v("sender")),
-      // Registering is the agreement; the privacy note sits by the button. Kept for the sheet script.
+      // Kept for the sheet script, which still reads this field.
       consent: true,
     };
 
     const errs: string[] = [];
     if (!body.name) errs.push("Enter your full name.");
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(body.email)) errs.push("Enter a valid email address. Your pass is sent there.");
-    if (!PHONE.test(body.phone)) errs.push("Enter a Bangladeshi mobile number, like 01712345678.");
+    if (!PHONE.test(body.phone)) errs.push("Mobile number (near the top): enter your 11-digit number, like 01712345678.");
     if (!body.institution) errs.push("Enter your school or college.");
     if (!category) errs.push("Choose your class.");
+    if (body.teamCode && !/^[A-Z0-9]{6}$/.test(body.teamCode)) errs.push("A team code has 6 letters and numbers.");
     if (pass !== "online") {
       if (!TRX.test(body.trxId)) errs.push("Enter the TrxID from your payment SMS. It has 8 to 12 letters and numbers, like DK481HDVPG.");
-      if (!PHONE.test(body.sender)) errs.push("Enter the number you paid from.");
+      if (!PHONE.test(body.sender)) errs.push("Number you paid from: enter the 11-digit bKash or Nagad number, like 01712345678.");
     }
     setErrors(errs);
     if (errs.length) { errorBox.current?.focus(); return; }
@@ -121,7 +129,7 @@ export default function RegisterForm({
     setBusy(true);
     try {
       const d = await call(endpoint!, body);
-      if (d.ok) setDone({ regId: d.regId, status: d.status });
+      if (d.ok) setDone({ regId: d.regId, status: d.status, teamCode: d.teamCode, newTeam: d.newTeam });
       else { setErrors(d.errors || [d.error || "Something went wrong. Please try again."]); errorBox.current?.focus(); }
     } catch {
       setErrors(["We couldn't reach the registration system. Check your internet and try again. You have not been charged twice: your payment is safe."]);
@@ -142,6 +150,12 @@ export default function RegisterForm({
           <p>We couldn't match your payment automatically, so our team will check it by hand, usually within a day. You don't need to pay again.</p>
         ) : (
           <p>We're matching your payment now. Your pass usually arrives by email within a few minutes. Please don't pay again.</p>
+        )}
+        {done.teamCode && (
+          <p className="reg-code">
+            Team code: <strong>{done.teamCode}</strong>
+            {done.newTeam && <span className="small muted"> Share this with your teammates. They type it in when they register.</span>}
+          </p>
         )}
         <p><a href={nessHref}>Back to NESS X</a></p>
       </div>
@@ -170,7 +184,7 @@ export default function RegisterForm({
           <div className="reg-passes">
             {([
               ["solo", "Solo pass", `${live.prices.solo} Tk`, "All solo segments in your category"],
-              ["team", "Team pass", `${live.prices.team} Tk per person`, "Every segment, solo and team. Teams of up to 3 form at the summit"],
+              ["team", "Team pass", `${live.prices.team} Tk per person`, "Every segment, solo and team. Up to 3 per team, each registers"],
               ["online", "Online segments", "Free", "All online submission segments"],
             ] as const).map(([val, name, cost, note]) => (
               <label key={val} className="reg-pass" data-on={pass === val}>
@@ -187,7 +201,7 @@ export default function RegisterForm({
           <legend><span className="reg-step">2</span> Your details</legend>
           <div className="reg-grid">
             <div><label htmlFor="name">Full name</label><input id="name" name="name" autoComplete="name" required /></div>
-            <div><label htmlFor="phone">Mobile number</label><input id="phone" name="phone" inputMode="tel" autoComplete="tel" placeholder="01712345678" required /></div>
+            <div><label htmlFor="phone">Mobile number</label><input id="phone" name="phone" inputMode="tel" autoComplete="tel" placeholder="e.g. 01712345678" required /></div>
             <div><label htmlFor="email">Email (your pass is sent here)</label><input id="email" name="email" type="email" autoComplete="email" required /></div>
             <div><label htmlFor="institution">School or college</label><input id="institution" name="institution" autoComplete="organization" required /></div>
             <div>
@@ -218,7 +232,7 @@ export default function RegisterForm({
             <>
               <p>
                 {pass === "team"
-                  ? "Your team pass includes every segment open to your category, solo and team. You don't need to pick, and you don't need a team yet: team pass holders can form teams of up to 3 at the summit."
+                  ? "Your team pass includes every segment open to your category, solo and team. You don't need to pick."
                   : pass === "online"
                     ? "This covers every online submission segment open to your category. You don't need to pick."
                     : "Your solo pass includes every solo segment open to your category. You don't need to pick."}
@@ -237,9 +251,22 @@ export default function RegisterForm({
           <p className="small muted" style={{ marginTop: "var(--s3)" }}>The UNOOSA special committee has its own registration form. Full rules for each segment are on the <a href={nessHref}>NESS X page</a>.</p>
         </fieldset>
 
+        {pass === "team" && (
+          <fieldset>
+            <legend><span className="reg-step">4</span> Your team</legend>
+            <div className="reg-grid">
+              <div className="reg-wide">
+                <label htmlFor="teamCode">Team code (leave blank if you are the first in your team)</label>
+                <input id="teamCode" name="teamCode" maxLength={6} placeholder="e.g. K7Q2MD" style={{ textTransform: "uppercase" }} />
+                <p className="small muted" style={{ marginTop: "var(--s2)" }}>The first teammate gets a code after registering. The other two type it here.</p>
+              </div>
+            </div>
+          </fieldset>
+        )}
+
         {pass !== "online" && (
           <fieldset>
-            <legend><span className="reg-step">4</span> Pay, then enter your TrxID</legend>
+            <legend><span className="reg-step">{pass === "team" ? 5 : 4}</span> Pay, then enter your TrxID</legend>
             <div className="reg-pay surface">
               <p className="reg-pay-amount">Send <strong>{price} Tk</strong> to <strong>{payNumber || "[club number]"}</strong> ({wallet})</p>
               <ol className="small">
@@ -247,7 +274,7 @@ export default function RegisterForm({
                 <li>Enter the number above and exactly {price} Tk.</li>
                 <li>You'll get an SMS with a <strong>TrxID</strong>, like DK481HDVPG. Type it below.</li>
               </ol>
-              <p className="small muted">No screenshots needed.{pass === "team" ? " Each teammate pays for their own pass." : ""}</p>
+              <p className="small muted">No screenshots needed. One teammate can pay for the whole team ({live.prices.team * 2} Tk for two, {live.prices.team * 3} Tk for three): everyone then enters the same TrxID and team code.</p>
             </div>
             <div className="reg-grid">
               <div>
@@ -257,8 +284,8 @@ export default function RegisterForm({
                   {live.nagad && <option value="Nagad">Nagad</option>}
                 </select>
               </div>
-              <div><label htmlFor="trxId">TrxID</label><input id="trxId" name="trxId" autoComplete="off" placeholder="DK481HDVPG" style={{ textTransform: "uppercase" }} required /></div>
-              <div className="reg-wide"><label htmlFor="sender">Number you paid from</label><input id="sender" name="sender" inputMode="tel" placeholder="01712345678" required /></div>
+              <div><label htmlFor="trxId">TrxID</label><input id="trxId" name="trxId" autoComplete="off" placeholder="e.g. DK481HDVPG" style={{ textTransform: "uppercase" }} required /></div>
+              <div className="reg-wide"><label htmlFor="sender">Number you paid from</label><input id="sender" name="sender" inputMode="tel" placeholder="e.g. 01712345678" required /></div>
             </div>
           </fieldset>
         )}
@@ -275,7 +302,6 @@ export default function RegisterForm({
         <div className="actions">
           <button className="btn" type="submit" disabled={busy || !live.open}>{busy ? "Sending..." : pass === "online" ? "Register" : "Register and confirm payment"}</button>
         </div>
-        <p className="small muted reg-privacy">We use these details only to run NESS X. <a href={privacyHref}>Privacy</a></p>
       </form>
 
       <StatusCheck endpoint={endpoint} />

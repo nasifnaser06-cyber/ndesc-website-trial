@@ -1,13 +1,12 @@
 import { type Locale, tr, num } from "@/lib/i18n";
 import { meta } from "@/lib/view";
 import { officers, executiveSessions } from "@/content/club";
-import { ui } from "@/content/ui";
 import { PageHead, PersonCard, Txt } from "@/components/bits";
 import Tabs from "@/components/Tabs";
 
 const title = { en: "Executives", bn: "কার্যনির্বাহী" };
 const lead = {
-  en: "The teachers who guide the club and the students who run it, session by session.",
+  en: "Meet the team behind the club's vision and initiatives. Introducing our Executive Committee — the dedicated individuals working together to lead, coordinate, and shape the journey ahead.",
   bn: "যে শিক্ষকেরা ক্লাবকে পথ দেখান আর যে শিক্ষার্থীরা প্রতি সেশনে ক্লাব পরিচালনা করেন।",
 };
 
@@ -48,8 +47,9 @@ export default async function Executives() {
       </h2>
       <div className="wings">
         {wings.map((g) => (
-          <section key={g.wing ?? "lead"} className="wing" aria-label={g.wing ?? (en ? "Secretary General" : "মহাসচিব")}>
-            {g.wing && <h3 className="wing-name">{g.wing}</h3>}
+          <section key={g.wing ?? "lead"} className="wing">
+            {/* The Secretary General has no wing; his heading is "Boss-Man" (Mahmud, 20 Nov 2026). */}
+            <h3 className="wing-name">{g.wing ?? "Boss-Man"}</h3>
             <div className="people">
               {g.members.map((p, i) => <PersonCard key={i} lang={lang} {...p} />)}
             </div>
@@ -72,7 +72,6 @@ export default async function Executives() {
             { id: "current", label: en ? "Current" : "বর্তমান", content: currentPanel },
           ]}
         />
-        <p className="small muted">{tr(ui.consentNote, lang)}</p>
       </div>
     </>
   );

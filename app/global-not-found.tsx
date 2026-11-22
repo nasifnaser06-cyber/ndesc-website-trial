@@ -12,8 +12,9 @@ export const metadata: Metadata = { title: "Page not found | Notre Dame Eco and 
 // - pages lost their /en/ prefix on 20 Nov 2026 (known /en/ pages have their own forwarding page;
 //   this catches any other /en/ address);
 // - the Bangla pages were taken off on 18 Nov 2026, so /bn/ links go to the same page in English;
+// - NESS 2027 was renamed NESS X on 20 Nov 2026, so the old event and news addresses forward;
 // - the News pages were taken off on 23 Nov 2026, so /news/... links go to the home page.
-const forwardOld = `(function(){var b=${JSON.stringify(bp)};var p=location.pathname;var o="/ndesc-website";var n=p;if(!b&&(n===o||n.indexOf(o+"/")===0)){n=n.slice(o.length)||"/";}var r=n.slice(b.length);var m=r.match(/^\\/(en|bn)(\\/.*)?$/);if(n.indexOf(b)===0&&m){n=b+(m[2]||"/");}if(n.indexOf(b)===0&&/^\\/news(\\/|$)/.test(n.slice(b.length))){n=b+"/";}if(n!==p){location.replace(n+location.search+location.hash);}})();`;
+const forwardOld = `(function(){var b=${JSON.stringify(bp)};var p=location.pathname;var o="/ndesc-website";var n=p;if(!b&&(n===o||n.indexOf(o+"/")===0)){n=n.slice(o.length)||"/";}var r=n.slice(b.length);var m=r.match(/^\\/(en|bn)(\\/.*)?$/);if(n.indexOf(b)===0&&m){n=b+(m[2]||"/");}var mv={"/events/ness-2027/":"/events/ness-x/","/news/ness-2027-dates/":"/news/ness-x-dates/"};var q=n.slice(b.length);if(q.slice(-1)!=="/")q+="/";if(mv[q])n=b+mv[q];if(n.indexOf(b)===0&&/^\\/news(\\/|$)/.test(n.slice(b.length))){n=b+"/";}if(n!==p){location.replace(n+location.search+location.hash);}})();`;
 
 export default function GlobalNotFound() {
   return (

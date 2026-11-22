@@ -23,13 +23,13 @@ export type ClubEvent = {
   poster?: { name: string; widths: number[]; alt: L; social?: string };
 };
 
-/** The official NESS 2027 banner, used on the home page, the NESS page and the event page. */
+/** The official NESS X banner, used on the home page, the NESS page and the event page. */
 export const ness2027Banner = {
   name: "/ness/ness-2027",
   widths: [768, 1280, 1920],
   social: "/ness/ness-2027-og.jpg",
   alt: {
-    en: "NESS, 10th National Earth and Space Summit 2027: two polar bears on melting ice reach towards each other under a pastel sky, with the Notre Dame College and club logos.",
+    en: "NESS X, the 10th National Earth and Space Summit: two polar bears on melting ice reach towards each other under a pastel sky, with the Notre Dame College and club logos.",
     bn: "NESS, ১০ম ন্যাশনাল আর্থ অ্যান্ড স্পেস সামিট ২০২৭: গলতে থাকা বরফের ওপর দুটি মেরু ভালুক একে অপরের দিকে হাত বাড়িয়েছে, সঙ্গে নটর ডেম কলেজ ও ক্লাবের লোগো।",
   },
 };
@@ -46,11 +46,12 @@ export const eventTypes: Record<EventType, L> = {
 
 export const events: ClubEvent[] = [
   {
-    slug: "ness-2027",
+    slug: "ness-x",
     type: "ness",
     start: "2027-01-28",
     end: "2027-01-30",
-    title: { en: "National Earth and Space Summit 2027", bn: "ন্যাশনাল আর্থ অ্যান্ড স্পেস সামিট ২০২৭" },
+    // Named like the other summits in the events list (Mahmud, 21 Nov 2026); the home page box still says NESS X.
+    title: { en: "10th National Earth and Space Summit", bn: "১০ম ন্যাশনাল আর্থ অ্যান্ড স্পেস সামিট" },
     venue: ndc,
     summary: {
       en: "NESS X, the 10th summit: three days of olympiads, quizzes, team contests, exhibitions and talks for students from Nursery to Class 12.",
@@ -64,10 +65,22 @@ export const events: ClubEvent[] = [
     poster: ness2027Banner,
   },
   {
+    slug: "cosmoterrium-2",
+    type: "cosmoterrium",
+    start: "2026-10-09",
+    title: { en: "Cosmoterrium 2.0", bn: "কসমোটেরিয়াম ২.০" },
+    venue: { en: "Notre Dame College, for its students only", bn: "নটর ডেম কলেজ, শুধু এই কলেজের শিক্ষার্থীদের জন্য" },
+    summary: {
+      en: "The second Cosmoterrium, the club's intra-college festival.",
+      bn: "দ্বিতীয় কসমোটেরিয়াম, ক্লাবের আন্তঃকলেজ উৎসব।",
+    },
+    todo: { en: "segments, passes and highlights", bn: "সেগমেন্ট, পাস ও মূল আকর্ষণ" },
+  },
+  {
     slug: "cosmoterrium-2026",
     type: "cosmoterrium",
     start: "2026-01-17",
-    title: { en: "Cosmoterrium 2026", bn: "কসমোটেরিয়াম ২০২৬" },
+    title: { en: "Cosmoterrium 1.0", bn: "কসমোটেরিয়াম ১.০" },
     venue: { en: "Notre Dame College, for its students only", bn: "নটর ডেম কলেজ, শুধু এই কলেজের শিক্ষার্থীদের জন্য" },
     summary: {
       en: "The club's intra-college festival: olympiads, quizzes, games, sessions and the Stellarscapes astro exhibits.",
@@ -77,6 +90,19 @@ export const events: ClubEvent[] = [
       { label: { en: "Passes", bn: "পাস" }, value: { en: "Solo pass 70 BDT, team pass 100 BDT per person", bn: "একক পাস ৭০ টাকা, দলীয় পাস জনপ্রতি ১০০ টাকা" } },
     ],
     sources: [{ title: "HappeningNext event listing", url: "https://happeningnext.com/event/cosmoterrium-2026-eid3a0d7pqrpo" }],
+  },
+  {
+    slug: "ness-2026",
+    type: "ness",
+    start: "2026-04-08",
+    end: "2026-04-10",
+    title: { en: "9th National Earth and Space Summit", bn: "৯ম ন্যাশনাল আর্থ অ্যান্ড স্পেস সামিট" },
+    venue: ndc,
+    summary: {
+      en: "The 9th summit: olympiads, quizzes, team contests, exhibitions and talks at Notre Dame College.",
+      bn: "৯ম আসর: নটর ডেম কলেজে অলিম্পিয়াড, কুইজ, দলীয় প্রতিযোগিতা, প্রদর্শনী আর আলোচনা।",
+    },
+    todo: { en: "highlights, participants and partners", bn: "মূল আকর্ষণ, অংশগ্রহণকারী ও সহযোগী" },
   },
   {
     slug: "ness-2025",

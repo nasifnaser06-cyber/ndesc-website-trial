@@ -94,11 +94,29 @@ main:focus { outline: none; }
 .actions { display: flex; flex-wrap: wrap; gap: var(--s4); }
 
 /* Header */
-.site-header { position: sticky; top: 0; z-index: 20; background: rgba(15, 30, 54, 0.92); backdrop-filter: blur(16px) saturate(160%); -webkit-backdrop-filter: blur(16px) saturate(160%); border-bottom: 1px solid var(--line); }
-@media (prefers-reduced-transparency: reduce) { .site-header { background: var(--night); backdrop-filter: none; } }
+/* No outline and no colour of its own: at the top the header is see-through, so each page's own
+   background runs right up behind it. Once content scrolls underneath, a glass tint of that same page
+   colour (--header-glass, set per page theme below) keeps the menu readable. */
+.site-header { --header-glass: rgba(15, 30, 54, 0.82); --header-menu: rgba(15, 30, 54, 0.5); --header-solid: var(--night); position: sticky; top: 0; z-index: 20; background: transparent; border-bottom: 0; transition: opacity 0.35s ease, background-color 0.3s ease; }
+.site-header[data-solid="true"] { background: var(--header-glass); -webkit-backdrop-filter: blur(16px) saturate(160%); backdrop-filter: blur(16px) saturate(160%); }
+@media (prefers-reduced-transparency: reduce) { .site-header[data-solid="true"] { background: var(--header-solid); -webkit-backdrop-filter: none; backdrop-filter: none; } }
+/* With the phone menu open: the page's own colour at half strength over a heavy blur, like a phone's
+   notification shade. The page stays visible behind the menu, but soft enough that the menu reads clearly. */
+.site-header:has(.main-nav[data-open="true"]) {
+  background: var(--header-menu);
+  -webkit-backdrop-filter: blur(28px) saturate(140%); backdrop-filter: blur(28px) saturate(140%);
+  /* The bottom edge fades out instead of ending in a hard line: an empty strip under the last link that
+     goes from the menu's tint and blur to the clear page. The negative margin keeps the page where it was. */
+  padding-bottom: 4rem; margin-bottom: -4rem;
+  -webkit-mask-image: linear-gradient(to bottom, #000 calc(100% - 4rem), transparent);
+  mask-image: linear-gradient(to bottom, #000 calc(100% - 4rem), transparent);
+}
+@media (prefers-reduced-transparency: reduce) {
+  .site-header:has(.main-nav[data-open="true"]) { background: var(--header-solid); -webkit-backdrop-filter: none; backdrop-filter: none; }
+}
 /* Fades out while scrolling down, fades back in on scroll up (Mahmud, 20 Nov 2026: fade, not slide).
    While faded it ignores taps, so the page underneath stays clickable. */
-.site-header { transition: opacity 0.35s ease; }
+.site-header { transition: opacity 0.35s ease, background-color 0.3s ease; }
 .site-header[data-hidden="true"] { opacity: 0; pointer-events: none; transition-duration: 0.3s; }
 /* Stay visible while a keyboard user is inside the header. Only :focus-visible counts: a link tapped
    with a finger or mouse keeps focus after navigating, and must not pin the header on the next page. */
@@ -113,19 +131,20 @@ main:focus { outline: none; }
 .main-nav ul { list-style: none; padding: 0; display: flex; gap: var(--s4); }
 .main-nav a { color: var(--starlight); text-decoration: none; padding: var(--s2) var(--s1); display: inline-block; }
 .main-nav a:hover { color: var(--sprout); }
-.main-nav a[aria-current="page"] { color: var(--sprout); text-decoration: underline; text-underline-offset: 8px; text-decoration-thickness: 2px; }
+.main-nav a[aria-current="page"] { color: var(--sprout); text-decoration: none; } /* No underline on the current page (Mahmud, 23 Nov 2026) */
 .only-menu { display: none; }
 .header-tools { display: flex; align-items: center; gap: var(--s3); }
+/* On wide screens the tools hold only the hidden menu button, so take them out of the row and let the menu reach the right edge. */
+@media (min-width: 1161px) { .header-tools:not(:has(> :not(.menu-btn))) { display: none; } }
 .lang { display: inline-flex; border: 1px solid var(--edge); border-radius: 999px; overflow: hidden; }
 .lang a { min-height: 40px; display: inline-flex; align-items: center; padding: 0 var(--s3); font-size: 0.875rem; color: var(--starlight); text-decoration: none; }
 .lang a.on { background: var(--starlight); color: var(--night); }
 .menu-btn { display: none; width: 44px; height: 44px; align-items: center; justify-content: center; border-radius: 12px; border: 1px solid var(--line); background: transparent; color: var(--starlight); cursor: pointer; }
 
-@media (max-width: 1100px) {
-  .main-nav ul { gap: var(--s3); }
-  .brand-name { display: none; }
-}
-@media (max-width: 900px) {
+/* The menu folds into the menu button up to 1160px: with the club name and the Register button
+   beside it, the full menu needs about 1120px to sit on one line (20 Nov 2026), plus some margin
+   for wider font rendering. */
+@media (max-width: 1160px) {
   .header-row { flex-wrap: wrap; }
   /* Without JavaScript the menu stays visible as a wrapped row. */
   .main-nav { order: 3; width: 100%; padding-bottom: var(--s3); }
@@ -139,7 +158,29 @@ main:focus { outline: none; }
   .only-menu { display: list-item; }
   .brand-name { display: inline; }
 }
-@media (max-width: 480px) {
+/* Phones keep the club's name beside the logo and the full "Register for NESS X" button on one row
+   (Mahmud, 23 Nov 2026: the phone button must say Register for NESS X). The header uses a little less
+   side space and smaller gaps, and on narrow phones the label sits on two short lines in the button. */
+.ice-label-short { display: none; }
+@media (max-width: 600px) {
+  .site-header .wrap { padding-inline: var(--s4); }
+  .header-row { gap: var(--s3); }
+  .header-tools { gap: var(--s2); }
+  .brand { gap: var(--s2); }
+  .brand-name { font-size: 0.8125rem; }
+}
+@media (max-width: 539px) {
+  .site-header .ice-btn { white-space: normal; line-height: 1.1; padding-block: 0.25rem; padding-inline: 1rem; font-size: 0.75rem; }
+  .site-header .ice-btn .ice-label-long { display: inline-block; max-width: 6.2em; text-align: center; }
+  /* The two big side crystals would touch the two-line label; the small corner ones stay. */
+  .ice .c1, .ice .c2 { display: none; }
+}
+@media (max-width: 380px) {
+  .brand-name { font-size: 0.6875rem; }
+  .brand .logo-mark { width: 38px; height: 38px; }
+}
+/* The narrowest phones (under 360px) show the logo alone, so the row still fits. */
+@media (max-width: 359px) {
   .brand-name { display: none; }
 }
 
@@ -167,7 +208,19 @@ body:has(.ness-bg) .site-footer { background: rgba(255, 255, 255, 0.42); border-
 .footer-grid a:hover { color: var(--sprout); text-decoration: underline; }
 /* Footer columns: one on phones, two on tablets, four on desktop with a wider last column for the email */
 @media (min-width: 600px) { .footer-grid { grid-template-columns: 1fr 1fr; } }
-@media (min-width: 1000px) { .footer-grid { grid-template-columns: 1fr 1fr 1fr 1.45fr; } }
+@media (min-width: 1000px) { .footer-grid { grid-template-columns: minmax(0, 1fr) max-content minmax(0, 1.5fr); column-gap: var(--s8); } }
+/* Footer "Visit us" map (Mahmud, 20 Nov 2026): a Google map of the college with an "Open in Maps" chip. */
+.footer-visit { display: grid; gap: var(--s2); align-content: start; }
+@media (min-width: 600px) and (max-width: 999px) { .footer-visit { grid-column: 1 / -1; } }
+.footer-map { position: relative; margin-top: var(--s2); border-radius: 14px; overflow: hidden; border: 1px solid var(--line); background: var(--deep); height: 13.5rem; width: 100%; }
+.footer-map iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; display: block; }
+.footer-grid a.footer-map-open {
+  position: absolute; top: 10px; left: 10px; z-index: 1;
+  display: inline-flex; align-items: center; gap: 0.35em; min-height: 2.25rem; padding: 0.35rem 0.75rem;
+  border-radius: 8px; background: #ffffff; color: #1a56c4; font-size: 0.875rem; font-weight: 700; text-decoration: none;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.25);
+}
+.footer-grid a.footer-map-open:hover { color: #0b3d91; text-decoration: underline; }
 .footer-about { display: grid; gap: var(--s2); align-content: start; }
 .footer-name { font-family: var(--font-head); font-weight: var(--weight-head); }
 .footer-base { margin-top: var(--s6); display: flex; flex-wrap: wrap; gap: var(--s4); justify-content: space-between; }
@@ -210,7 +263,7 @@ body:has(.ness-bg) .site-footer { background: rgba(255, 255, 255, 0.42); border-
 .panel-band { padding: var(--s7); display: flex; flex-wrap: wrap; gap: var(--s6); align-items: flex-end; justify-content: space-between; }
 .panel-band > div:first-child { flex: 1 1 28rem; display: flex; flex-direction: column; gap: var(--s3); }
 @media (max-width: 640px) { .panel-band { padding: var(--s5); } }
-/* Banners and posters (NESS 2027) */
+/* Banners and posters (NESS X) */
 .banner { display: block; width: 100%; height: auto; aspect-ratio: var(--banner-ratio, 16 / 9); object-fit: cover; border-radius: 16px; background: var(--deep); border: 1px solid var(--line); }
 .banner-figure { margin: 0; }
 
@@ -242,6 +295,9 @@ body:has(.ness-bg) .site-footer { background: rgba(255, 255, 255, 0.42); border-
   height: 100lvh;
   transform: translateZ(0);
   backface-visibility: hidden;
+  /* Keep the picture on its own layer that the browser never repaints while scrolling (20 Nov 2026). */
+  will-change: transform;
+  contain: strict;
 }
 html:has(.ness-bg) { background: #6391a8; }
 html:has(.ps-bg) { background: #082846; }
@@ -273,8 +329,8 @@ body:has(.ness-bg) main .surface {
     0 10px 36px rgba(15, 30, 54, 0.12),
     inset 0 1px 0 rgba(255, 255, 255, 0.85),
     inset 0 0 22px rgba(255, 255, 255, 0.28);
-  -webkit-backdrop-filter: blur(22px) saturate(160%) brightness(1.06);
-  backdrop-filter: blur(22px) saturate(160%) brightness(1.06);
+  -webkit-backdrop-filter: blur(10px) saturate(160%) brightness(1.06);
+  backdrop-filter: blur(10px) saturate(160%) brightness(1.06);
 }
 @supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
   body:has(.ness-bg) main .surface { background: rgba(240, 248, 252, 0.85); }
@@ -383,7 +439,7 @@ th { font-weight: var(--weight-body); font-size: 0.9375rem; color: var(--haze); 
 .person-poster { width: 100%; height: auto; aspect-ratio: 1; display: block; border-radius: 8px; background: var(--deep); }
 .wings { display: flex; flex-direction: column; gap: var(--s7); }
 .wing-name { font-size: 1.25rem; margin-bottom: var(--s4); padding-bottom: var(--s2); border-bottom: 1px solid var(--line); }
-.person-photo { width: 100%; aspect-ratio: 4 / 5; object-fit: cover; border-radius: 12px; display: block; }
+.person-photo { width: 100%; height: auto; aspect-ratio: 4 / 5; background: var(--deep); object-fit: cover; border-radius: 12px; display: block; }
 .tab-panel[hidden] { display: none; }
 @keyframes tab-in { from { opacity: 0; transform: translateY(8px); } }
 .tabs[data-ready="true"] > .tab-panel:not([hidden]) { animation: tab-in 0.25s var(--ease) both; }
@@ -669,16 +725,10 @@ details[open] > summary::after { transform: rotate(45deg); }
 @keyframes ice-twinkle { 0%, 88%, 100% { opacity: 0.95; } 94% { opacity: 0.5; } }
 @keyframes ice-sheen { from { transform: translateX(-120%); } to { transform: translateX(120%); } }
 
-.reg-privacy { margin-top: var(--s3); }
 
 /* Narrow phones: keep the longer label from crowding the logo */
-@media (max-width: 420px) {
-  .ice-btn { padding-inline: 1.65rem; font-size: 0.8125rem; }
-}
-@media (max-width: 340px) {
-  .header-row { gap: var(--s3); }
-  .ice-btn { padding-inline: 1.3rem; font-size: 0.75rem; }
-  .ice .c3, .ice .c4 { display: none; }
+@media (max-width: 380px) {
+  .header-tools { gap: 6px; }
 }
 
 /* Photosphere 7.0 page */
@@ -699,6 +749,9 @@ details[open] > summary::after { transform: rotate(45deg); }
 .ps-examples { margin: 0; padding-left: 1.2rem; display: grid; gap: var(--s2); }
 .ps-list { max-width: 72ch; padding-left: 1.2rem; display: grid; gap: var(--s2); }
 .ps-list li::marker { color: var(--sprout); }
+/* Submission rules in three groups, each with a numbered subheading. */
+.ps-rule-groups { display: grid; gap: var(--s6); margin-top: var(--s4); }
+.ps-rule-group h3 { margin-bottom: var(--s3); }
 
 /* NESS page: the NESS logo in place of the "NESSX" heading */
 .ness-logo-h1 { margin: var(--s2) 0 var(--s3); line-height: 0; }
@@ -707,13 +760,16 @@ details[open] > summary::after { transform: rotate(45deg); }
 /* Photosphere page: the PS 7.0 logo in place of the heading */
 .ps-logo-h1 { margin: var(--s2) 0 var(--s3); line-height: 0; }
 .ps-logo-h1 img { display: block; width: min(60%, 21.6rem); height: auto; }
+/* The line under the NESS X and Photosphere logos sits close to the logo, like a caption. */
+.sky-copy > .logo-caption { margin-top: calc(var(--s4) * -1); }
 
 /* Photosphere page (trial, 20 Nov 2026): picture background, Veroland titles, Montserrat SemiBold text. */
 @font-face { font-family: "Veroland"; src: url("./fonts/veroland.woff2") format("woff2"); font-weight: 400; font-style: normal; font-display: swap; }
 @font-face { font-family: "Montserrat"; src: url("./fonts/montserrat-600.woff2") format("woff2"); font-weight: 600; font-style: normal; font-display: swap; }
 @font-face { font-family: "Montserrat"; src: url("./fonts/montserrat-800.woff2") format("woff2"); font-weight: 800; font-style: normal; font-display: swap; }
 .ps-bg {
-  position: fixed; inset: 0; z-index: -1; pointer-events: none;
+  /* Top-anchored at the largest screen height, like the NESS page. A plain "inset: 0" here used to undo that. */
+  position: fixed; inset: 0 0 auto 0; z-index: -1; pointer-events: none;
   background:
     linear-gradient(180deg, rgba(8, 18, 36, 0.5) 0%, rgba(8, 18, 36, 0.42) 45%, rgba(8, 18, 36, 0.68) 100%),
     var(--bg-lg) center 55% / cover no-repeat,
@@ -738,8 +794,8 @@ body:has(.ps-bg) main :is(th, td) { border-top-color: rgba(255, 255, 255, 0.6); 
 body:has(.ps-bg) main .surface {
   background: rgba(15, 30, 54, 0.6);
   border-color: rgba(233, 238, 246, 0.2);
-  -webkit-backdrop-filter: blur(14px) saturate(140%);
-  backdrop-filter: blur(14px) saturate(140%);
+  -webkit-backdrop-filter: blur(7px) saturate(140%);
+  backdrop-filter: blur(7px) saturate(140%);
 }
 @media (prefers-reduced-transparency: reduce) {
   body:has(.ps-bg) main .surface { background: rgba(15, 30, 54, 0.92); -webkit-backdrop-filter: none; backdrop-filter: none; }
@@ -767,8 +823,8 @@ body:has(.ness-bg) main .form :is(input:not([type="checkbox"]):not([type="radio"
   color: var(--starlight);
   background: rgba(255, 255, 255, 0.55);
   border-color: rgba(15, 30, 54, 0.28);
-  -webkit-backdrop-filter: blur(10px);
-  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(5px);
+  backdrop-filter: blur(5px);
 }
 body:has(.ness-bg) main .form :is(input, select, textarea):focus-visible { border-color: var(--sprout); background: rgba(255, 255, 255, 0.8); }
 body:has(.ness-bg) main .form select option { color: #0f1e36; background: #fff; }
@@ -776,8 +832,8 @@ body:has(.ness-bg) main .form .reg-pass {
   background: linear-gradient(145deg, rgba(255, 255, 255, 0.38) 0%, rgba(224, 241, 250, 0.22) 55%, rgba(255, 255, 255, 0.3) 100%);
   border: 1.5px solid rgba(255, 255, 255, 0.7);
   box-shadow: 0 10px 30px rgba(15, 30, 54, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.85);
-  -webkit-backdrop-filter: blur(22px) saturate(160%);
-  backdrop-filter: blur(22px) saturate(160%);
+  -webkit-backdrop-filter: blur(10px) saturate(160%);
+  backdrop-filter: blur(10px) saturate(160%);
 }
 body:has(.ness-bg) main .form .reg-pass[data-on="true"] { border-color: var(--sprout); box-shadow: 0 10px 30px rgba(15, 30, 54, 0.12), inset 0 0 0 1px var(--sprout); background: rgba(255, 255, 255, 0.6); }
 body:has(.ness-bg) main .reg-step { color: #fff; }
@@ -852,17 +908,18 @@ body:has(.ness-three) .site-footer { background: rgba(235, 245, 249, 0.6); borde
   body:has(.ness-three) .site-footer { background: #ebf5f9; }
 }
 
-/* Header on this page: deep blue bar, ice text, sky accents */
+/* Header on this page: no bar of its own, deep blue text on the page's ice background */
 body:has(.ness-three) .site-header {
-  --starlight: #ebf5f9;
-  --haze: #ebf5f9;
-  --sprout: #8ed1e6;
-  --sprout-light: #ebf5f9;
-  --line: rgba(142, 209, 230, 0.35);
-  background: rgba(10, 74, 112, 0.94);
-}
-@media (prefers-reduced-transparency: reduce) {
-  body:has(.ness-three) .site-header { background: #0a4a70; }
+  --starlight: #0a4a70;
+  --haze: #0a4a70;
+  --sprout: #0a4a70;
+  --sprout-light: #0a4a70;
+  --line: rgba(10, 74, 112, 0.3);
+  --edge: rgba(10, 74, 112, 0.3);
+  --night: #ebf5f9;
+  --header-glass: rgba(235, 245, 249, 0.82);
+  --header-menu: rgba(235, 245, 249, 0.5);
+  --header-solid: #ebf5f9;
 }
 body:has(.ness-three) .ice-btn {
   background: linear-gradient(135deg, #ebf5f9 0%, #8ed1e6 50%, #ebf5f9 100%);
@@ -881,7 +938,6 @@ body:has(.ness-three) .ice-btn::after { background: linear-gradient(105deg, tran
 /* Last pieces on this page: placeholders, the skip link and the college crest tile */
 body:has(.ness-three) .todo { color: #0a4a70; border-bottom-color: #0a4a70; }
 body:has(.ness-three) .skip-link { background: #0a4a70; color: #ebf5f9; }
-body:has(.ness-three) .crest-tile { background: #ebf5f9; }
 
 /* Register page form in the same three colours (Mahmud, 20 Nov 2026, trial) */
 body:has(.ness-three) main .form :is(input:not([type="checkbox"]):not([type="radio"]), select, textarea) {
@@ -889,7 +945,7 @@ body:has(.ness-three) main .form :is(input:not([type="checkbox"]):not([type="rad
   background: rgba(235, 245, 249, 0.7);
   border-color: #0a4a70;
 }
-body:has(.ness-three) main .form :is(input, select, textarea)::placeholder { color: #0a4a70; opacity: 0.7; }
+body:has(.ness-three) main .form :is(input, select, textarea)::placeholder { color: #0a4a70; opacity: 0.28; } /* 40% of the earlier 0.7, so an example never looks filled in */
 body:has(.ness-three) main .form :is(input, select, textarea):focus-visible { border-color: #0a4a70; background: #ebf5f9; outline-color: #0a4a70; }
 body:has(.ness-three) main .form select option { color: #0a4a70; background: #ebf5f9; }
 body:has(.ness-three) main :is(input[type="checkbox"], input[type="radio"]) { accent-color: #0a4a70; background: #ebf5f9; }
@@ -917,15 +973,16 @@ body:has(.ness-three) main :is(.reg-draft, .reg-errors) { color: #0a4a70; backgr
    #e2f2fc on #1d5f8a 6.0:1. #1d5f8a is only used for lines and edges (2.5:1 on navy).
    --------------------------------------------------------------------------------------------- */
 .ps-bg.ps-four {
+  /* Veil 40% stronger (Mahmud, 20 Nov 2026): 0.5 / 0.42 / 0.7 became 0.7 / 0.59 / 0.98. */
   background:
-    linear-gradient(180deg, rgba(11, 28, 51, 0.5) 0%, rgba(11, 28, 51, 0.42) 45%, rgba(11, 28, 51, 0.7) 100%),
+    linear-gradient(180deg, rgba(11, 28, 51, 0.7) 0%, rgba(11, 28, 51, 0.59) 45%, rgba(11, 28, 51, 0.98) 100%),
     var(--bg-lg) center 55% / cover no-repeat,
     #0b1c33;
 }
 @media (max-width: 900px) {
   .ps-bg.ps-four {
     background:
-      linear-gradient(180deg, rgba(11, 28, 51, 0.5) 0%, rgba(11, 28, 51, 0.42) 45%, rgba(11, 28, 51, 0.7) 100%),
+      linear-gradient(180deg, rgba(11, 28, 51, 0.7) 0%, rgba(11, 28, 51, 0.59) 45%, rgba(11, 28, 51, 0.98) 100%),
       var(--bg-sm) center 55% / cover no-repeat,
       #0b1c33;
   }
@@ -970,11 +1027,9 @@ body:has(.ps-four) main .tag { color: #e2f2fc; border-color: #1d5f8a; background
 body:has(.ps-four) .todo { color: #3ae3d1; border-bottom-color: #3ae3d1; }
 
 /* Header, footer and skip link on this page */
-body:has(.ps-four) .site-header { background: rgba(11, 28, 51, 0.94); --line: rgba(29, 95, 138, 0.6); }
-@media (prefers-reduced-transparency: reduce) { body:has(.ps-four) .site-header { background: #0b1c33; } }
+body:has(.ps-four) .site-header { --line: rgba(29, 95, 138, 0.6); --header-glass: rgba(11, 28, 51, 0.82); --header-menu: rgba(11, 28, 51, 0.5); --header-solid: #0b1c33; }
 body:has(.ps-four) .site-footer { background: rgba(11, 28, 51, 0.6); border-top-color: #1d5f8a; }
 @media (prefers-reduced-transparency: reduce) { body:has(.ps-four) .site-footer { background: #0b1c33; } }
-body:has(.ps-four) .crest-tile { background: #e2f2fc; }
 body:has(.ps-four) .skip-link { background: #3ae3d1; color: #0b1c33; }
 body:has(.ps-four) .ice-btn {
   background: linear-gradient(135deg, #e2f2fc 0%, #3ae3d1 50%, #e2f2fc 100%);
@@ -990,3 +1045,148 @@ body:has(.ps-four) .ice .crystal path { stroke: #e2f2fc; }
 body:has(.ps-four) .ice { filter: drop-shadow(0 0 0.6px #0b1c33) drop-shadow(0 0 2px rgba(11, 28, 51, 0.4)); }
 body:has(.ps-four) .ice-btn::before,
 body:has(.ps-four) .ice-btn::after { background: linear-gradient(105deg, transparent 30%, rgba(226, 242, 252, 0.6) 48%, rgba(226, 242, 252, 0.1) 56%, transparent 70%); }
+
+/* Photosphere: "Submit Creation" glides down to the submission forms, stopping clear of the header. */
+#ps-submit { scroll-margin-top: 5.5rem; }
+@media (prefers-reduced-motion: no-preference) {
+  html:has(.ps-bg) { scroll-behavior: smooth; }
+}
+
+/* Photosphere: the footer map in dark mode to match the night page (Mahmud, 20 Nov 2026).
+   Google's free embed has no dark style, so the map is inverted and its hues turned back round:
+   streets go dark, labels light, and the red pin stays red. The chip uses the page's own colours. */
+body:has(.ps-bg) .footer-map { background: #0b1c33; border-color: #1d5f8a; }
+/* Then tinted blue to match the page (Mahmud, 20 Nov 2026): navy ground, blue streets, a teal pin. */
+body:has(.ps-bg) .footer-map iframe { filter: invert(0.88) hue-rotate(180deg) sepia(1) hue-rotate(150deg) saturate(3) brightness(0.75) contrast(1.1); }
+body:has(.ps-bg) .footer-grid a.footer-map-open { background: #0b1c33; color: #3ae3d1; border: 1px solid #1d5f8a; box-shadow: 0 1px 6px rgba(0, 0, 0, 0.4); }
+body:has(.ps-bg) .footer-grid a.footer-map-open:hover { background: #1d5f8a; color: #e2f2fc; }
+
+/* NESS X and Register pages: the footer map tinted to the page's ice blues (Mahmud, 20 Nov 2026):
+   pale ice ground, sky-blue roads and a deep-blue pin, close to #ebf5f9, #8ed1e6 and #0a4a70. */
+body:has(.ness-three) .footer-map { background: #ebf5f9; border-color: #8ed1e6; }
+body:has(.ness-three) .footer-map iframe { filter: grayscale(1) sepia(1) hue-rotate(160deg) saturate(1.6) brightness(1.05); }
+body:has(.ness-three) .footer-grid a.footer-map-open { background: #ebf5f9; color: #0a4a70; border: 1px solid #8ed1e6; box-shadow: 0 1px 6px rgba(10, 74, 112, 0.18); }
+body:has(.ness-three) .footer-grid a.footer-map-open:hover { background: #0a4a70; color: #ebf5f9; }
+
+/* Footer map marker (Photosphere page): a pale pin with a navy outline and a teal halo, so the college
+   stands out on the blue map. The map starts still (the marker would drift if it were dragged); the
+   first tap on it fades the marker and unlocks zoom and drag, and Google's pin takes over. */
+.footer-map-pin, .footer-map-unlock, .footer-map-cover { display: none; }
+body:has(.ps-bg) .footer-map iframe { pointer-events: none; }
+body:has(.ps-bg) .footer-map-unlock { display: block; position: absolute; opacity: 0; width: 1px; height: 1px; margin: 0; }
+body:has(.ps-bg) .footer-map-cover {
+  display: flex; position: absolute; inset: 0; z-index: 1; cursor: pointer;
+  align-items: flex-end; justify-content: center; padding-bottom: 2.4rem; border-radius: inherit;
+}
+body:has(.ps-bg) .footer-map-unlock:focus-visible + .footer-map-cover { outline: 2px solid #3ae3d1; outline-offset: -4px; }
+body:has(.ps-bg) .footer-map-hint {
+  font-size: 0.8rem; font-weight: 600; padding: 0.3rem 0.75rem; border-radius: 999px;
+  background: rgba(11, 28, 51, 0.85); color: #e2f2fc; border: 1px solid #1d5f8a;
+}
+body:has(.ps-bg) .footer-map:has(.footer-map-unlock:checked) iframe { pointer-events: auto; }
+body:has(.ps-bg) .footer-map:has(.footer-map-unlock:checked) .footer-map-unlock,
+body:has(.ps-bg) .footer-map:has(.footer-map-unlock:checked) .footer-map-cover { display: none; }
+body:has(.ps-bg) .footer-map-pin { transition: opacity 0.3s ease, visibility 0.3s; }
+body:has(.ps-bg) .footer-map:has(.footer-map-unlock:checked) .footer-map-pin { opacity: 0; visibility: hidden; }
+body:has(.ps-bg) .footer-map-pin {
+  display: block; position: absolute; left: 50%; top: 50%; z-index: 1; pointer-events: none;
+  width: 36px; height: 48px; transform: translate(-50%, calc(-100% + 4px));
+  filter: drop-shadow(0 3px 6px rgba(11, 28, 51, 0.6));
+}
+body:has(.ps-bg) .footer-map-pin svg { display: block; }
+body:has(.ps-bg) .footer-map-pin::before {
+  content: ""; position: absolute; left: 50%; bottom: -9px; width: 26px; height: 26px; margin-left: -13px;
+  border-radius: 50%; border: 2px solid #3ae3d1; background: rgba(58, 227, 209, 0.25); z-index: -1;
+}
+@media (prefers-reduced-motion: no-preference) {
+  body:has(.ps-bg) .footer-map-pin::before { animation: map-pin-halo 2.4s ease-out infinite; }
+}
+@keyframes map-pin-halo {
+  0% { transform: scale(0.6); opacity: 0.9; }
+  100% { transform: scale(1.8); opacity: 0; }
+}
+
+/* ---------------------------------------------------------------------------------------------
+   23 Nov 2026 (Mahmud): footer at about 60% of its old height, college crest without its tile,
+   dark maps on every page except NESS X and Photosphere, a soft page-coloured shadow under the
+   header once you scroll, and a phone menu button without a box.
+   --------------------------------------------------------------------------------------------- */
+.site-footer { padding: var(--s5) 0 var(--s3); }
+.footer-grid { gap: var(--s4); }
+@media (min-width: 1000px) { .footer-grid { column-gap: var(--s7); } }
+.footer-about { gap: var(--s1); }
+.footer-marks { gap: var(--s3); margin-bottom: var(--s1); }
+.footer-marks .logo-mark { width: 40px; height: 40px; }
+.crest-tile { background: none; padding: 0; border-radius: 0; }
+.crest-tile img { height: 40px; }
+.footer-name { font-size: 0.9375rem; }
+.footer-grid ul { margin-top: var(--s1); }
+.footer-grid .contact-link { min-height: 2.25rem; }
+.footer-visit { gap: var(--s1); }
+/* 208px: Google shows its zoom and move buttons once the map inside the border is at least 200px tall (trial, 23 Nov 2026). */
+.footer-map { margin-top: var(--s1); height: 13rem; }
+.footer-base { margin-top: var(--s3); }
+/* Phones: logos on top, the club name and founding line under them (Mahmud, 23 Nov 2026) */
+
+/* Dark map by default; NESS X (.ness-three) and Photosphere (.ps-bg) keep their own tints. */
+.footer-map { background: #0f1e36; }
+.footer-map iframe { filter: invert(0.9) hue-rotate(180deg) brightness(0.9) contrast(0.95); }
+.footer-grid a.footer-map-open { background: #0f1e36; color: var(--sprout); border: 1px solid rgba(233, 238, 246, 0.2); box-shadow: 0 1px 6px rgba(0, 0, 0, 0.4); }
+.footer-grid a.footer-map-open:hover { background: #1b2d4a; color: var(--starlight); }
+
+/* Header shadow once scrolled: 40% of each page's own dark colour. */
+.site-header { --header-shadow: rgba(4, 10, 22, 0.4); }
+body:has(.ness-three) .site-header { --header-shadow: rgba(10, 74, 112, 0.4); }
+body:has(.ps-four) .site-header { --header-shadow: rgba(11, 28, 51, 0.4); }
+.site-header[data-solid="true"] { box-shadow: 0 6px 20px var(--header-shadow); }
+.site-header { transition: opacity 0.35s ease, background-color 0.3s ease, box-shadow 0.3s ease; }
+
+/* Phone menu button: no box around the three bars */
+.menu-btn { border: 0; }
+.menu-btn:focus-visible { outline: 2px solid var(--sprout); outline-offset: 2px; }
+
+/* NESS X: every header link is the same blue, so the other links are dimmed to 75% and the current
+   page stays at full strength (Mahmud, 23 Nov 2026). 75% keeps them readable on the ice background. */
+body:has(.ness-three) .main-nav a:not([aria-current="page"]) { opacity: 0.75; transition: opacity 0.2s var(--ease-ui); }
+body:has(.ness-three) .main-nav a:not([aria-current="page"]):is(:hover, :focus-visible) { opacity: 1; }
+
+/* Phones (Mahmud, 23 Nov 2026): the footer is 87.5% of the screen tall, its parts spread evenly with the
+   copyright at the bottom. The gap above it fills the rest of the screen (plus 3rem for content that
+   spills a few px past the page end), so at the very bottom no page text shows above the footer.
+   lvh minus svh also covers the browser's address bar sliding away. */
+@media (max-width: 599px) {
+  .site-footer { min-height: 87.5vh; min-height: 87.5svh; display: flex; flex-direction: column; margin-top: calc(12.5vh + var(--s7)); margin-top: calc(100lvh - 87.5svh + var(--s7)); }
+  .site-footer > .wrap { width: 100%; } /* keep full width inside the flex column */
+  .site-footer .footer-grid { flex: 1; align-content: space-evenly; }
+}
+
+/* NESS X and Photosphere (Mahmud, 23 Nov 2026): the header keeps a frosted-glass bar in the page's
+   own colour at all times, not only once scrolled, with a soft shadow under it: snowy white on
+   NESS X and Register, space blue on Photosphere. The fade-on-scroll and the phone menu stay as they are. */
+body:has(.ness-three) .site-header { --header-glass: rgba(235, 245, 249, 0.78); --header-shadow: rgba(255, 255, 255, 0.85); }
+body:has(.ps-four) .site-header { --header-glass: rgba(11, 28, 51, 0.78); --header-shadow: rgba(30, 80, 170, 0.55); }
+body:has(.ness-three) .site-header,
+body:has(.ps-four) .site-header {
+  background: var(--header-glass);
+  -webkit-backdrop-filter: blur(16px) saturate(160%); backdrop-filter: blur(16px) saturate(160%);
+  box-shadow: 0 6px 22px var(--header-shadow);
+}
+@media (prefers-reduced-transparency: reduce) {
+  body:has(.ness-three) .site-header, body:has(.ps-four) .site-header { background: var(--header-solid); -webkit-backdrop-filter: none; backdrop-filter: none; }
+}
+
+/* Every other page (Mahmud, 23 Nov 2026): the header stands apart from the page by colour alone, no
+   outline. A frosted bar a step lighter than the night background (the theme's --dusk), with the soft
+   night shadow under it, at all times. NESS X, Register and Photosphere keep their own bars above. */
+.site-header {
+  --header-glass: rgba(23, 42, 74, 0.86);
+  background: var(--header-glass);
+  -webkit-backdrop-filter: blur(16px) saturate(160%); backdrop-filter: blur(16px) saturate(160%);
+  box-shadow: 0 6px 20px var(--header-shadow);
+}
+@media (prefers-reduced-transparency: reduce) {
+  .site-header { background: var(--dusk); -webkit-backdrop-filter: none; backdrop-filter: none; }
+}
+
+/* Copyright centred (Mahmud, 23 Nov 2026) */
+.footer-base { justify-content: center; text-align: center; }

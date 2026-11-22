@@ -4,17 +4,16 @@ import type { L } from "@/lib/i18n";
 export const ui = {
   nav: {
     about: { en: "About", bn: "আমাদের কথা" },
-    ness: { en: "NESS 2027", bn: "NESS ২০২৭" },
-    /** Header label for the NESS page (Mahmud, 20 Nov 2026, trial). The footer keeps "NESS 2027". */
+    ness: { en: "NESS X", bn: "NESS X" },
+    /** Header label for the NESS page (Mahmud, 20 Nov 2026). Everything is called NESS X, never NESS 2027. */
     nessX: { en: "NESS X", bn: "NESS X" },
-    photosphere: { en: "PS 7.0", bn: "PS 7.0" },
+    photosphere: { en: "Photosphere 7.0", bn: "Photosphere 7.0" },
     events: { en: "Events", bn: "ইভেন্ট" },
     resources: { en: "Resources", bn: "রিসোর্স" },
     gallery: { en: "Gallery", bn: "গ্যালারি" },
     executives: { en: "Executives", bn: "কার্যনির্বাহী" },
     join: { en: "Join the club", bn: "ক্লাবে যোগ দিন" },
     contact: { en: "Contact", bn: "যোগাযোগ" },
-    privacy: { en: "Privacy", bn: "গোপনীয়তা" },
     home: { en: "Home", bn: "হোম" },
   },
   skip: { en: "Skip to content", bn: "মূল অংশে যান" },
@@ -32,7 +31,7 @@ export const ui = {
   details: { en: "Details", bn: "বিস্তারিত" },
   allEvents: { en: "All events", bn: "সব ইভেন্ট" },
   ourStory: { en: "Our story", bn: "আমাদের গল্প" },
-  seeNess: { en: "See NESS 2027", bn: "NESS ২০২৭ দেখুন" },
+  seeNess: { en: "See NESS X", bn: "NESS X দেখুন" },
   register: { en: "Register to compete", bn: "প্রতিযোগিতায় নিবন্ধন করুন" },
   exhibit: { en: "Exhibit your project", bn: "আপনার প্রকল্প প্রদর্শন করুন" },
   howToJoin: { en: "How to join", bn: "কীভাবে যোগ দেবেন" },
@@ -43,17 +42,13 @@ export const ui = {
   for: { en: "For", bn: "কাদের জন্য" },
   explore: { en: "Explore", bn: "ঘুরে দেখুন" },
   takePart: { en: "Take part", bn: "অংশ নিন" },
-  follow: { en: "Follow", bn: "ফলো করুন" },
+  follow: { en: "Follow us", bn: "আমাদের ফলো করুন" },
   founded: { en: "Founded 28 October 1992 at Notre Dame College, Dhaka.", bn: "নটর ডেম কলেজ, ঢাকায় ২৮ অক্টোবর ১৯৯২ সালে প্রতিষ্ঠিত।" },
   breadcrumb: { en: "Breadcrumb", bn: "পথনির্দেশ" },
   sources: { en: "Sources", bn: "সূত্র" },
   notFoundTitle: { en: "Lost in space", bn: "পথ হারিয়ে মহাশূন্যে" },
   notFoundText: { en: "We could not find that page. It may have moved.", bn: "পাতাটি খুঁজে পাওয়া যায়নি। হয়তো সরানো হয়েছে।" },
   backHome: { en: "Back to the home page", bn: "হোম পেজে ফিরে যান" },
-  consentNote: {
-    en: "Students appear on this site only with their consent. To ask for a photo or name to be removed, contact us.",
-    bn: "শিক্ষার্থীদের সম্মতি ছাড়া তাদের নাম বা ছবি এই সাইটে দেখানো হয় না। কোনো ছবি বা নাম সরাতে চাইলে আমাদের সঙ্গে যোগাযোগ করুন।",
-  },
   photoSoon: { en: "Photo coming soon", bn: "ছবি শিগগিরই" },
   newTab: { en: "(opens in a new tab)", bn: "(নতুন ট্যাবে খুলবে)" },
 } satisfies Record<string, L | Record<string, L>>;

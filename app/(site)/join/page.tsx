@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { type Locale, tr, path } from "@/lib/i18n";
+import { type Locale, path } from "@/lib/i18n";
 import { meta } from "@/lib/view";
 import { site } from "@/content/site";
 import { PageHead, FormButton, T } from "@/components/bits";
@@ -18,11 +18,6 @@ export async function generateMetadata() {
 export default async function Join() {
   const lang: Locale = "en";
   const en = lang === "en";
-  const faq = [
-    { q: { en: "When does joining open?", bn: "কখন যোগ দেওয়া যায়?" }, a: { en: "[Answer]", bn: "[উত্তর]" } },
-    { q: { en: "Is there a fee?", bn: "কোনো ফি আছে?" }, a: { en: "[Answer]", bn: "[উত্তর]" } },
-    { q: { en: "Can I work in a particular team?", bn: "নির্দিষ্ট কোনো দলে কাজ করা যায়?" }, a: { en: "[Answer, e.g. events, publications, IT, PR]", bn: "[উত্তর, যেমন ইভেন্ট, প্রকাশনা, আইটি, পিআর]" } },
-  ];
   return (
     <>
       <PageHead lang={lang} title={title} lead={lead} />
@@ -53,18 +48,12 @@ export default async function Join() {
             <FormButton href={site.forms.join} lang={lang}>{en ? "Fill in the entry form" : "ভর্তি ফর্ম পূরণ করো"}</FormButton>
           </div>
         </section>
-        <section aria-labelledby="jfaq">
-          <h2 id="jfaq" style={{ marginBottom: "var(--s3)" }}>{en ? "Questions" : "প্রশ্নোত্তর"}</h2>
-          {faq.map((f) => (
-            <details key={f.q.en}><summary>{tr(f.q, lang)}</summary><p><T text={f.a} lang={lang} /></p></details>
-          ))}
-        </section>
         <section className="surface panel-band">
           <div>
             <h3>{en ? "From another school or an organisation?" : "অন্য প্রতিষ্ঠান থেকে?"}</h3>
             <p className="muted small">{en ? "Compete or exhibit at the National Earth and Space Summit." : "ন্যাশনাল আর্থ অ্যান্ড স্পেস সামিটে প্রতিযোগিতা বা প্রদর্শনী করুন।"}</p>
           </div>
-          <Link className="btn btn-secondary" href={path(lang, "/ness")}>{en ? "Go to NESS 2027" : "NESS ২০২৭-এ যান"}</Link>
+          <Link className="btn btn-secondary" href={path(lang, "/ness")}>{en ? "Go to NESS X" : "NESS X-এ যান"}</Link>
         </section>
       </div>
     </>

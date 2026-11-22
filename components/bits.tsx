@@ -51,7 +51,7 @@ export function CollegeCrest({ alt }: { alt: string }) {
   return (
     <span className="crest-tile">
       {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img src={`${bp()}/brand/ndc-crest-72.png`} srcSet={`${bp()}/brand/ndc-crest-72.png 1x, ${bp()}/brand/ndc-crest-144.png 2x, ${bp()}/brand/ndc-crest-216.png 3x`} width={69} height={72} alt={alt} loading="lazy" />
+      <img src={`${bp()}/brand/ndc-crest-72.png`} srcSet={`${bp()}/brand/ndc-crest-72.png 1x, ${bp()}/brand/ndc-crest-144.png 2x, ${bp()}/brand/ndc-crest-216.png 3x`} width={74} height={72} alt={alt} loading="lazy" />
     </span>
   );
 }
@@ -158,18 +158,24 @@ export function PersonCard({ name, post, department, photo, poster, lang }: { na
         />
       ) : photo ? (
         // eslint-disable-next-line @next/next/no-img-element
-        <img className="person-photo" src={`${bp}${photo}`} alt={tr(name, lang)} loading="lazy" width={400} height={500} />
+        <img
+          className="person-photo"
+          src={`${bp}${photo}-400.webp`}
+          srcSet={`${bp}${photo}-400.webp 400w, ${bp}${photo}-800.webp 800w`}
+          sizes="(min-width: 1280px) 220px, (min-width: 600px) 25vw, 46vw"
+          alt={tr(name, lang)}
+          loading="lazy"
+          decoding="async"
+          width={800}
+          height={1000}
+        />
       ) : (
-        <PhotoSlot lang={lang} label={{ en: "photo, with consent", bn: "ছবি, সম্মতিসহ" }} />
+        <PhotoSlot lang={lang} label={{ en: "photo", bn: "ছবি" }} />
       )}
       <h3><T text={name} lang={lang} /></h3>
       <p className="small muted">
+        {/* Position only (Mahmud, 20 Nov 2026): the wing is already the heading above the cards. */}
         <T text={post} lang={lang} />
-        {department && (
-          <>
-            , <T text={department} lang={lang} />
-          </>
-        )}
       </p>
     </div>
   );
@@ -249,7 +255,7 @@ export function ContactLink({ kind, value, lang, className }: { kind: ContactKin
   return (
     <a className={cls} href={value} target="_blank" rel="noopener noreferrer">
       <ContactIcon kind={kind} />{name}
-      <span>{kind === "instagram" ? `@${handle}` : handle}</span>
+      <span>{handle}</span>
       <span className="visually-hidden"> {tr(ui.newTab, lang)}</span>
     </a>
   );

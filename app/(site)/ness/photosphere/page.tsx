@@ -2,7 +2,7 @@ import Link from "next/link";
 import { type Locale, path } from "@/lib/i18n";
 import { meta } from "@/lib/view";
 import { photosphere, photosphereBanner } from "@/content/photosphere";
-import { ContactLink, FormButton, RegisterButton } from "@/components/bits";
+import { ContactLink, FormButton } from "@/components/bits";
 
 const title = { en: "Photosphere 7.0", bn: "Photosphere 7.0" };
 const lead = {
@@ -30,11 +30,10 @@ export default async function Photosphere() {
           ["--bg-sm" as string]: `url("${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}/ness/ps-bg-1600.webp")`,
         }}
       />
-      {/* Hero, laid out like the NESS 2027 page: a short brief, key facts, then the two actions. */}
+      {/* Hero, laid out like the NESS X page: a short brief, key facts, then the two actions. */}
       <section className="sky sky-clear" aria-labelledby="ps-h1">
         <div className="wrap sky-inner" style={{ paddingBlock: "var(--s8) var(--s7)" }}>
           <div className="sky-copy">
-            <p className="label">Visual art competition and exhibition of NESS X, 2027</p>
             <h1 id="ps-h1" className="ps-logo-h1">
               {/* The Photosphere 7.0 logo stands in for the heading; its alt text is the heading's name. */}
               {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -47,15 +46,17 @@ export default async function Photosphere() {
                 fetchPriority="high"
               />
             </h1>
+            {/* Logo first, its line underneath (Mahmud, 23 Nov 2026). */}
+            <p className="label logo-caption">Visual art competition and exhibition</p>
             <p>{p.brief}</p>
             <dl className="facts">
               <div><dt>Exhibition</dt><dd>28–30 January 2027</dd></div>
               <div><dt>Venue</dt><dd>Notre Dame College, Motijheel, Dhaka</dd></div>
-              <div><dt>Entry</dt><dd>Free to submit</dd></div>
+              <div><dt>Initial Submission</dt><dd>Free</dd></div>
             </dl>
             <div className="actions">
-              <RegisterButton lang={lang}>Register now</RegisterButton>
-              <Link className="btn btn-secondary" href={`${path(lang, "/ness")}#segments`}>See other segments</Link>
+              <a className="btn" href="#ps-submit">Submit Creation</a>
+              <Link className="btn btn-secondary" href={path(lang, "/ness")}>Checkout NESS X</Link>
             </div>
           </div>
         </div>
@@ -110,9 +111,16 @@ export default async function Photosphere() {
 
         <section id="ps-rules" aria-labelledby="ps-rul">
           <h2 id="ps-rul">Submission rules</h2>
-          <ul className="ps-list">
-            {p.rules.map((r) => <li key={r}>{r}</li>)}
-          </ul>
+          <div className="ps-rule-groups">
+            {p.rules.map((g, i) => (
+              <div key={g.title} className="ps-rule-group">
+                <h3>{i + 1}. {g.title}</h3>
+                <ul className="ps-list">
+                  {g.items.map((r) => <li key={r}>{r}</li>)}
+                </ul>
+              </div>
+            ))}
+          </div>
         </section>
 
         <section aria-labelledby="ps-fee">

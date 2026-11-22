@@ -11,6 +11,8 @@ export const site = {
     bn: "নটর ডেম কলেজ, টয়েনবি সার্কুলার রোড, মতিঝিল, ঢাকা ১০০০",
   },
   mapUrl: "https://maps.app.goo.gl/N4N3Rvg5j3EB2ua16",
+  /** Google map of the college shown in the footer ("Visit us"): a pin on the campus (23.7304 N, 90.4207 E). No API key needed. */
+  mapEmbed: "https://maps.google.com/maps?q=23.7304,90.4207&z=16&output=embed",
 
   /** Club email, monitored by the moderator. Never a student's personal address. */
   email: "ndesc.organizers.2027@gmail.com" as string | null,

@@ -1,5 +1,4 @@
-import Link from "next/link";
-import { type Locale, tr, path } from "@/lib/i18n";
+import { type Locale, tr } from "@/lib/i18n";
 import { meta } from "@/lib/view";
 import { site } from "@/content/site";
 import { ContactLink, PageHead, T, ExternalLink } from "@/components/bits";
@@ -16,8 +15,8 @@ export default async function Contact() {
   const lang: Locale = "en";
   const en = lang === "en";
   const topics = en
-    ? ["NESS 2027", "Exhibiting or sponsoring", "Joining the club", "Press", "Something else"]
-    : ["NESS ২০২৭", "প্রদর্শনী বা স্পনসরশিপ", "ক্লাবে যোগদান", "সংবাদমাধ্যম", "অন্য কিছু"];
+    ? ["NESS X", "Exhibiting or sponsoring", "Joining the club", "Press", "Something else"]
+    : ["NESS X", "প্রদর্শনী বা স্পনসরশিপ", "ক্লাবে যোগদান", "সংবাদমাধ্যম", "অন্য কিছু"];
   return (
     <>
       <PageHead lang={lang} title={title} lead={lead} />
@@ -48,7 +47,6 @@ export default async function Contact() {
             <div><label htmlFor="topic">{en ? "Topic" : "বিষয়"}</label><select id="topic" name="topic">{topics.map((t) => <option key={t}>{t}</option>)}</select></div>
             <div><label htmlFor="message">{en ? "Message" : "বার্তা"}</label><textarea id="message" name="message" rows={6} required /></div>
             <div><button className="btn" type="submit">{en ? "Send message" : "বার্তা পাঠান"}</button></div>
-            <p className="small muted">{en ? "We only use your details to reply. " : "উত্তর দেওয়া ছাড়া আপনার তথ্য অন্য কাজে ব্যবহার হবে না। "}<Link href={path(lang, "/privacy")}>{en ? "Privacy" : "গোপনীয়তা"}</Link></p>
           </form>
         ) : (
           <div className="surface" style={{ padding: "var(--s6)", alignSelf: "start" }}>

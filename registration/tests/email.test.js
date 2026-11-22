@@ -1,0 +1,24 @@
+const { makeGoogle } = require('./fake-google');
+
+const { ctx, sheets, mails } = makeGoogle();
+let pass = 0, fail = 0;
+const check = (n, c, x) => { if (c) pass++; else { fail++; console.log('FAIL', n, x || ''); } };
+const post = b => ctx.doPost({ postData: { contents: JSON.stringify(b) }, parameter: {} });
+ctx.setup();
+const key = sheets.Settings.data.find(r => r[0] === 'SMS key')[1];
+const base = { action: 'register', name: 'Ayaan Rahman', email: 'ayaan@example.com', phone: '01730260578', institution: 'Example College, Dhaka', className: 'Class 11', category: 'HS', wallet: 'bKash' };
+post({ ...base, pass: 'online' });
+let m = mails[mails.length - 1];
+check('online pass sent', m && /NESSX-10000/.test(m.subject), mails.map(x => x.subject));
+check('online wording', /Online segments/.test(m.htmlBody) && !/payment is confirmed/.test(m.htmlBody) && /This is your entry pass/.test(m.htmlBody) && /at the registration desk\./.test(m.htmlBody));
+post({ ...base, email: 'b@example.com', phone: '01711111111', pass: 'team', trxId: 'DKTEAM0001', sender: '01711111111' });
+post({ action: 'sms', key, text: 'You have received Tk 300.00 from 01711111111. Fee Tk 0.00. Balance Tk 9.00. TrxID DKTEAM0001 at 18/11/2026 13:38' });
+m = mails[mails.length - 1];
+check('team pass sent', /NESSX-10001/.test(m.subject), mails.map(x => x.subject));
+check('team wording', /Team pass/.test(m.htmlBody) && !/Team code/.test(m.htmlBody));
+globalThis.QR_DOWN = true;
+post({ ...base, email: 'c@example.com', phone: '01722222222', pass: 'solo', trxId: 'DKSOLO0001', sender: '01722222222' });
+post({ action: 'sms', key, text: 'You have received Tk 200.00 from 01722222222. Fee Tk 0.00. Balance Tk 9.00. TrxID DKSOLO0001 at 18/11/2026 13:38' });
+m = mails[mails.length - 1];
+check('QR down still sends pass', /NESSX-10002/.test(m.subject) && !m.inlineImages && !m.attachments && /could not be added/.test(m.htmlBody));
+console.log(pass + '/' + (pass + fail) + ' checks passed');

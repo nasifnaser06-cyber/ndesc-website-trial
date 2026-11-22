@@ -21,7 +21,7 @@ export async function generateMetadata() {
 export default async function Register() {
   const lang: Locale = "en";
   const bp = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
-  const ness = getEvent("ness-2027");
+  const ness = getEvent("ness-x");
   const segments: SegOption[] = [
     ...soloSegments.map((s) => ({ name: s.name, cats: s.cats, online: !!s.online, team: false })),
     ...teamSegments.map((s) => ({ name: s.name, cats: s.cats, online: !!s.online, team: true })),
@@ -40,7 +40,7 @@ export default async function Register() {
       <section className="sky sky-clear" aria-labelledby="reg-h1">
         <div className="wrap sky-inner" style={{ paddingBlock: "var(--s8) var(--s6)" }}>
           <div className="sky-copy">
-            <p className="label"><Link href={path(lang, "/ness")}>{nessx.name}</Link> · {nessx.fullName}, 2027</p>
+            <p className="label"><Link href={path(lang, "/ness")}>{nessx.name}</Link> · {nessx.fullName}</p>
             <h1 id="reg-h1">{title.en}</h1>
             {/* Date and venue in an ice box, each with an icon instead of a label (Mahmud, 20 Nov 2026, trial). */}
             <div className="surface reg-intro">
@@ -78,7 +78,6 @@ export default async function Register() {
           googleForm={site.registerWith === "form" ? site.forms.nessRegister : null}
           categories={categories.filter((c) => c.code !== "C")}
           segments={segments}
-          privacyHref={path(lang, "/privacy")}
           nessHref={path(lang, "/ness")}
         />
       </div>

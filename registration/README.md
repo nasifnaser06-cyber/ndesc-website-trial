@@ -10,11 +10,27 @@ The full process and the risks are in the "NESSX automated registration and paym
 | --- | --- |
 | `apps-script/Logic.gs` | The rules: reads bKash SMS, checks forms, decides verify or review. No Google services, so it can be tested on a computer. |
 | `apps-script/Code.gs` | The web app around the rules: sheets, form and SMS handling, emails, alerts, setup. |
-| `tests/logic.test.js` | 31 checks of the rules. |
-| `tests/flow.test.js` | 22 checks of the whole flow, with fake Google services. |
+| `tests/logic.test.js` | 35 checks of the rules. |
+| `tests/flow.test.js` | 35 checks of the whole flow, with fake Google services. |
+| `tests/email.test.js` | 5 checks of the pass email for online and team passes and when the QR service is down. |
 | `tests/mock-server.js` | A stand-in for the web app at `http://localhost:8078`, to try the Register page locally. |
 
-Run the tests: `node registration/tests/logic.test.js && node registration/tests/flow.test.js`
+Run the tests: `node registration/tests/logic.test.js && node registration/tests/flow.test.js && node registration/tests/email.test.js && node registration/tests/checkin.test.js`
+
+The summit check-in (scanner) is in `checkin/`, with its own README.
+
+## Participant IDs
+
+Verified registrations get NESSX-10000, NESSX-10001, ... in the order they are verified, one counter for every category and pass. The script also checks the IDs already in the sheet, so a number is never given twice.
+
+## Emails
+
+Sent from the account that owns the sheet (ndesc.organizers.2027@gmail.com, sender name from Settings, "NESS X Organizers"):
+
+- **Pass email** when a registration is verified: the QR code inside the email (fetched once when sending, also attached as `NESSX-pass-qr.png`), name, Participant ID, pass, category, institution, date and venue, what to do on the day. The check code itself is never shown as text.
+- **We're checking your payment** when a registration goes to Needs review.
+
+There is no "registration received" email: the Register page already says the payment is being matched.
 
 ## Setting it up (about 30 minutes, once)
 
@@ -41,4 +57,4 @@ After changing the script, use Deploy > Manage deployments > Edit > New version,
 
 - A free Gmail account can send about 100 emails a day from a script. Passes over the limit are marked `Queued` and go out on the next run after the limit resets.
 - Nagad's SMS format is not in the reader yet. Send one real "money received" SMS and it will be added.
-- The pass QR image comes from a free QR service and carries only the random check code. Clear "QR image service" in Settings to leave it out.
+- The pass QR image is fetched from a free QR service when the email is sent; the service sees only the random check code. If it fails, the pass still goes out with a note to use "Check my registration" to get it again.

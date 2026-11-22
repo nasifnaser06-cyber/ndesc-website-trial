@@ -34,9 +34,9 @@ var DEFAULT_SETTINGS = [
   ['SMS key', '', 'Secret. Made by setup(). The phone forwarder must send it.'],
   ['Alert email', '', 'Who hears about problems: no SMS for hours, unreadable SMS'],
   ['Alert after hours', '6', 'No SMS for this long between 8am and 11pm sends an alert'],
-  ['Email from name', 'NESSX Team', ''],
+  ['Email from name', 'NESS X Organizers', ''],
   ['Reply-to email', 'ndesc.organizers.2027@gmail.com', ''],
-  ['QR image service', 'https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=', 'Gets only the random check code, never names or numbers. Blank = no QR image.'],
+  ['QR image service', 'https://api.qrserver.com/v1/create-qr-code/?size=400x400&margin=8&data=', 'Gets only the random check code, never names or numbers. Blank = no QR image.'],
   ['Website', 'https://ndesc.com/ness/', ''],
 ];
 
@@ -120,11 +120,22 @@ function handleRegister(b) {
     var dup = rows.filter(function (x) {
       return x.phone === r.phone && x.pass === r.pass && (r.pass === 'online' ? x.email === r.email : x.trxId === r.trxId);
     })[0];
-    if (dup) return { ok: true, regId: dup.id, status: dup.status, duplicate: true };
+    if (dup) return { ok: true, regId: dup.id, status: dup.status, teamCode: dup.teamCode, duplicate: true };
 
-    // No team codes (20 Nov 2026): team pass holders form teams of up to 3 at the summit.
-    // The Team code column stays in the sheet, left blank.
-    r.teamCode = '';
+    // Team codes: the first teammate gets a new one, the others type it in.
+    var newTeam = false;
+    if (r.pass === 'team') {
+      if (r.teamCode) {
+        var members = rows.filter(function (x) { return x.teamCode === r.teamCode && x.status !== 'Cancelled'; });
+        if (!members.length) return { ok: false, errors: ['We could not find that team code. Check it with your teammate, or leave it blank to start a new team.'] };
+        if (members.length >= LOGIC.MAX_TEAM) return { ok: false, errors: ['That team already has 3 members.'] };
+      } else {
+        r.teamCode = newCode(6, rows.map(function (x) { return x.teamCode; }));
+        newTeam = true;
+      }
+    } else {
+      r.teamCode = '';
+    }
 
     var id = 'R' + Utilities.formatDate(new Date(), 'Asia/Dhaka', 'yyMMdd') + '-' + newCode(5, rows.map(function (x) { return x.id; }));
     sh.appendRow([id, new Date(), 'Waiting', r.pass, r.name, r.email, "'" + r.phone, r.institution, r.className,
@@ -135,10 +146,9 @@ function handleRegister(b) {
     lock.releaseLock();
   }
 
-  if (r.pass !== 'online') sendReceivedEmail(r, id);
   runMatcher(); // pays may already be in; a free pass is verified now
   var now = readRegs().filter(function (x) { return x.id === id; })[0];
-  return { ok: true, regId: id, status: now ? now.status : 'Waiting' };
+  return { ok: true, regId: id, status: now ? now.status : 'Waiting', teamCode: r.teamCode, newTeam: newTeam };
 }
 
 // ---------------------------------------------------------------- status lookup
@@ -210,7 +220,7 @@ function runMatcher() {
     d.verify.forEach(function (v) {
       var r = byId[v.id];
       r.status = 'Verified';
-      r.participantId = nextParticipantId(r.category);
+      r.participantId = nextParticipantId();
       r.checkCode = newCode(10, []);
       sh.getRange(r.row, col('Status')).setValue('Verified');
       sh.getRange(r.row, col('Participant ID')).setValue(r.participantId);
@@ -252,62 +262,108 @@ function markPaymentUsed(psh, pays, trxId, regId) {
 
 // ---------------------------------------------------------------- emails
 
-function sendReceivedEmail(r, id) {
-  var s = settings();
-  mail(r.email, 'NESSX: registration received (' + id + ')',
-    '<p>Hi ' + esc(r.name) + ',</p>' +
-    '<p>We have your NESSX registration. We are now matching your payment (TrxID <b>' + esc(r.trxId) + '</b>). ' +
-    'Your pass usually arrives within a few minutes. Please do not pay again.</p>' +
-    '<p>Check your status any time: ' + esc(s['Website']) + 'register/</p>' +
-    '<p>NESSX Team<br>Notre Dame Eco and Space Club</p>', false);
+var EMAIL = {
+  INK: '#15233b', MUTED: '#5f6b7d', LINE: '#e6e4dc', NIGHT: '#0f1e36', STAR: '#e9eef6', HAZE: '#a9b7cc', SOFT: '#f1f4f8',
+  CATEGORY: { P: 'Primary', J: 'Junior', S: 'Secondary', HS: 'Higher Secondary' },
+  PASS: { solo: 'Solo pass', team: 'Team pass', online: 'Online segments' },
+};
+
+/** The navy NESS X header and white card every email shares. */
+function emailFrame(bodyHtml) {
+  var E = EMAIL;
+  return '<!DOCTYPE html><html><body style="margin:0;padding:0;background:#f4f4f2">' +
+    '<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" bgcolor="#f4f4f2"><tr><td align="center" style="padding:16px 8px">' +
+    '<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="max-width:520px;background:#ffffff;border:1px solid #d3d1c7;border-radius:12px;font-family:Arial,Helvetica,sans-serif;color:' + E.INK + '">' +
+    '<tr><td bgcolor="' + E.NIGHT + '" style="background:' + E.NIGHT + ';padding:18px 24px;border-radius:12px 12px 0 0">' +
+    '<div style="font-size:12px;letter-spacing:0.5px;color:' + E.HAZE + '">Notre Dame Eco and Space Club</div>' +
+    '<div style="font-size:22px;font-weight:bold;color:' + E.STAR + ';margin-top:2px">NESS X</div>' +
+    '<div style="font-size:13px;color:' + E.HAZE + '">10th National Earth and Space Summit</div>' +
+    '</td></tr>' +
+    '<tr><td style="padding:20px 24px;font-size:15px;line-height:1.6">' + bodyHtml +
+    '<p style="font-size:14px;margin:16px 0 0">See you at NESS X,<br>NESS X Organizers<br><span style="color:' + E.MUTED + '">Notre Dame Eco and Space Club</span></p>' +
+    '</td></tr></table></td></tr></table></body></html>';
 }
 
 function sendReviewEmail(r) {
-  mail(r.email, 'NESSX: we are checking your payment',
-    '<p>Hi ' + esc(r.name) + ',</p>' +
-    '<p>We could not match your payment automatically, so a member of our team will check it by hand, usually within a day. ' +
-    'You do not need to do anything now. If we need something from you, we will reply to this email.</p>' +
-    '<p>Registration ' + esc(r.id) + ', TrxID ' + esc(r.trxId || 'none') + '.</p>' +
-    '<p>NESSX Team<br>Notre Dame Eco and Space Club</p>', false);
+  var E = EMAIL;
+  var body =
+    '<p style="margin:0 0 10px">Hi ' + esc(r.name) + ',</p>' +
+    '<p style="margin:0 0 12px">We couldn\'t match your payment automatically, so someone from our team will check it by hand, usually within a day. ' +
+    'You don\'t need to do anything right now. Please don\'t pay again.</p>' +
+    '<p style="margin:0 0 12px;font-size:14px;color:' + E.MUTED + '">Registration: ' + esc(r.id) + '<br>TrxID: ' + esc(r.trxId || 'none') + '</p>' +
+    '<p style="margin:0">If we need anything from you, we\'ll reply to this email.</p>';
+  mail(r.email, 'We\'re checking your NESS X payment', emailFrame(body), false);
+}
+
+/** Fetches the QR picture once, at send time, so it travels inside the email. */
+function qrBlob(checkCode) {
+  var base = settings()['QR image service'];
+  if (!base || !checkCode) return null;
+  try {
+    var res = UrlFetchApp.fetch(base + encodeURIComponent(checkCode), { muteHttpExceptions: true });
+    if (res.getResponseCode() !== 200) return null;
+    return res.getBlob().setName('NESSX-pass-qr.png');
+  } catch (err) {
+    console.error('QR fetch failed: ' + err);
+    return null;
+  }
+}
+
+function detailRow(k, v, last) {
+  var border = last ? '' : 'border-bottom:1px solid ' + EMAIL.LINE + ';';
+  return '<tr><td style="padding:7px 0;color:' + EMAIL.MUTED + ';' + border + '">' + k + '</td>' +
+    '<td align="right" style="padding:7px 0;text-align:right;' + border + '">' + v + '</td></tr>';
 }
 
 function sendPassEmail(r, isResend) {
-  var s = settings();
+  var E = EMAIL;
   if (MailApp.getRemainingDailyQuota() < 1) {
     sheet(SHEETS.REG).getRange(r.row, col('Pass email')).setValue('Queued');
     return;
   }
-  var passName = r.pass === 'team' ? 'Team Pass' : r.pass === 'online' ? 'Online Submission' : 'Solo Pass';
-  var qrBase = s['QR image service'];
-  var qr = qrBase ? '<p><img src="' + qrBase + encodeURIComponent(r.checkCode) + '" width="220" height="220" alt="Your pass QR code"></p>' : '';
-  var html =
-    '<div style="font-family:Arial,sans-serif;font-size:15px;color:#111">' +
-    '<p>Hi ' + esc(r.name) + ',</p>' +
-    '<p>You are registered for <b>NESSX, the 10th National Earth and Space Summit</b>, 28 to 30 January 2027 at Notre Dame College, Dhaka.</p>' +
-    '<table cellpadding="6" style="border-collapse:collapse;border:1px solid #ccc">' +
-    row('Participant ID', '<b style="font-size:20px">' + esc(r.participantId) + '</b>') +
-    row('Pass', passName) +
-    row('Category', esc(r.category)) +
-    row('Institution', esc(r.institution)) +
-    row('Your pass includes', esc(r.segments)) +
-    row('Check code', '<span style="font-family:monospace;font-size:18px">' + esc(r.checkCode) + '</span>') +
-    '</table>' + qr +
-    (r.pass === 'team' ? '<p>With a team pass you can form a team of up to 3 team pass holders at the summit.</p>' : '') +
-    '<p>Show this email (or the QR code) at the gate. Bring your student ID card.</p>' +
-    '<p>NESSX Team<br>Notre Dame Eco and Space Club</p></div>';
-  var sent = mail(r.email, 'Your NESSX ' + passName + ', ' + r.participantId + (isResend ? ' (sent again)' : ''), html, true);
+  var passName = E.PASS[r.pass] || 'Solo pass';
+  var online = r.pass === 'online';
+  var blob = qrBlob(r.checkCode);
+  var qr = blob
+    ? '<img src="cid:qr" width="200" height="200" alt="Your NESS X pass QR code" style="display:block;margin:0 auto;width:200px;height:200px">'
+    : '<p style="margin:0;font-size:14px">Your QR code could not be added to this email. Use "Check my registration" on the website to have it sent again.</p>';
+  var body =
+    '<p style="margin:0 0 10px">Hi ' + esc(r.name) + ',</p>' +
+    '<p style="margin:0 0 16px">You\'re registered for NESS X. ' + (online ? '' : 'Your payment is confirmed and ') + (online ? 'This is your entry pass.' : 'this is your entry pass.') + '</p>' +
+    '<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="border:1px solid #d3d1c7;border-radius:12px"><tr><td align="center" style="padding:16px">' +
+    qr +
+    '<div style="font-size:13px;color:' + E.MUTED + ';margin-top:8px">Show this QR code at the registration desk</div>' +
+    '</td></tr></table>' +
+    '<p style="font-size:13px;color:' + E.MUTED + ';margin:8px 0 16px;text-align:center">Tip: take a screenshot now, so you have it even without internet.</p>' +
+    '<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="font-size:14px;margin:0 0 16px">' +
+    detailRow('Name', esc(r.name)) +
+    detailRow('Participant ID', '<b>' + esc(r.participantId) + '</b>') +
+    detailRow('Pass', passName) +
+    detailRow('Category', esc(E.CATEGORY[r.category] || r.category)) +
+    detailRow('Institution', esc(r.institution), true) +
+    '</table>' +
+    '<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" bgcolor="' + E.SOFT + '" style="background:' + E.SOFT + ';border-radius:8px;margin:0 0 16px"><tr><td style="padding:12px 14px;font-size:14px">' +
+    '<b>When and where</b><br>28 to 30 January 2027<br>Notre Dame College, Motijheel, Dhaka' +
+    '</td></tr></table>' +
+    '<p style="margin:0 0 4px;font-size:14px"><b>On the day</b></p>' +
+    '<p style="margin:0 0 16px;font-size:14px">1. Bring your student ID card.<br>2. Show this QR code at the registration desk.<br>' +
+    (online ? '3. Collect your NESS X pass at the registration desk.' : '3. Collect your NESS X pass. You only need to check in once.') + '</p>' +
+    '<p style="margin:0;font-size:14px">Questions? Reply to this email.</p>';
+  var sent = mail(r.email, 'Your NESS X pass: ' + r.participantId + (isResend ? ' (sent again)' : ''), emailFrame(body), true, blob);
   sheet(SHEETS.REG).getRange(r.row, col('Pass email')).setValue(sent ? 'Sent ' + Utilities.formatDate(new Date(), 'Asia/Dhaka', 'd MMM HH:mm') : 'Queued');
 }
 
-function row(k, v) {
-  return '<tr><td style="border:1px solid #ccc;color:#555">' + k + '</td><td style="border:1px solid #ccc">' + v + '</td></tr>';
-}
-
-function mail(to, subject, html, important) {
+/** qr: optional PNG blob, shown in the email body and attached so it can be saved. */
+function mail(to, subject, html, important, qr) {
   var s = settings();
   if (!to) return false;
   if (MailApp.getRemainingDailyQuota() < (important ? 1 : 5)) return false; // keep the last few for passes
-  MailApp.sendEmail({ to: to, subject: subject, htmlBody: html, name: s['Email from name'] || 'NESSX Team', replyTo: s['Reply-to email'] || undefined });
+  var msg = { to: to, subject: subject, htmlBody: html, name: s['Email from name'] || 'NESS X Organizers', replyTo: s['Reply-to email'] || undefined };
+  if (qr) {
+    msg.inlineImages = { qr: qr };
+    msg.attachments = [qr.copyBlob().setName('NESSX-pass-qr.png')];
+  }
+  MailApp.sendEmail(msg);
   return true;
 }
 
@@ -388,12 +444,20 @@ function readPays() {
   return out;
 }
 
-function nextParticipantId(category) {
+/**
+ * Participant IDs run NESSX-10000, NESSX-10001, ... for everyone (one counter, not per category).
+ * Also looks at the IDs already in the sheet, so a reset counter or copied rows never repeat a number.
+ */
+var FIRST_PARTICIPANT_NUMBER = 10000;
+function nextParticipantId() {
   var props = PropertiesService.getScriptProperties();
-  var key = 'count_' + category;
-  var n = Number(props.getProperty(key) || 0) + 1;
-  props.setProperty(key, String(n));
-  return 'NESSX-' + category + '-' + ('0000' + n).slice(-4);
+  var n = Number(props.getProperty('participant_next') || FIRST_PARTICIPANT_NUMBER);
+  readRegs().forEach(function (r) {
+    var m = String(r.participantId || '').match(/^NESSX-(\d{5,})$/);
+    if (m && Number(m[1]) >= n) n = Number(m[1]) + 1;
+  });
+  props.setProperty('participant_next', String(n + 1));
+  return 'NESSX-' + n;
 }
 
 /** Random code of letters and digits, without look-alikes (0/O, 1/I). */
@@ -462,14 +526,22 @@ function approveSelectedRow() {
   if (sh.getName() !== SHEETS.REG) throw new Error('Select a row in the Registrations tab.');
   var r = sh.getActiveRange().getRow();
   if (r < 2) return;
+  var lock = LockService.getScriptLock();
+  lock.waitLock(30000);
+  try {
   var reg = readRegs().filter(function (x) { return x.row === r; })[0];
+  if (reg.status === 'Verified' && reg.participantId) throw new Error('This row is already verified as ' + reg.participantId + '.');
   reg.status = 'Verified';
-  reg.participantId = nextParticipantId(reg.category);
+  reg.participantId = nextParticipantId();
   reg.checkCode = newCode(10, []);
   sh.getRange(r, col('Status')).setValue('Verified');
   sh.getRange(r, col('Participant ID')).setValue(reg.participantId);
   sh.getRange(r, col('Check code')).setValue(reg.checkCode);
   sh.getRange(r, col('Review reason')).setValue('Approved by hand ' + Utilities.formatDate(new Date(), 'Asia/Dhaka', 'd MMM HH:mm'));
+  SpreadsheetApp.flush();
+  } finally {
+    lock.releaseLock();
+  }
   sendPassEmail(reg, false);
 }
 

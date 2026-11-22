@@ -32,7 +32,32 @@ export default function Header({ lang }: { lang: Locale }) {
   const menuButton = useRef<HTMLButtonElement>(null);
 
   // Close the phone menu on navigation and with Escape.
-  useEffect(() => setOpen(false), [sub]);
+  // A link tapped in the open menu closes the menu at once, so the header doesn't shrink under the reader.
+  const onHeaderClick = (e: React.MouseEvent<HTMLElement>) => {
+    if (!open) return;
+    const a = (e.target as HTMLElement).closest("a");
+    if (!a || a.target === "_blank") return;
+    setOpen(false);
+  };
+  // Every new page starts at its top (the logo and title), unless the link points at a #section or the
+  // reader went Back/Forward (then the browser puts them where they were). Next.js's own scroll can land
+  // part-way down pages with a fixed background picture (Photosphere opened at "About", 21 Nov 2026).
+  const historyNav = useRef(false);
+  useEffect(() => {
+    const onPop = () => { historyNav.current = true; };
+    window.addEventListener("popstate", onPop);
+    return () => window.removeEventListener("popstate", onPop);
+  }, []);
+  const firstRender = useRef(true);
+  useEffect(() => {
+    setOpen(false);
+    if (firstRender.current) { firstRender.current = false; return; }
+    if (historyNav.current) { historyNav.current = false; return; }
+    if (window.location.hash) return;
+    const toTop = () => window.scrollTo({ top: 0, left: 0, behavior: "instant" });
+    toTop();
+    requestAnimationFrame(() => { toTop(); requestAnimationFrame(toTop); });
+  }, [sub]);
   useEffect(() => {
     if (!open) return;
     const onKey = (e: KeyboardEvent) => {
@@ -48,6 +73,9 @@ export default function Header({ lang }: { lang: Locale }) {
   // Slide the header away while scrolling down, bring it back on any scroll up.
   const header = useRef<HTMLElement>(null);
   const [hidden, setHidden] = useState(false);
+  // At the very top the header is see-through and blends with the page; once the page scrolls under
+  // it, it takes a soft glass tint of the same page colour so the menu stays readable.
+  const [scrolled, setScrolled] = useState(false);
   useEffect(() => {
     let lastY = window.scrollY;
     let ticking = false;
@@ -56,6 +84,7 @@ export default function Header({ lang }: { lang: Locale }) {
       const y = Math.max(0, window.scrollY);
       const h = header.current?.offsetHeight ?? 80;
       const dy = y - lastY;
+      setScrolled(y > 4);
       if (y <= h) setHidden(false);
       else if (dy > 6) setHidden(true);
       else if (dy < -6) setHidden(false);
@@ -65,6 +94,7 @@ export default function Header({ lang }: { lang: Locale }) {
       if (!ticking) { ticking = true; requestAnimationFrame(update); }
     };
     window.addEventListener("scroll", onScroll, { passive: true });
+    update();
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
   useEffect(() => setHidden(false), [sub]);
@@ -75,7 +105,7 @@ export default function Header({ lang }: { lang: Locale }) {
   const isActive = (to: string) => to === best;
 
   return (
-    <header className="site-header" ref={header} data-hidden={hidden && !open}>
+    <header className="site-header" ref={header} data-hidden={hidden && !open} data-solid={scrolled || open} onClickCapture={onHeaderClick}>
       <div className="wrap header-row">
         <Link href={path(lang)} className="brand">
           <Logo />
@@ -114,8 +144,10 @@ export default function Header({ lang }: { lang: Locale }) {
         </nav>
 
         <div className="header-tools">
-          {/* No Register button on the Register page itself. */}
-          {sub !== "/ness/register" &&
+          {/* The "Register for NESS X" ice button, back in the header (Mahmud, 20 Nov 2026).
+              Not on the Register page itself, nor on the NESS X page, which has its own
+              Register now button (Mahmud, 21 Nov 2026). */}
+          {sub !== "/ness/register" && sub !== "/ness" &&
             (site.registerWith === "form" && site.forms.nessRegister ? (
               <IceButton href={site.forms.nessRegister} external note={tr(ui.newTab, lang)} />
             ) : (

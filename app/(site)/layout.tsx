@@ -29,6 +29,8 @@ export async function generateMetadata(): Promise<Metadata> {
     title: { default: tr(site.name, l), template: `%s | ${tr(site.name, l)}` },
     icons: {
       icon: [
+        { url: `${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}/favicon.ico`, sizes: "16x16 32x32 48x48" },
+        { url: `${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}/favicon-48.png`, sizes: "48x48", type: "image/png" },
         { url: `${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}/favicon-32.png`, sizes: "32x32", type: "image/png" },
         { url: `${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}/icon-192.png`, sizes: "192x192", type: "image/png" },
       ],

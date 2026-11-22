@@ -87,6 +87,7 @@ function validateRegistration(r) {
     if (!LOGIC.TRX_RE.test(normTrx(r.trxId))) errors.push('Enter the TrxID from your payment SMS (8 to 12 letters and numbers).');
     if (!normPhone(r.sender)) errors.push('Enter the number you paid from.');
   }
+  if (r.teamCode && !/^[A-Z0-9]{6}$/.test(String(r.teamCode).toUpperCase())) errors.push('A team code has 6 letters and numbers.');
   return errors;
 }
 
@@ -105,8 +106,8 @@ function validateRegistration(r) {
  *  - Online-only (free) registrations are verified straight away.
  *  - A paid registration is verified when its TrxID is in the payments, the amount is the
  *    price of its pass, and no other registration has used that TrxID.
- *  - Every person pays for their own pass, team pass included (no shared team payments
- *    since 20 Nov 2026: teams form at the summit).
+ *  - A team payment of 2 or 3 times the team price covers that many teammates who all
+ *    gave the same team code and the same TrxID.
  *  - On a "received" (Send Money) SMS the number it came from must match the number the person
  *    typed. On a Cash In the number is the agent's shop, so it is not checked.
  *  - Wrong amount, a TrxID already used, or a different sender go to review straight away.
@@ -146,21 +147,31 @@ function decide(regs, pays, prices, nowMs) {
 
     if (p.amount === price && held.length === 0) {
       ok = true;
+    } else if (r.pass === 'team' && price > 0 && p.amount % price === 0 &&
+               p.amount / price >= 2 && p.amount / price <= LOGIC.MAX_TEAM) {
+      var seats = p.amount / price;
+      var sameTeam = held.every(function (h) {
+        return h.pass === 'team' && h.teamCode && h.teamCode === r.teamCode;
+      });
+      if (!r.teamCode) reason = 'A shared team payment needs the team code';
+      else if (!sameTeam) reason = 'TrxID already used by someone outside this team';
+      else if (held.length >= seats) reason = 'This payment already covers ' + seats + ' teammates';
+      else ok = true;
     } else if (held.length > 0) {
       reason = 'TrxID already used by another registration';
     } else {
       reason = 'Paid ' + p.amount + ' Tk, expected ' + price + ' Tk';
     }
 
-    // Send Money: the number must match.
-    if (ok && p.kind === 'received' && normPhone(p.from) !== normPhone(r.sender)) {
+    // Send Money: the number must match. Only for the person who paid alone (a shared team payment came from one teammate).
+    if (ok && p.kind === 'received' && p.amount === price && normPhone(p.from) !== normPhone(r.sender)) {
       ok = false;
       reason = 'Number in the SMS (' + p.from + ') is not the number given';
     }
 
     if (ok) {
       verify.push({ id: r.id, trxId: k });
-      (holders[k] = holders[k] || []).push({ pass: r.pass, status: 'Verified' });
+      (holders[k] = holders[k] || []).push({ pass: r.pass, teamCode: r.teamCode, status: 'Verified' });
     } else {
       review.push({ id: r.id, reason: reason });
     }
