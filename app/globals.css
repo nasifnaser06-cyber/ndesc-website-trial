@@ -1191,14 +1191,19 @@ body:has(.ps-four) .site-header {
 /* Copyright centred (Mahmud, 23 Nov 2026) */
 .footer-base { justify-content: center; text-align: center; }
 
-/* Footer balanced against the taller map (trial, 23 Nov 2026). On screens where the columns sit side
-   by side, every column is as tall as the map column: the tops line up, the club name and founding
-   line sit at the bottom level with the map's bottom edge, and the three links spread evenly down
-   the same height. */
+/* Footer balanced against the taller map (trial, 23 Nov 2026), second try. The text stays grouped
+   (no stretched gaps) but is set larger, so the logo, name and link columns come close to the map's
+   height and their tops line up with it. Screens 1000px and wider, where the columns sit side by side. */
 @media (min-width: 1000px) {
-  .footer-grid { align-items: stretch; }
-  .footer-about, .footer-follow { display: flex; flex-direction: column; }
-  .footer-about .footer-name { margin-top: auto; }
-  .footer-follow ul.contact-links { flex: 1; display: flex; flex-direction: column; justify-content: space-between; margin-bottom: 0; }
+  .footer-marks { gap: var(--s4); margin-bottom: var(--s3); }
+  .footer-marks .logo-mark { width: 64px; height: 64px; }
+  .crest-tile img { height: 64px; }
+  .footer-name { font-size: 1.25rem; line-height: 1.3; }
+  .footer-about p.small { font-size: 1rem; line-height: 1.55; max-width: 26ch; }
+  .footer-follow ul.contact-links { gap: var(--s3); margin-top: var(--s3); }
+  .footer-grid .contact-link { min-height: 2.75rem; font-size: 1.1875rem; gap: var(--s3); }
+  .footer-grid .contact-link .contact-icon { width: 24px; height: 24px; }
+  .footer-visit .footer-map { margin-top: var(--s3); }
+  .footer-grid .label { font-size: 1rem; }
 }
 
