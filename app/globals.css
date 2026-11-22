@@ -100,20 +100,6 @@ main:focus { outline: none; }
 .site-header { --header-glass: rgba(15, 30, 54, 0.82); --header-menu: rgba(15, 30, 54, 0.5); --header-solid: var(--night); position: sticky; top: 0; z-index: 20; background: transparent; border-bottom: 0; transition: opacity 0.35s ease, background-color 0.3s ease; }
 .site-header[data-solid="true"] { background: var(--header-glass); -webkit-backdrop-filter: blur(16px) saturate(160%); backdrop-filter: blur(16px) saturate(160%); }
 @media (prefers-reduced-transparency: reduce) { .site-header[data-solid="true"] { background: var(--header-solid); -webkit-backdrop-filter: none; backdrop-filter: none; } }
-/* With the phone menu open: the page's own colour at half strength over a heavy blur, like a phone's
-   notification shade. The page stays visible behind the menu, but soft enough that the menu reads clearly. */
-.site-header:has(.main-nav[data-open="true"]) {
-  background: var(--header-menu);
-  -webkit-backdrop-filter: blur(28px) saturate(140%); backdrop-filter: blur(28px) saturate(140%);
-  /* The bottom edge fades out instead of ending in a hard line: an empty strip under the last link that
-     goes from the menu's tint and blur to the clear page. The negative margin keeps the page where it was. */
-  padding-bottom: 4rem; margin-bottom: -4rem;
-  -webkit-mask-image: linear-gradient(to bottom, #000 calc(100% - 4rem), transparent);
-  mask-image: linear-gradient(to bottom, #000 calc(100% - 4rem), transparent);
-}
-@media (prefers-reduced-transparency: reduce) {
-  .site-header:has(.main-nav[data-open="true"]) { background: var(--header-solid); -webkit-backdrop-filter: none; backdrop-filter: none; }
-}
 /* Fades out while scrolling down, fades back in on scroll up (Mahmud, 20 Nov 2026: fade, not slide).
    While faded it ignores taps, so the page underneath stays clickable. */
 .site-header { transition: opacity 0.35s ease, background-color 0.3s ease; }
@@ -146,6 +132,9 @@ main:focus { outline: none; }
    for wider font rendering. */
 @media (max-width: 1160px) {
   .header-row { flex-wrap: wrap; }
+  /* The top row keeps its full 72px height when the menu opens below it. Without this the row
+     shrank to its tallest item and the logo slid up to the screen edge (Mahmud, 23 Nov 2026). */
+  .header-row > .brand, .header-row > .header-tools { min-height: 72px; }
   /* Without JavaScript the menu stays visible as a wrapped row. */
   .main-nav { order: 3; width: 100%; padding-bottom: var(--s3); }
   .main-nav ul { flex-wrap: wrap; }
@@ -185,10 +174,10 @@ main:focus { outline: none; }
 }
 
 /* Footer */
-.logo-mark { display: block; flex: none; border-radius: 50%; }
+.logo-mark { display: block; flex: none; object-fit: contain; } /* the logo file is already round with clear corners: no clipping (23 Nov 2026) */
 .footer-marks { display: flex; align-items: center; gap: var(--s4); margin-bottom: var(--s2); }
 .crest-tile { display: inline-flex; align-items: center; justify-content: center; background: #F6F3EA; border-radius: 12px; padding: 6px 8px; }
-.crest-tile img { display: block; height: 52px; width: auto; }
+.crest-tile img { display: block; height: 52px; width: auto; object-fit: contain; }
 .site-footer {
   margin-top: var(--s9); padding: var(--s7) 0 var(--s6);
   /* Frosted glass: the page shows through, blurred. */
@@ -625,8 +614,7 @@ main section > :is(.event-list, .grid-3, .two-worlds, .timeline, .timeline-v, .g
 html.motion main section .timeline li::before { transform: scaleX(0); }
 html.motion main section.is-in .timeline li::before { transform: none; transition: transform 0.7s var(--ease); transition-delay: calc(var(--d, 0ms) + var(--gap, 0ms) + 150ms); }
 
-/* 4. Phone menu opens as one piece (menus are used often: no stagger). */
-.js .main-nav[data-open="true"] { animation: rise 0.22s var(--ease) both; --rise: -6px; }
+/* 4. Phone menu: "corner bloom", see the end of this file. */
 
 /* 5. Questions open smoothly where the browser can animate to height: auto. */
 summary { list-style: none; display: flex; justify-content: space-between; gap: var(--s4); align-items: center; }
@@ -657,7 +645,9 @@ details[open] > summary::after { transform: rotate(45deg); }
   html.motion main section.is-in > *,
   html.motion main section.is-in > :is(.event-list, .grid-3, .two-worlds, .timeline, .timeline-v, .groups, .cards-3, .people, .steps, .ps-segments) > * { transition: opacity 0.3s ease; transition-delay: 0ms; }
   html.motion main section .timeline li::before { transform: none; }
-  .js .main-nav[data-open="true"] { animation-name: fade-in; }
+  .js .main-nav[data-open="true"] { animation: fade-in 0.2s ease both; }
+  .js .main-nav[data-open="true"] li { animation: none; }
+  .menu-btn .bar { transition: none; }
   details::details-content { transition: none; }
   summary::after { transition: none; }
   .btn:active { transform: none; }
@@ -1284,6 +1274,53 @@ body:has(.ps-four) .site-header {
   .footer-about { padding-top: 0.25rem; }
 }
 
+
+/* A small outline button inside a card (NESS X programmes: Check out Photosphere 7.0). */
+.btn.btn-mini { min-height: 36px; padding: 0.25rem 0.875rem; font-size: 0.8125rem; border-width: 1.5px; }
+
+/* Phone menu, "corner bloom" (Mahmud, 23 Nov 2026). The menu is its own frosted panel under the header
+   bar: it grows out of the menu button's corner (scale 0.6 to 1, rounded corners settling square),
+   the links slide in from the right one after another, and the three bars turn into an X.
+   The panel carries the glass (half-strength page colour over a 28px blur) and the soft bottom fade;
+   the bar above it turns solid while it is open, because a blur inside a blurred element can't see
+   the page. */
+@media (max-width: 1160px) {
+  .site-header { --header-bar-solid: #162847; }
+  body:has(.ness-three) .site-header { --header-bar-solid: #e6f0f5; }
+  body:has(.ps-four) .site-header { --header-bar-solid: #0b1c33; }
+  .site-header:has(.main-nav[data-open="true"]) { background: var(--header-bar-solid); -webkit-backdrop-filter: none; backdrop-filter: none; }
+  .js .main-nav[data-open="true"] {
+    position: absolute; top: 100%; left: 0; right: 0;
+    max-height: calc(100dvh - 72px); overflow-y: auto; overscroll-behavior: contain;
+    padding: var(--s2) var(--s6) calc(var(--s5) + 4rem);
+    background: var(--header-menu);
+    -webkit-backdrop-filter: blur(28px) saturate(140%); backdrop-filter: blur(28px) saturate(140%);
+    -webkit-mask-image: linear-gradient(to bottom, #000 calc(100% - 4rem), transparent);
+    mask-image: linear-gradient(to bottom, #000 calc(100% - 4rem), transparent);
+    transform-origin: top right;
+    animation: menu-bloom 0.42s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+  }
+  .js .main-nav[data-open="true"] li { animation: menu-link-in 0.34s cubic-bezier(0.2, 0.8, 0.2, 1) both; }
+  .js .main-nav[data-open="true"] li:nth-child(2) { animation-delay: 180ms; }
+  .js .main-nav[data-open="true"] li:nth-child(1) { animation-delay: 140ms; }
+  .js .main-nav[data-open="true"] li:nth-child(3) { animation-delay: 220ms; }
+  .js .main-nav[data-open="true"] li:nth-child(4) { animation-delay: 260ms; }
+  .js .main-nav[data-open="true"] li:nth-child(5) { animation-delay: 300ms; }
+  .js .main-nav[data-open="true"] li:nth-child(6) { animation-delay: 340ms; }
+  .js .main-nav[data-open="true"] li:nth-child(7) { animation-delay: 380ms; }
+  .js .main-nav[data-open="true"] li:nth-child(n+8) { animation-delay: 420ms; }
+}
+@media (max-width: 600px) { .js .main-nav[data-open="true"] { padding-inline: var(--s4); } }
+@media (prefers-reduced-transparency: reduce) {
+  .js .main-nav[data-open="true"] { background: var(--header-bar-solid); -webkit-backdrop-filter: none; backdrop-filter: none; }
+}
+@keyframes menu-bloom { from { opacity: 0; transform: scale(0.6); border-radius: 24px; } to { opacity: 1; transform: none; border-radius: 0; } }
+@keyframes menu-link-in { from { opacity: 0; transform: translateX(16px); } }
+/* The menu button's three bars turn into an X (and back). */
+.menu-btn .bar { transform-box: view-box; transform-origin: 11px 11px; transition: transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1), opacity 0.2s ease; }
+.menu-btn[aria-expanded="true"] .bar-1 { transform: rotate(45deg) translateY(5px); }
+.menu-btn[aria-expanded="true"] .bar-2 { opacity: 0; }
+.menu-btn[aria-expanded="true"] .bar-3 { transform: rotate(-45deg) translateY(-5px); }
 /* ---------------------------------------------------------------------------------------------
    Background drift on phones, NESS X and Photosphere only (.bg-drift, 23 Nov 2026).
    Before: the layer was pinned to the top of the viewport, so on Android Chrome it rode up with the

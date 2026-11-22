@@ -163,11 +163,10 @@ export default function Header({ lang }: { lang: Locale }) {
             onClick={() => setOpen((v) => !v)}
           >
             <svg width="22" height="22" viewBox="0 0 22 22" aria-hidden="true">
-              {open ? (
-                <path d="M5 5l12 12M17 5L5 17" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
-              ) : (
-                <path d="M3 6h16M3 11h16M3 16h16" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
-              )}
+              {/* Three bars that turn into an X when the menu is open (CSS, .menu-btn .bar). */}
+              <path className="bar bar-1" d="M3 6h16" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
+              <path className="bar bar-2" d="M3 11h16" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
+              <path className="bar bar-3" d="M3 16h16" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
             </svg>
           </button>
         </div>

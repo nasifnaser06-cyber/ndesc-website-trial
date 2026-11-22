@@ -134,14 +134,14 @@ export default async function Ness() {
               </tbody>
             </table>
           </div>
-          <p className="small muted" style={{ marginTop: "var(--s4)", maxWidth: "70ch" }}><strong>{en ? "Winners. " : "বিজয়ী। "}</strong>{winnersNote}</p>
+          <p className="small muted" style={{ marginTop: "var(--s4)", maxWidth: "70ch" }}><strong>{en ? "Winner details: " : "বিজয়ীদের বিবরণ: "}</strong>{winnersNote}</p>
         </section>
 
         <section id="segments" aria-labelledby="seg-h">
           <h2 id="seg-h" style={{ marginBottom: "var(--s3)" }}>{en ? "Segments" : "সেগমেন্ট"}</h2>
           <p className="muted" style={{ maxWidth: "70ch" }}>
             {en ? "Open a segment to read what it involves. The letters show which categories can enter. Full rules for each segment come in its own post on " : "প্রতিটি সেগমেন্টের বিস্তারিত দেখতে খুলুন। "}
-            <ExternalLink href={site.social.facebook} lang={lang}>{en ? "the club's Facebook page" : "ফেসবুক পেজ"}</ExternalLink>.
+            {en ? "the club's " : ""}<ExternalLink href={site.social.facebook} lang={lang}>{en ? "facebook page" : "ফেসবুক পেজ"}</ExternalLink>.
           </p>
           <div className="segment-groups">
             <div>
@@ -163,8 +163,13 @@ export default async function Ness() {
           <div className="groups">
             {programmes.map((g) => (
               <div key={g.name}>
-                <h3>{g.name.includes("Photosphere") ? <Link href={path(lang, "/ness/photosphere")}>{g.name}</Link> : g.name}</h3>
+                <h3>{g.name}</h3>
                 <p className="muted small">{g.desc}</p>
+                {g.name.includes("Photosphere") && (
+                  <Link className="btn btn-secondary btn-mini" href={path(lang, "/ness/photosphere")} style={{ marginTop: "var(--s2)", alignSelf: "flex-start" }}>
+                    {en ? "Check out Photosphere 7.0" : "ফটোস্ফিয়ার ৭.০ দেখুন"}
+                  </Link>
+                )}
               </div>
             ))}
           </div>

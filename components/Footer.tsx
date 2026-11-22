@@ -9,8 +9,8 @@ export default function Footer({ lang }: { lang: Locale }) {
       <div className="wrap footer-grid">
         <div className="footer-about">
           <div className="footer-marks">
-            <Logo size={40} alt={lang === "en" ? "Notre Dame Eco and Space Club logo" : "নটর ডেম ইকো অ্যান্ড স্পেস ক্লাবের লোগো"} />
-            <CollegeCrest alt={lang === "en" ? "Notre Dame College, Dhaka crest" : "নটর ডেম কলেজ, ঢাকার প্রতীক"} />
+            <Logo size={40} sizes="(min-width: 1000px) 80px, 40px" alt={lang === "en" ? "Notre Dame Eco and Space Club logo" : "নটর ডেম ইকো অ্যান্ড স্পেস ক্লাবের লোগো"} />
+            <CollegeCrest sizes="(min-width: 1000px) 82px, 41px" alt={lang === "en" ? "Notre Dame College, Dhaka crest" : "নটর ডেম কলেজ, ঢাকার প্রতীক"} />
           </div>
           <p className="footer-name">{tr(site.name, lang)}</p>
           <p className="small muted">{tr(ui.founded, lang)}</p>

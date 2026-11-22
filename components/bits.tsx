@@ -36,22 +36,33 @@ export function T({ text, lang }: { text: L; lang: Locale }) {
 
 const bp = () => process.env.NEXT_PUBLIC_BASE_PATH ?? "";
 
-/** The club's own logo (public/brand/). Decorative where the club's name is written beside it. */
-export function Logo({ size = 44, alt = "" }: { size?: number; alt?: string }) {
+/** The club's own logo (public/brand/). Decorative where the club's name is written beside it.
+ *  Width-based srcset (23 Nov 2026): the browser picks a file big enough for the size the logo is
+ *  actually shown at (CSS can make it larger than `size`), so it is never stretched or blurred.
+ *  `sizes` tells it that shown size; it defaults to `size`. */
+export function Logo({ size = 44, alt = "", sizes }: { size?: number; alt?: string; sizes?: string }) {
   const src = (s: number) => `${bp()}/brand/ndesc-logo-${s}.png`;
-  const one = size <= 48 ? 48 : 144;
+  const set = [48, 96, 144, 192, 288, 384, 576].map((w) => `${src(w)} ${w}w`).join(", ");
   return (
     // eslint-disable-next-line @next/next/no-img-element
-    <img className="logo-mark" src={src(one)} srcSet={`${src(one)} 1x, ${src(one === 48 ? 96 : 288)} 2x`} width={size} height={size} alt={alt} aria-hidden={alt ? undefined : true} />
+    <img className="logo-mark" src={src(144)} srcSet={set} sizes={sizes ?? `${size}px`} width={size} height={size} alt={alt} aria-hidden={alt ? undefined : true} />
   );
 }
 
 /** Notre Dame College's crest, on a light tile so its black lettering reads on the night background. */
-export function CollegeCrest({ alt }: { alt: string }) {
+export function CollegeCrest({ alt, sizes = "74px" }: { alt: string; sizes?: string }) {
   return (
     <span className="crest-tile">
       {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img src={`${bp()}/brand/ndc-crest-72.png`} srcSet={`${bp()}/brand/ndc-crest-72.png 1x, ${bp()}/brand/ndc-crest-144.png 2x, ${bp()}/brand/ndc-crest-216.png 3x`} width={74} height={72} alt={alt} loading="lazy" />
+      <img
+        src={`${bp()}/brand/ndc-crest-144.png`}
+        srcSet={[[72, 74], [144, 148], [216, 221], [288, 295], [432, 443]].map(([h, w]) => `${bp()}/brand/ndc-crest-${h}.png ${w}w`).join(", ")}
+        sizes={sizes}
+        width={74}
+        height={72}
+        alt={alt}
+        loading="lazy"
+      />
     </span>
   );
 }

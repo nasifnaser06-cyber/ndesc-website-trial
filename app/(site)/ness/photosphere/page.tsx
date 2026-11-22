@@ -58,7 +58,7 @@ export default async function Photosphere() {
             </dl>
             <div className="actions">
               <a className="btn" href="#ps-submit">Submit Creation</a>
-              <Link className="btn btn-secondary" href={path(lang, "/ness")}>Checkout NESS X</Link>
+              <Link className="btn btn-secondary" href={path(lang, "/ness")}>Check out NESS X</Link>
             </div>
           </div>
         </div>
