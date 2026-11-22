@@ -6,7 +6,7 @@ import { ui } from "@/content/ui";
 import { getEvent, ness2027Banner } from "@/content/events";
 import { nessSchedule, showNessSchedule } from "@/content/club";
 import { nessx, passes, passNote, registerWays, categories, categoryNote, winnersNote, soloSegments, teamSegments, specialSegments, programmes, organizers, type Segment } from "@/content/ness2027";
-import { ContactLink, ExternalLink, FormButton, Stars, T, RegisterButton } from "@/components/bits";
+import { ContactLink, ExternalLink, Stars, T, RegisterButton } from "@/components/bits";
 
 const title = { en: "NESS X", bn: "NESS X" };
 const description = {
@@ -184,23 +184,21 @@ export default async function Ness() {
 
         <section id="exhibit" className="surface panel-band" aria-labelledby="exh">
           <div>
-            <p className="label">{en ? "For organisations" : "প্রতিষ্ঠানের জন্য"}</p>
-            <h2 id="exh">{en ? "Show your project at NESS" : "NESS-এ আপনার প্রকল্প দেখান"}</h2>
+            <p className="label">{en ? "For External Organizations" : "বাইরের প্রতিষ্ঠানের জন্য"}</p>
+            <h2 id="exh">{en ? "Showcase Your Project or Organization at NESS" : "NESS-এ আপনার প্রকল্প বা প্রতিষ্ঠান তুলে ধরুন"}</h2>
             <p className="muted">
               {en
-                ? "Universities, research teams, clubs and companies can take a stall and meet thousands of students and families. Past exhibitors include Formula IUT, Amateur Experimental Rocketry Dhaka and MICB Scientific Society."
-                : "বিশ্ববিদ্যালয়, গবেষণা দল, ক্লাব ও প্রতিষ্ঠান স্টল নিয়ে হাজারো শিক্ষার্থী ও পরিবারের কাছে পৌঁছাতে পারে। আগের প্রদর্শকদের মধ্যে ছিল ফর্মুলা আইইউটি, অ্যামেচার এক্সপেরিমেন্টাল রকেট্রি ঢাকা ও এমআইসিবি সায়েন্টিফিক সোসাইটি।"}
+                ? "Academic institutions, research teams, external student clubs and companies can book an exhibition stall on our event premises and partner with NESS to showcase their projects, products, programs and innovations or host dedicated seminars and workshops for thousands of attending students and families."
+                : "শিক্ষাপ্রতিষ্ঠান, গবেষণা দল, বাইরের শিক্ষার্থী ক্লাব ও প্রতিষ্ঠান আমাদের আয়োজনস্থলে প্রদর্শনী স্টল নিয়ে NESS-এর সঙ্গে অংশীদার হয়ে তাদের প্রকল্প, পণ্য, কার্যক্রম ও উদ্ভাবন তুলে ধরতে পারে, অথবা হাজারো শিক্ষার্থী ও পরিবারের জন্য সেমিনার ও কর্মশালা আয়োজন করতে পারে।"}
             </p>
-            <p className="small muted"><T lang={lang} text={{ en: "[Stall sizes, cost and deadline]", bn: "[স্টলের আকার, খরচ ও শেষ তারিখ]" }} /></p>
           </div>
           <div className="actions">
-            <FormButton href={site.forms.nessExhibit} lang={lang}>{en ? "Apply to exhibit" : "প্রদর্শনের আবেদন"}</FormButton>
-            <Link className="btn btn-secondary" href={path(lang, "/contact")}>{en ? "Ask the NESS team" : "NESS টিমকে জিজ্ঞেস করুন"}</Link>
+            <Link className="btn btn-secondary" href={path(lang, "/contact")}>{en ? "Contact for Exhibition" : "প্রদর্শনীর জন্য যোগাযোগ"}</Link>
           </div>
         </section>
 
         <section id="contacts" aria-labelledby="contacts-h">
-          <h2 id="contacts-h" style={{ marginBottom: "var(--s5)" }}>{en ? "Questions? Contact the organizers" : "প্রশ্ন? আয়োজকদের সঙ্গে যোগাযোগ করুন"}</h2>
+          <h2 id="contacts-h" style={{ marginBottom: "var(--s5)" }}>{en ? "Questions? Contact us" : "প্রশ্ন? আমাদের সঙ্গে যোগাযোগ করুন"}</h2>
           <div className="cards-3">
             {organizers.map((o) => (
               <div className="surface organizer" key={o.name}>

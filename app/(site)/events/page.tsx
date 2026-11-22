@@ -1,8 +1,10 @@
 import { type Locale, tr } from "@/lib/i18n";
 import { meta, eventRow, eventLabels } from "@/lib/view";
 import { sortedEvents, eventTypes } from "@/content/events";
+import type { SearchDoc } from "@/lib/eventSearch";
+import { nessx } from "@/content/ness2027";
 import { PageHead } from "@/components/bits";
-import { FilteredEvents } from "@/components/EventList";
+import EventSearch from "@/components/EventSearch";
 
 const title = { en: "Events", bn: "ইভেন্ট" };
 const lead = {
@@ -17,15 +19,26 @@ export async function generateMetadata() {
 
 export default async function Events() {
   const lang: Locale = "en";
-  const items = sortedEvents().map((e) => eventRow(e, lang));
-  const types = Object.entries(eventTypes)
-    .filter(([key]) => items.some((i) => i.type === key))
-    .map(([key, label]) => ({ key, label: tr(label, lang) }));
+  const events = sortedEvents();
+  const items = events.map((e) => eventRow(e, lang));
+  // What the search looks through: name, category, dates, venue and summary of each real event.
+  const docs: SearchDoc[] = events.map((e, i) => ({
+    slug: e.slug,
+    title: items[i].title,
+    typeKey: e.type,
+    typeLabel: tr(eventTypes[e.type], lang),
+    date: items[i].date,
+    where: items[i].where,
+    summary: tr(e.summary, lang),
+    start: e.start,
+    end: e.end,
+    aka: e.slug === "ness-x" ? nessx.name : undefined,
+  }));
   return (
     <>
       <PageHead lang={lang} title={title} lead={lead} />
       <div className="wrap">
-        <FilteredEvents items={items} labels={eventLabels(lang)} types={types} />
+        <EventSearch items={items} docs={docs} labels={eventLabels(lang)} />
       </div>
     </>
   );

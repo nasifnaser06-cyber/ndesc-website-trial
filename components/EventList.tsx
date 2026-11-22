@@ -1,7 +1,6 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
 
 export type EventRowData = {
   slug: string;
@@ -43,55 +42,5 @@ export function EventRows({ items, labels }: { items: EventRowData[]; labels: La
         <Row key={e.slug} e={e} labels={labels} />
       ))}
     </ul>
-  );
-}
-
-/** Events page list with time and type filters. Without JavaScript every event shows. */
-export function FilteredEvents({ items, labels, types }: { items: EventRowData[]; labels: Labels; types: { key: string; label: string }[] }) {
-  const [when, setWhen] = useState<"all" | "upcoming" | "past">("all");
-  const [kind, setKind] = useState<string>("all");
-  const [changed, setChanged] = useState(false); // crossfade only after the first filter change
-  const shown = items.filter(
-    (e) => (when === "all" || (when === "upcoming") === e.upcoming) && (kind === "all" || e.type === kind),
-  );
-  const whenOpts = [
-    { key: "all", label: labels.all },
-    { key: "upcoming", label: labels.upcoming },
-    { key: "past", label: labels.past },
-  ] as const;
-  return (
-    <>
-      <div className="filters">
-        <div className="chips" role="group" aria-label={labels.when}>
-          {whenOpts.map((o) => (
-            <button key={o.key} type="button" className="chip" aria-pressed={when === o.key} onClick={() => { setWhen(o.key); setChanged(true); }}>
-              {o.label}
-            </button>
-          ))}
-        </div>
-        <div className="chips" role="group" aria-label={labels.kind}>
-          <button type="button" className="chip" aria-pressed={kind === "all"} onClick={() => { setKind("all"); setChanged(true); }}>
-            {labels.allTypes}
-          </button>
-          {types.map((t) => (
-            <button key={t.key} type="button" className="chip" aria-pressed={kind === t.key} onClick={() => { setKind(t.key); setChanged(true); }}>
-              {t.label}
-            </button>
-          ))}
-        </div>
-      </div>
-      <p className="visually-hidden" aria-live="polite">
-        {shown.length}
-      </p>
-      {shown.length === 0 ? (
-        <p className="empty">{labels.empty}</p>
-      ) : (
-        <ul className={`event-list ${changed ? "list-swap" : ""}`} key={`${when}-${kind}`}>
-          {shown.map((e) => (
-            <Row key={e.slug} e={e} labels={labels} />
-          ))}
-        </ul>
-      )}
-    </>
   );
 }

@@ -34,6 +34,28 @@ jobs:
           NEXT_PUBLIC_BASE_PATH: ${{ steps.pages.outputs.base_path }}
           NEXT_PUBLIC_SITE_ORIGIN: ${{ steps.pages.outputs.origin }}
           NEXT_TELEMETRY_DISABLED: "1"
+      # Keep the script and style files of recent builds. A visitor whose browser still has the page
+      # from before a deploy (GitHub Pages lets browsers keep pages for 10 minutes), or who has the site
+      # open in a tab, still asks for the old files; without them the page loads unstyled or a link fails.
+      # Files are named by their content, so old and new never clash. Anything older than 14 days goes.
+      - name: Restore files from earlier builds
+        uses: actions/cache/restore@v4
+        with:
+          path: prev-static
+          key: next-static-${{ github.run_id }}
+          restore-keys: next-static-
+      - name: Keep earlier builds' files
+        run: |
+          mkdir -p prev-static
+          find prev-static -type f -mtime +14 -delete
+          cp -rnp prev-static/. out/_next/static/ 2>/dev/null || true
+          rm -rf prev-static && mkdir -p prev-static && cp -rp out/_next/static/. prev-static/
+          du -sh prev-static
+      - name: Save files for the next build
+        uses: actions/cache/save@v4
+        with:
+          path: prev-static
+          key: next-static-${{ github.run_id }}
       - uses: actions/upload-pages-artifact@v3
         with:
           path: out

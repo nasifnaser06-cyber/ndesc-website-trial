@@ -105,6 +105,8 @@ export default function RegisterForm({
       sender: pass === "online" ? "" : normPhone(v("sender")),
       // Kept for the sheet script, which still reads this field.
       consent: true,
+      // Hidden spam trap: people never see it, so it stays empty for them.
+      hp_field: v("hp_field"),
     };
 
     const errs: string[] = [];
@@ -179,6 +181,9 @@ export default function RegisterForm({
       {!live.open && <div className="reg-draft" role="note"><strong>Registration is closed.</strong></div>}
 
       <form className="form reg-form" onSubmit={submit} noValidate>
+        <div className="hp-trap" aria-hidden="true">
+          <label>Leave this empty <input type="text" name="hp_field" tabIndex={-1} autoComplete="off" defaultValue="" /></label>
+        </div>
         <fieldset>
           <legend><span className="reg-step">1</span> Choose your pass</legend>
           <div className="reg-passes">

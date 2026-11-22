@@ -131,7 +131,7 @@ export default async function Photosphere() {
         </section>
 
         <section aria-labelledby="ps-contact">
-          <h2 id="ps-contact">Questions? Contact the organizers</h2>
+          <h2 id="ps-contact">Questions? Contact us</h2>
           <div className="cards-3">
             {p.organizers.map((o) => (
               <div className="surface organizer" key={o.name}>

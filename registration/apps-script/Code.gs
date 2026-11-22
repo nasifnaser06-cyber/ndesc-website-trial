@@ -87,6 +87,8 @@ function json(obj) {
 function handleRegister(b) {
   var s = settings();
   if (s['Registration open'] !== 'TRUE') return { ok: false, error: 'Registration is closed.' };
+  // A hidden form field people never see: only bots fill it in.
+  if (String(b.hp_field || '').trim()) return { ok: false, error: 'Something went wrong. Please try again.' };
 
   var r = {
     pass: String(b.pass || ''),
@@ -109,6 +111,13 @@ function handleRegister(b) {
   r.segments = [passIncludes(r.pass)];
   var errors = validateRegistration(r);
   if (errors.length) return { ok: false, errors: errors };
+
+  // Flood guard: at most 60 new registrations in any 10 minutes, so a script can't fill the sheet or
+  // use up the daily email allowance that the real pass emails need.
+  var cache = CacheService.getScriptCache();
+  var recent = Number(cache.get('reg-recent') || 0);
+  if (recent >= 60) return { ok: false, error: 'A lot of people are registering right now. Please try again in a few minutes.' };
+  cache.put('reg-recent', String(recent + 1), 600);
 
   var lock = LockService.getScriptLock();
   lock.waitLock(20000);
@@ -183,7 +192,7 @@ function handleSms(b) {
 
   if (p.ignored) return { ok: true, ignored: true };
   if (!p.ok) {
-    sheet(SHEETS.UNREAD).appendRow([new Date(), p.raw]);
+    sheet(SHEETS.UNREAD).appendRow([new Date(), asText(p.raw, 2000)]);
     sendAlert('An SMS with a TrxID could not be read', 'It is in the "Unread SMS" tab. If bKash changed its wording, the reader needs an update.\n\n' + p.raw);
     return { ok: true, unread: true };
   }
@@ -472,7 +481,15 @@ function newCode(len, taken) {
 }
 
 function clean(s, max) {
-  return String(s || '').replace(/[<>]/g, '').replace(/^[=+\-@]/, "'").trim().slice(0, max);
+  // Trim first, so " =formula" can't slip past the check, then stop text that starts with = + - @
+  // (or a tab or return) from running as a spreadsheet formula.
+  return String(s || '').replace(/[<>]/g, '').trim().replace(/^[=+\-@\t\r]+/, "'").slice(0, max);
+}
+
+/** A value for a sheet cell that must stay plain text (SMS text, scanned codes). */
+function asText(s, max) {
+  var t = String(s == null ? '' : s).slice(0, max || 2000);
+  return /^[=+\-@\t\r]/.test(t) ? "'" + t : t;
 }
 
 function esc(s) {

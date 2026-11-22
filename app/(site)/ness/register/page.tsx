@@ -1,12 +1,11 @@
-import Link from "next/link";
 import { type Locale, path, formatDateRange } from "@/lib/i18n";
 import { meta } from "@/lib/view";
 import { site } from "@/content/site";
-import { categories, soloSegments, teamSegments, nessx } from "@/content/ness2027";
+import { categories, soloSegments, teamSegments } from "@/content/ness2027";
 import { getEvent } from "@/content/events";
 import RegisterForm, { type SegOption } from "@/components/RegisterForm";
 
-const title = { en: "Register for NESS X", bn: "NESS X-এ নিবন্ধন" };
+const title = { en: "Registration for 10th National Earth and Space Summit", bn: "১০ম ন্যাশনাল আর্থ অ্যান্ড স্পেস সামিটে নিবন্ধন" };
 const lead = {
   en: "Pick your pass, pay by bKash, and get your pass by email.",
   bn: "পাস বেছে নিন, বিকাশে পেমেন্ট করুন, ইমেইলে পাস পান।",
@@ -40,8 +39,7 @@ export default async function Register() {
       <section className="sky sky-clear" aria-labelledby="reg-h1">
         <div className="wrap sky-inner" style={{ paddingBlock: "var(--s8) var(--s6)" }}>
           <div className="sky-copy">
-            <p className="label"><Link href={path(lang, "/ness")}>{nessx.name}</Link> · {nessx.fullName}</p>
-            <h1 id="reg-h1">{title.en}</h1>
+            <h1 id="reg-h1">Registration for<br />10th National Earth and Space Summit</h1>
             {/* Date and venue in an ice box, each with an icon instead of a label (Mahmud, 20 Nov 2026, trial). */}
             <div className="surface reg-intro">
               <dl className="facts facts-icons">

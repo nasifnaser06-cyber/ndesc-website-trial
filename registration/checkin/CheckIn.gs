@@ -37,7 +37,7 @@ function doPost(e) {
     var s = checkinSettings();
     if (!s['Scanner key'] || String(body.key || '') !== s['Scanner key']) out = { ok: false, error: 'This scanner link is not valid. Open the newest link from the NESS X Summit sheet.' };
     else if (body.action === 'ping') out = { ok: true, sheet: SpreadsheetApp.getActive().getName() };
-    else if (body.action === 'scan') out = scan(String(body.code || ''), String(body.device || '').slice(0, 40));
+    else if (body.action === 'scan') out = scan(String(body.code || '').slice(0, 200), String(body.device || '').trim().replace(/^[=+\-@\t\r]+/, '').slice(0, 40));
     else out = { ok: false, error: 'Unknown request.' };
   } catch (err) {
     console.error(err);
@@ -73,7 +73,7 @@ function scan(raw, device) {
     var log = checkinSheet(CHECKIN.LOG);
     var now = new Date();
     if (!reg) {
-      log.appendRow([now, '', '', '', CHECKIN.RESULT.not_registered, device, value]);
+      log.appendRow([now, '', '', '', CHECKIN.RESULT.not_registered, device, "'" + value.slice(0, 100)]);
       return { ok: true, result: 'not_registered' };
     }
     var pass = CHECKIN.PASS[reg.pass] || reg.pass;
