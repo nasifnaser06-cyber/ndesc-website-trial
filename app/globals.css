@@ -1190,3 +1190,15 @@ body:has(.ps-four) .site-header {
 
 /* Copyright centred (Mahmud, 23 Nov 2026) */
 .footer-base { justify-content: center; text-align: center; }
+
+/* Footer balanced against the taller map (trial, 23 Nov 2026). On screens where the columns sit side
+   by side, every column is as tall as the map column: the tops line up, the club name and founding
+   line sit at the bottom level with the map's bottom edge, and the three links spread evenly down
+   the same height. */
+@media (min-width: 1000px) {
+  .footer-grid { align-items: stretch; }
+  .footer-about, .footer-follow { display: flex; flex-direction: column; }
+  .footer-about .footer-name { margin-top: auto; }
+  .footer-follow ul.contact-links { flex: 1; display: flex; flex-direction: column; justify-content: space-between; margin-bottom: 0; }
+}
+

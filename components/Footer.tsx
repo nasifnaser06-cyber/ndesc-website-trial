@@ -15,7 +15,7 @@ export default function Footer({ lang }: { lang: Locale }) {
           <p className="footer-name">{tr(site.name, lang)}</p>
           <p className="small muted">{tr(ui.founded, lang)}</p>
         </div>
-        <div>
+        <div className="footer-follow">
           <p className="label">{tr(ui.follow, lang)}</p>
           <ul className="contact-links">
             <li><ContactLink kind="facebook" value={site.social.facebook} lang={lang} /></li>
