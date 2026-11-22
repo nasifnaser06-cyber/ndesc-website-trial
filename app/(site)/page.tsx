@@ -5,7 +5,6 @@ import { ui } from "@/content/ui";
 import { site } from "@/content/site";
 import { sortedEvents, getEvent, ness2027Banner } from "@/content/events";
 import { timeline } from "@/content/club";
-import { posts, newsCategories } from "@/content/news";
 import { Banner, FormButton, PhotoSlot, SectionHead, Stars, T, RegisterButton } from "@/components/bits";
 import { EventRows } from "@/components/EventList";
 
@@ -114,19 +113,6 @@ export default async function Home() {
             </li>
           ))}
         </ol>
-      </section>
-
-      <section className="wrap section" aria-labelledby="news-title">
-        <SectionHead title={ui.nav.news} link={{ label: ui.allNews, to: "/news" }} lang={lang} />
-        <div className="grid-3">
-          {posts.slice(0, 3).map((p) => (
-            <Link key={p.slug} className="card-link" href={path(lang, `/news/${p.slug}`)}>
-              <p className="label">{tr(newsCategories[p.category], lang)}, {formatDateRange(p.date, undefined, lang)}</p>
-              <h3>{tr(p.title, lang)}</h3>
-              <p className="muted small">{tr(p.summary, lang)}</p>
-            </Link>
-          ))}
-        </div>
       </section>
     </>
   );

@@ -10,11 +10,11 @@ import { Logo } from "./bits";
 import IceButton from "./IceButton";
 
 // Gallery and Resources left the header on 20 Nov 2026 (the pages still exist).
+// News was taken off the site on 23 Nov 2026.
 const navItems = [
   { key: "nessX", to: "/ness" },
   { key: "photosphere", to: "/ness/photosphere" },
   { key: "events", to: "/events" },
-  { key: "news", to: "/news" },
   { key: "executives", to: "/executives" },
   { key: "about", to: "/about" },
 ] as const;
