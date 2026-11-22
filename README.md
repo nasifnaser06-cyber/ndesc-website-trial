@@ -15,7 +15,6 @@ You do not need to touch the page code to update the site. All the words and dat
 | `content/site.ts` | Club email, social links, form links, address, the draft ribbon switch |
 | `content/events.ts` | Every event: dates, titles, summaries, highlights, partners, press links |
 | `content/club.ts` | Timeline, NESS programme, categories, schedule, past summits, FAQs, officers and executives, resources, gallery albums |
-| `content/news.ts` | News posts |
 | `content/ui.ts` | Menu labels, button words and other short interface text |
 
 Every piece of text has an English (`en`) and a Bangla (`bn`) version. Only the English is published. Keep the `bn` lines in place (copy the English if you like): the site checks that both exist. To bring Bangla back, add `"bn"` to `publishedLocales` in `lib/i18n.ts` and put the language switch back in `components/Header.tsx`.
@@ -28,7 +27,6 @@ You can edit these files right on GitHub: open the file, click the pencil icon, 
 - **Turn on registration buttons:** put the Google Form links into `forms` in `content/site.ts`. Until a link is there, the button says "Form link coming soon".
 - **Turn on the contact form:** set `contactEndpoint` to a form service address that accepts posts (for example Formspree). Until then the Contact page points people to Facebook.
 - **Add an event:** copy an entry in `content/events.ts`, give it a new `slug` (a short name with hyphens, e.g. `ness-2028`) and change the details. It gets its own page automatically.
-- **Add a news post:** copy the post in `content/news.ts`, change the `slug`, date and text.
 - **Update the executives:** in `content/club.ts`, edit `officers` (teachers) and `executiveSessions`. Each session has a `session` like `"2026–27"` and a list of members with `name`, `post` and an optional `department`. When a new panel takes over, add the new session at the top with `current: true` and remove `current` from the old one; the old one moves to the Former tab by itself. For a photo, put it in `public/executives/` and add `photo: "/executives/file-name.jpg"` to that person.
 - **Add resources:** put the PDF in `public/resources/` and add a line to `resources` in `content/club.ts`, with `url: "/resources/your-file.pdf"`.
 - **Fill a placeholder:** search the `content/` folder for the text in square brackets and replace it.
