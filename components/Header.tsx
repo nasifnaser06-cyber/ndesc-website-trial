@@ -1,20 +1,19 @@
 "use client";
-
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
-import { type Locale, tr, path } from "@/lib/i18n";
+import { type Locale, path } from "@/lib/i18n";
 import { ui } from "@/content/ui";
 import { site } from "@/content/site";
 import { Logo } from "./bits";
 import IceButton from "./IceButton";
 
 // Gallery and Resources left the header on 20 Nov 2026 (the pages still exist).
-// News was taken off the site on 23 Nov 2026.
+// News was taken off the site on 23 Nov 2026. Events moved into Explore on 23 Nov 2026 (the page stays).
 const navItems = [
   { key: "nessX", to: "/ness" },
   { key: "photosphere", to: "/ness/photosphere" },
-  { key: "events", to: "/events" },
+  { key: "explore", to: "/explore" },
   { key: "executives", to: "/executives" },
   { key: "about", to: "/about" },
 ] as const;
@@ -53,6 +52,9 @@ export default function Header({ lang }: { lang: Locale }) {
     setOpen(false);
     if (firstRender.current) { firstRender.current = false; return; }
     if (historyNav.current) { historyNav.current = false; return; }
+    // A page that restores its own scroll position (the FactsFriday archive on return) asks to be left alone.
+    const w = window as unknown as { __ndescKeepScroll?: boolean };
+    if (w.__ndescKeepScroll) { w.__ndescKeepScroll = false; return; }
     if (window.location.hash) return;
     const toTop = () => window.scrollTo({ top: 0, left: 0, behavior: "instant" });
     toTop();
@@ -101,7 +103,13 @@ export default function Header({ lang }: { lang: Locale }) {
 
   // The longest matching item wins, so /ness/photosphere marks Photosphere, not NESS X.
   const matches = (to: string) => sub === to || sub.startsWith(`${to}/`);
-  const best = [...navItems.map((i) => i.to as string), "/contact"].filter(matches).sort((a, b) => b.length - a.length)[0];
+  // Explore stays lit on the sections it leads to (Events, FactsFriday, Olympiad Teams, Publications, Resources).
+  const sections: [string, string][] = [
+    ...navItems.map((i) => [i.to, i.to] as [string, string]),
+    ["/contact", "/contact"],
+    ...["/events", "/factsfriday", "/olympiad-teams", "/publications", "/resources"].map((p) => [p, "/explore"] as [string, string]),
+  ];
+  const best = sections.filter(([p]) => matches(p)).sort((a, b) => b[0].length - a[0].length)[0]?.[1];
   const isActive = (to: string) => to === best;
 
   return (
@@ -110,56 +118,45 @@ export default function Header({ lang }: { lang: Locale }) {
         <Link href={path(lang)} className="brand">
           <Logo />
           <span className="brand-name">
-            {lang === "en" ? (
+            {(
               <>
                 Notre Dame
                 <br />
                 Eco and Space Club
               </>
-            ) : (
-              <>
-                নটর ডেম
-                <br />
-                ইকো অ্যান্ড স্পেস ক্লাব
-              </>
             )}
           </span>
         </Link>
 
-        <nav aria-label={tr(ui.mainNav, lang)} className="main-nav" id="main-nav" data-open={open}>
+        <nav aria-label={ui.mainNav} className="main-nav" id="main-nav" data-open={open}>
           <ul>
             {navItems.map((item) => (
               <li key={item.key}>
                 <Link href={path(lang, item.to)} aria-current={isActive(item.to) ? "page" : undefined}>
-                  {tr(ui.nav[item.key], lang)}
+                  {ui.nav[item.key]}
                 </Link>
               </li>
             ))}
             <li className="only-menu">
               <Link href={path(lang, "/contact")} aria-current={isActive("/contact") ? "page" : undefined}>
-                {tr(ui.nav.contact, lang)}
+                {ui.nav.contact}
               </Link>
             </li>
           </ul>
         </nav>
 
         <div className="header-tools">
-          {/* The "Register for NESS X" ice button, back in the header (Mahmud, 20 Nov 2026).
-              Not on the Register page itself, nor on the NESS X page, which has its own
-              Register now button (Mahmud, 21 Nov 2026). */}
-          {sub !== "/ness/register" && sub !== "/ness" &&
-            (site.registerWith === "form" && site.forms.nessRegister ? (
-              <IceButton href={site.forms.nessRegister} external note={tr(ui.newTab, lang)} />
-            ) : (
-              <IceButton href={path(lang, "/ness/register")} />
-            ))}
+          {/* The "Register for NESS X" ice button (Mahmud, 20 Nov 2026). It opens the NESS X page
+              (Mahmud, 24 Nov 2026), whose Register now button leads on to the registration form,
+              so it is not shown on the NESS X page itself (Mahmud, 21 Nov 2026). */}
+          {sub !== "/ness" && <IceButton href={path(lang, "/ness")} />}
           <button
             ref={menuButton}
             type="button"
             className="menu-btn"
             aria-expanded={open}
             aria-controls="main-nav"
-            aria-label={tr(open ? ui.menuClose : ui.menuOpen, lang)}
+            aria-label={open ? ui.menuClose : ui.menuOpen}
             onClick={() => setOpen((v) => !v)}
           >
             <svg width="22" height="22" viewBox="0 0 22 22" aria-hidden="true">
@@ -173,7 +170,7 @@ export default function Header({ lang }: { lang: Locale }) {
       </div>
       {site.draft && (
         <p className="draft-ribbon">
-          <span className="wrap">{tr(ui.draft, lang)}</span>
+          <span className="wrap">{ui.draft}</span>
         </p>
       )}
     </header>

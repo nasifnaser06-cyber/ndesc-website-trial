@@ -12,7 +12,7 @@ export default async function PanelMoved() {
   return (
     <div className="wrap redirect-note">
       <meta httpEquiv="refresh" content={`0; url=${to}`} />
-      <p><a href={to}>{lang === "en" ? "This page has moved to Executives." : "এই পাতাটি এখন কার্যনির্বাহী পাতায়।"}</a></p>
+      <p><a href={to}>This page has moved to Executives.</a></p>
     </div>
   );
 }

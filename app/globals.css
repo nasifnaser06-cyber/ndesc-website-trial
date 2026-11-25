@@ -25,10 +25,6 @@
   --wrap: 76rem;
   --ease: cubic-bezier(0.22, 1, 0.36, 1);
 }
-html[data-lang="bn"], [lang="bn"] {
-  --font-body: "Noto Sans Bengali", "Atkinson Hyperlegible", system-ui, sans-serif;
-  --font-head: "Noto Serif Bengali", "Bitter", Georgia, serif;
-}
 
 *, *::before, *::after { box-sizing: border-box; }
 html { -webkit-text-size-adjust: 100%; scroll-padding-top: 6rem; }
@@ -41,7 +37,6 @@ body {
   font-size: 1.125rem;
   line-height: 1.6;
 }
-html[data-lang="bn"] body { line-height: 1.75; }
 img, svg { max-width: 100%; }
 h1, h2, h3 {
   font-family: var(--font-head);
@@ -52,7 +47,6 @@ h1, h2, h3 {
 h1 { font-size: clamp(2.25rem, 1.4rem + 3.6vw, 3.75rem); line-height: 1.08; letter-spacing: -0.02em; }
 h2 { font-size: clamp(1.75rem, 1.4rem + 1.4vw, 2.25rem); line-height: 1.15; letter-spacing: -0.01em; }
 h3 { font-size: 1.375rem; line-height: 1.25; }
-html[data-lang="bn"] :is(h1, h2, h3) { letter-spacing: 0; line-height: 1.3; }
 p { margin: 0; text-wrap: pretty; }
 ul, ol { margin: 0; }
 a { color: var(--sprout); text-underline-offset: 0.18em; }
@@ -1348,3 +1342,340 @@ body:has(.ps-four) .site-header {
     }
   }
 }
+
+/* ---------------------------------------------------------------- Explore hub (23 Nov 2026) */
+/* Cards on /explore/, /olympiad-teams/ and /publications/: dusk surface, a small line icon in the
+   card's own accent, a quiet lift and accent border on hover, the theme focus ring on keyboard. */
+.hub-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(20rem, 100%), 1fr)); gap: var(--s5); }
+.hub-card { --accent: var(--sprout); position: relative; display: flex; flex-direction: column; gap: var(--s3); padding: var(--s6); border-radius: 16px; background: var(--dusk); border: 1px solid var(--line); color: var(--starlight); text-decoration: none; transition: border-color 0.25s var(--ease-ui), transform 0.25s var(--ease-ui), background-color 0.25s var(--ease-ui); }
+.hub-card h2, .hub-card h3 { font-size: 1.5rem; margin: 0; }
+.hub-card p { margin: 0; color: var(--haze); }
+.hub-card .hub-go { margin-top: auto; padding-top: var(--s2); color: var(--accent); font-weight: 700; display: inline-flex; align-items: center; gap: var(--s2); }
+.hub-card .hub-go svg { transition: transform 0.25s var(--ease-ui); }
+.hub-icon { width: 52px; height: 52px; border-radius: 14px; display: grid; place-items: center; color: var(--accent); background: color-mix(in srgb, var(--accent) 14%, transparent); border: 1px solid color-mix(in srgb, var(--accent) 35%, transparent); }
+.hub-icon svg { width: 28px; height: 28px; }
+.hub-preview { border-top: 1px solid var(--line); padding-top: var(--s3); display: flex; gap: var(--s3); align-items: center; font-size: 0.9375rem; color: var(--haze); }
+.hub-preview strong { color: var(--starlight); font-weight: 700; display: block; }
+.hub-preview img { width: 56px; height: 56px; border-radius: 10px; object-fit: cover; flex: none; background: var(--deep); }
+.hub-card:focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; }
+@media (hover: hover) and (pointer: fine) {
+  .hub-card:hover { border-color: color-mix(in srgb, var(--accent) 60%, transparent); transform: translateY(-3px); background: color-mix(in srgb, var(--dusk) 88%, var(--accent)); }
+  .hub-card:hover .hub-go svg { transform: translateX(4px); }
+}
+.hub-card:active { transform: scale(0.99); }
+.accent-events { --accent: #8fd3a6; }
+.accent-facts { --accent: #f2c27b; }
+.accent-teams { --accent: #9db8ff; }
+.accent-pubs { --accent: #e9a6c8; }
+.accent-interstellar { --accent: #9db8ff; }
+.accent-terrestrial { --accent: #d9b37c; }
+.accent-helix { --accent: #8fd3a6; }
+@media (prefers-reduced-motion: reduce) { .hub-card, .hub-card .hub-go svg { transition: border-color 0.2s ease; } .hub-card:hover, .hub-card:active { transform: none; } }
+
+/* FactsFriday archive */
+.ff-tools { display: flex; flex-wrap: wrap; gap: var(--s3); align-items: center; margin-bottom: var(--s5); }
+.ff-tools input[type="search"] { flex: 1 1 18rem; min-height: 48px; padding: 0 var(--s4); border-radius: 12px; border: 1px solid var(--edge); background: var(--deep); color: var(--starlight); font: inherit; }
+.ff-tools select { min-height: 48px; padding: 0 var(--s3); border-radius: 12px; border: 1px solid var(--edge); background: var(--deep); color: var(--starlight); font: inherit; }
+.ff-tools input:focus-visible, .ff-tools select:focus-visible { outline: 3px solid var(--sprout); outline-offset: 2px; }
+.ff-count { font-size: 0.9375rem; color: var(--haze); margin-bottom: var(--s4); }
+.ff-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(15rem, 100%), 1fr)); gap: var(--s5); list-style: none; padding: 0; margin: 0; }
+.ff-card { display: flex; flex-direction: column; gap: var(--s2); height: 100%; color: var(--starlight); text-decoration: none; border-radius: 14px; }
+.ff-pic { display: block; position: relative; overflow: hidden; aspect-ratio: 1; border-radius: 14px; background: var(--deep); border: 1px solid var(--line); }
+.ff-card img { display: block; width: 100%; height: 100%; aspect-ratio: 1; object-fit: cover; }
+.ff-text { display: flex; flex-direction: column; gap: var(--s2); }
+.ff-card h3 { font-size: 1.125rem; margin: var(--s1) 0 0; }
+.ff-meta { font-size: 0.8125rem; color: var(--haze); display: flex; gap: var(--s2); flex-wrap: wrap; }
+.ff-card p { font-size: 0.9375rem; color: var(--haze); margin: 0; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+.ff-card:focus-visible { outline: 3px solid var(--sprout); outline-offset: 4px; }
+/* Hover and press: see "FactsFriday motion" below. */
+
+/* FactsFriday article */
+.ff-article { display: grid; gap: var(--s7); grid-template-columns: minmax(0, 1fr); }
+@media (min-width: 960px) { .ff-article { grid-template-columns: minmax(0, 22rem) minmax(0, 1fr); align-items: start; } .ff-article figure { position: sticky; top: 96px; } }
+.ff-article figure { margin: 0; }
+.ff-pic-lg { border-radius: 16px; }
+.ff-article figure img { width: 100%; height: 100%; aspect-ratio: 1; object-fit: cover; display: block; }
+.ff-body { max-width: 68ch; display: flex; flex-direction: column; gap: var(--s4); font-size: 1.0625rem; line-height: 1.75; }
+/* Every paragraph of a post in the same type (the opening one used to be larger), at 80% strength */
+.ff-body > p { opacity: 0.8; }
+.ff-refs { border-top: 1px solid var(--line); padding-top: var(--s4); }
+.ff-refs h2 { font-size: 1.125rem; margin-bottom: var(--s2); }
+.ff-refs ol { padding-left: 1.25rem; margin: 0; display: grid; gap: var(--s1); font-size: 0.9375rem; }
+.ff-foot { display: flex; flex-wrap: wrap; gap: var(--s3); margin-top: var(--s3); }
+
+/* Olympiad team page */
+.team-facts { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(14rem, 100%), 1fr)); gap: var(--s4); margin: 0; }
+.team-facts > div { border-top: 1px solid var(--line); padding-top: var(--s3); }
+.team-facts dt { font-size: 0.875rem; color: var(--haze); }
+.team-facts dd { margin: var(--s1) 0 0; font-weight: 700; }
+.tick-list { list-style: none; padding: 0; margin: 0; display: grid; gap: var(--s3); }
+/* Submit links inside a segment's parts stay on one line (NESS X page). */
+.segment-parts a { white-space: nowrap; }
+/* Event pages: one card per segment or programme day. */
+.seg-list { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(min(20rem, 100%), 1fr)); gap: var(--s5); align-items: start; }
+.seg { padding: var(--s5); display: flex; flex-direction: column; gap: var(--s3); }
+.seg h3 { font-size: 1.125rem; margin: 0; }
+.seg p { margin: 0; }
+.seg-when { font-size: 0.8125rem; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; color: var(--haze); }
+/* Olympiad team pages: one card per year with its mentors, advisors and members. */
+.cohorts { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(18rem, 100%), 1fr)); gap: var(--s5); align-items: start; }
+.cohort { padding: var(--s5); display: flex; flex-direction: column; gap: var(--s2); }
+.cohort h3 { font-size: 1.125rem; margin: 0 0 var(--s1); }
+.cohort-label { margin: var(--s3) 0 0; font-size: 0.8125rem; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; color: var(--haze); }
+.cohort-list, .cohort-names { list-style: none; padding: 0; margin: 0; display: grid; gap: var(--s2); }
+.cohort-list li { display: flex; flex-direction: column; }
+.cohort-list li span { font-size: 0.875rem; color: var(--haze); }
+.cohort-names { gap: var(--s1); }
+.tick-list li { display: flex; gap: var(--s3); align-items: flex-start; }
+.tick-list li::before { content: ""; flex: none; width: 8px; height: 8px; margin-top: 0.6em; border-radius: 50%; background: var(--accent, var(--sprout)); }
+/* Explore's four cards sit two by two on wider screens. */
+@media (min-width: 760px) { .hub-grid.hub-2x2 { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 600px) { .hub-card { padding: var(--s5); } }
+
+/* ---------------------------------------------------------------- FactsFriday motion, Apple style
+   rion-motion-web Part 2, measured from apple.com. Mahmud picked this package on 23 Nov 2026.
+   Script: components/FactsFridayMotion.tsx and the flight in FactsFridayArchive.tsx. */
+:root { --ease-apple: cubic-bezier(0.4, 0, 0.6, 1); }
+
+/* Quiet hover and press: colour and brightness only, the card shrinks a little when pressed */
+.ff-card { transition: scale 0.1s ease-out; }
+.ff-card h3, .ff-card .ff-cat { transition: color 0.32s var(--ease-apple); }
+.ff-card img { transition: filter 0.24s var(--ease-apple); }
+@media (hover: hover) and (pointer: fine) {
+  .ff-card:hover h3, .ff-card:hover .ff-cat { color: var(--sprout); }
+  .ff-card:hover img { filter: brightness(1.12); }
+}
+.ff-card:active { scale: 0.97; }
+
+@media (prefers-reduced-motion: no-preference) {
+  /* Scroll-linked heading: drifts up 48px and fades over the first 70% of a screen, and comes back on
+     the way up; a post's picture settles from 108% to 100% over the first 90% */
+  @supports (animation-timeline: scroll()) {
+    main:has(.fc, .ff-article) .page-head { animation: ff-head-out linear both; animation-timeline: scroll(root); animation-range: 0 70vh; }
+    .ff-article .ff-pic img { animation: ff-pic-settle linear both; animation-timeline: scroll(root); animation-range: 0 90vh; }
+  }
+}
+@keyframes ff-head-out { to { opacity: 0; translate: 0 -48px; } }
+@keyframes ff-pic-settle { from { scale: 1.08; } to { scale: 1; } }
+@media (prefers-reduced-motion: reduce) { .ff-card:active { scale: none; } }
+
+/* Card-to-post flight (view transitions): the picture and title travel, the rest crossfades */
+::view-transition-group(ff-cover), ::view-transition-group(ff-title) { animation-duration: 0.6s; animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1); }
+::view-transition-old(root), ::view-transition-new(root) { animation-duration: 0.35s; }
+.ff-article .ff-pic img { view-transition-name: ff-cover; }
+main:has(.ff-article) .page-head > h1 { view-transition-name: ff-title; width: fit-content; }
+html.ff-flying .page-head > * { animation: none; }
+
+/* Slide-down bar once the page title has left the screen (sits under the site header) */
+.ff-subnav { position: fixed; inset: 0 0 auto; z-index: 19; height: 52px; display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 0 max(20px, calc((100vw - 1152px) / 2)); background: rgba(15, 30, 54, 0.8); -webkit-backdrop-filter: blur(16px) saturate(160%); backdrop-filter: blur(16px) saturate(160%); border-bottom: 1px solid var(--line); transform: translateY(-100%); transition: transform 0.23s var(--ease-apple); }
+.ff-subnav.is-shown { transform: none; }
+.ff-subnav-title { font-weight: 800; font-size: 1.0625rem; color: var(--starlight); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.ff-subnav-btn { flex: none; font: inherit; font-size: 0.875rem; font-weight: 700; color: var(--night); background: var(--sprout); border: 0; border-radius: 999px; padding: 6px 16px; text-decoration: none; cursor: pointer; }
+@media (prefers-reduced-transparency: reduce) { .ff-subnav { background: var(--night); -webkit-backdrop-filter: none; backdrop-filter: none; } }
+@media (prefers-reduced-motion: reduce) { .ff-subnav { transform: none; opacity: 0; visibility: hidden; transition: opacity 0.2s ease, visibility 0.2s; } .ff-subnav.is-shown { opacity: 1; visibility: visible; } }
+
+
+
+/* ---------------------------------------------------------------- FactsFriday carousel
+   One strip, newest first, the centred card in front. Native scrolling and scroll snapping are the
+   baseline; depth comes from scroll-driven animations where supported (each card's distance from the
+   centre drives its scale, stacking and dimming), or from FactsCarousel.tsx elsewhere. Scale only:
+   cards always face the reader. */
+/* Card size: about 31% of the window on desktop (capped at 560px, reached around 1810px wide), never taller than 56% of the window so
+   the arrows and caption stay reachable on short laptop screens; 80% of a phone's width. The scroll-linked
+   depth then shows neighbours at 80% and the next cards at 64% of this. */
+.fc { --fc-card: clamp(280px, min(31vw, 56vh), 560px); --fc-step: calc(var(--fc-card) * 0.62); --fc-radius: 18px; position: relative; }
+.fc-compact { --fc-card: clamp(170px, 20vw, 240px); --fc-radius: 14px; }
+@media (max-width: 600px) { .fc { --fc-card: 80vw; } .fc-compact { --fc-card: 52vw; } }
+@media (prefers-reduced-motion: reduce) { .fc { --fc-step: calc(var(--fc-card) + 16px); } }
+
+.fc-track { position: relative; display: flex; list-style: none; margin: 0; padding: 20px calc(50% - var(--fc-step) / 2) 28px; overflow-x: auto; overflow-y: hidden; scroll-snap-type: x mandatory; overscroll-behavior-x: contain; scrollbar-width: none; -webkit-overflow-scrolling: touch; }
+.fc-track::-webkit-scrollbar { display: none; }
+.fc-track.is-dragging { scroll-snap-type: none; cursor: grabbing; }
+@media (hover: hover) and (pointer: fine) { .fc.is-enhanced .fc-track { cursor: grab; } }
+.fc-track:focus-visible { outline: 3px solid var(--sprout); outline-offset: -3px; border-radius: 12px; }
+.fc-slide { position: relative; flex: 0 0 var(--fc-step); min-width: 0; display: flex; justify-content: center; scroll-snap-align: center; z-index: 1; }
+/* Looping strip: open on the starting card in the middle copy, even before the inline start script runs. */
+.fc-slide[data-fc-start] { scroll-initial-target: nearest; }
+.fc-slide.is-active { z-index: 100; }
+.fc-card { flex: none; display: block; width: var(--fc-card); border-radius: var(--fc-radius); color: var(--starlight); text-decoration: none; transform-origin: 50% 50%; -webkit-user-drag: none; -webkit-tap-highlight-color: transparent; }
+.fc-frame { position: relative; display: block; aspect-ratio: 1; border-radius: var(--fc-radius); overflow: hidden; background: var(--deep); border: 1px solid var(--line); box-shadow: 0 18px 40px rgba(0, 0, 0, 0.45); }
+/* contain, not cover: the posts carry lettering right up to their edges */
+.fc-frame img { display: block; width: 100%; height: 100%; object-fit: contain; -webkit-user-drag: none; user-select: none; }
+.fc-frame::after { content: ""; position: absolute; inset: 0; background: #0a1529; opacity: var(--fc-dim, 0); pointer-events: none; }
+.fc-slide:not(.is-active) .fc-frame::after { --fc-dim: 0.35; }
+.fc-fallback { position: absolute; inset: 0; display: grid; place-items: center; padding: 1.25rem; text-align: center; font-weight: 800; font-size: 1.375rem; line-height: 1.25; background: linear-gradient(160deg, #1d3a63, #0f1e36); }
+.fc-card:focus-visible { outline: 3px solid var(--sprout); outline-offset: 4px; }
+
+/* Depth: centre 100%, neighbours 80% and a little darker, the next ones 64%; the centre sits on top */
+@media (prefers-reduced-motion: no-preference) {
+  @supports (animation-timeline: view()) {
+    .fc-slide { view-timeline: --fc-slide inline; view-timeline-inset: calc(50% - var(--fc-step) * 1.5); animation: fc-depth-z linear both; animation-timeline: --fc-slide; }
+    .fc-card { animation: fc-depth-scale linear both; animation-timeline: --fc-slide; }
+    .fc-frame::after { animation: fc-depth-dim linear both; animation-timeline: --fc-slide; }
+    html[data-fc-js="1"] .fc-slide, html[data-fc-js="1"] .fc-card, html[data-fc-js="1"] .fc-frame::after { animation: none; }
+  }
+  /* Script-driven depth (browsers without scroll-driven animations): FactsCarousel sets transform and stacking */
+  .fc-track.fc-jsdepth .fc-slide:not(.is-active) .fc-frame::after { --fc-dim: unset; }
+  .fc-caption-inner { animation: fc-caption-in 0.3s var(--ease) both; }
+}
+@keyframes fc-depth-scale { 0%, 100% { scale: 0.64; } 25%, 75% { scale: 0.8; } 50% { scale: 1; } }
+@keyframes fc-depth-z { 0%, 100% { z-index: 1; } 25%, 75% { z-index: 50; } 50% { z-index: 100; } }
+@keyframes fc-depth-dim { 0%, 100% { opacity: 0.55; } 25%, 75% { opacity: 0.3; } 50% { opacity: 0; } }
+@keyframes fc-caption-in { from { opacity: 0; translate: 0 6px; } }
+/* Reduced motion: no scaling or fading, the active card is marked instead */
+@media (prefers-reduced-motion: reduce) {
+  .fc-slide.is-active .fc-frame { outline: 3px solid var(--sprout); outline-offset: 3px; }
+}
+
+/* Centred card on mouse: brightens; pressing it shrinks it a touch */
+@media (hover: hover) and (pointer: fine) { .fc-slide.is-active .fc-card:hover img { filter: brightness(1.1); } }
+.fc-frame img { transition: filter 0.24s var(--ease-apple); }
+
+.fc-controls { display: flex; justify-content: center; align-items: center; gap: var(--s4); }
+.fc-btn { width: 44px; height: 44px; display: grid; place-items: center; border-radius: 50%; border: 1px solid var(--edge); background: var(--deep); color: var(--starlight); font: inherit; font-size: 1.5rem; line-height: 1; cursor: pointer; transition: opacity 0.24s var(--ease-apple), background-color 0.24s var(--ease-apple); }
+.fc-btn:hover:not(:disabled) { background: var(--dusk, #1a2f52); }
+.fc-btn:disabled { opacity: 0.35; cursor: default; }
+.fc-btn:focus-visible { outline: 3px solid var(--sprout); outline-offset: 2px; }
+.fc-pos { min-width: 6ch; text-align: center; font-variant-numeric: tabular-nums; color: var(--haze); font-size: 0.9375rem; }
+
+/* The caption has a fixed height, so the page never moves when the centred post changes */
+.fc-caption { max-width: 40rem; height: 15rem; margin: var(--s4) auto 0; padding-inline: var(--s5); text-align: center; overflow: hidden; }
+.fc-caption-inner { display: flex; flex-direction: column; align-items: center; gap: var(--s2); }
+.fc-meta { margin: 0; font-size: 0.875rem; color: var(--haze); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100%; }
+.fc-title { margin: 0; font-size: clamp(1.375rem, 2.4vw, 1.875rem); line-height: 1.2; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.fc-teaser { margin: 0; color: var(--haze); font-size: 1rem; line-height: 1.55; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+.fc-read { margin-top: var(--s2); }
+.fc-compact .fc-caption { height: 12.5rem; }
+.fc-compact .fc-title { font-size: 1.25rem; }
+.fc-compact .fc-teaser { -webkit-line-clamp: 2; }
+@media (max-width: 600px) { .fc-caption { height: 16rem; } .fc-compact .fc-caption { height: 13.5rem; } }
+
+.ff-none { display: flex; flex-direction: column; align-items: flex-start; gap: var(--s3); padding-block: var(--s6) var(--s8); }
+.ff-none p { margin: 0; color: var(--haze); }
+.ff-more { padding-block: var(--s8) var(--s4); }
+.ff-more h2 { font-size: 1.5rem; margin: 0 0 var(--s2); }
+.ff-restoring .fc-track, .ff-restoring .fc-caption, .ff-restoring .fc-controls { visibility: hidden; }
+
+/* Register page paused (site.registration.paused): the form stays visible but greyed out and locked */
+.reg-lock { display: contents; border: 0; padding: 0; margin: 0; min-width: 0; }
+.reg-lock:disabled :is(input, select, textarea, button, label) { cursor: not-allowed; }
+form[aria-disabled="true"] { opacity: 0.55; }
+
+/* ---------------------------------------------------------------------------------------------
+   NESS X page in a dark theme (Mahmud, 25 Nov 2026). Only the NESS X page (marked .ness-dark);
+   the Register page keeps the light ice look. Same NESS colours, turned round:
+   night #071c2e (veil, boxes), deep blue #0a4a70 (rims, hovers), sky #8ed1e6 (links, buttons,
+   accents), ice #ebf5f9 (text). Contrast: #ebf5f9 on #071c2e 16:1, #8ed1e6 on #071c2e 10.6:1,
+   #071c2e on #8ed1e6 10.6:1.
+   --------------------------------------------------------------------------------------------- */
+.ness-bg.ness-three.ness-dark {
+  background:
+    linear-gradient(180deg, rgba(7, 28, 46, 0.72) 0%, rgba(7, 28, 46, 0.62) 45%, rgba(7, 28, 46, 0.9) 100%),
+    var(--bg-lg) center 42% / cover no-repeat,
+    #071c2e;
+}
+@media (max-width: 900px) {
+  .ness-bg.ness-three.ness-dark {
+    background:
+      linear-gradient(180deg, rgba(7, 28, 46, 0.72) 0%, rgba(7, 28, 46, 0.62) 45%, rgba(7, 28, 46, 0.9) 100%),
+      var(--bg-sm) center 40% / cover no-repeat,
+      #071c2e;
+  }
+}
+html:has(.ness-dark) { background: #071c2e; }
+
+body:has(.ness-dark) main,
+body:has(.ness-dark) .site-footer {
+  --starlight: #ebf5f9;
+  --haze: #b9d6e3;
+  --sprout: #8ed1e6;
+  --sprout-light: #ebf5f9;
+  --line: rgba(142, 209, 230, 0.35);
+  --edge: rgba(142, 209, 230, 0.6);
+  color: #ebf5f9;
+}
+body:has(.ness-dark) main { color-scheme: dark; }
+body:has(.ness-dark) main a:hover { color: #ebf5f9; text-decoration-color: #8ed1e6; }
+body:has(.ness-dark) main :focus-visible { outline-color: #8ed1e6; }
+
+body:has(.ness-dark) main .btn { background: #8ed1e6; border-color: #8ed1e6; color: #071c2e; }
+body:has(.ness-dark) main .btn:hover { background: #ebf5f9; border-color: #ebf5f9; color: #071c2e; }
+body:has(.ness-dark) main .btn-secondary { background: rgba(7, 28, 46, 0.45); border-color: #8ed1e6; color: #8ed1e6; }
+body:has(.ness-dark) main .btn-secondary:hover { background: #0a4a70; border-color: #8ed1e6; color: #ebf5f9; }
+
+/* Night-ice boxes: dark glass with a sky rim */
+body:has(.ness-dark) main .surface {
+  background: linear-gradient(145deg, rgba(10, 74, 112, 0.42) 0%, rgba(7, 28, 46, 0.55) 60%, rgba(10, 74, 112, 0.38) 100%);
+  border: 1px solid rgba(142, 209, 230, 0.4);
+  box-shadow: 0 10px 36px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(142, 209, 230, 0.25);
+  -webkit-backdrop-filter: blur(10px) saturate(140%); backdrop-filter: blur(10px) saturate(140%);
+}
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  body:has(.ness-dark) main .surface { background: rgba(7, 28, 46, 0.9); }
+}
+@media (prefers-reduced-transparency: reduce) {
+  body:has(.ness-dark) main .surface { background: #0b2a44; -webkit-backdrop-filter: none; backdrop-filter: none; }
+}
+body:has(.ness-dark) .todo { color: #8ed1e6; border-bottom-color: #8ed1e6; }
+body:has(.ness-dark) .skip-link { background: #8ed1e6; color: #071c2e; }
+
+/* Header: night glass with ice text */
+body:has(.ness-dark) .site-header {
+  --starlight: #ebf5f9;
+  --haze: #ebf5f9;
+  --sprout: #8ed1e6;
+  --sprout-light: #ebf5f9;
+  --line: rgba(142, 209, 230, 0.35);
+  --edge: rgba(142, 209, 230, 0.35);
+  --night: #071c2e;
+  --header-glass: rgba(7, 28, 46, 0.78);
+  --header-menu: rgba(7, 28, 46, 0.6);
+  --header-solid: #071c2e;
+  --header-shadow: rgba(142, 209, 230, 0.12);
+}
+@media (max-width: 1160px) {
+  body:has(.ness-dark) .site-header { --header-bar-solid: #071c2e; }
+}
+
+/* Footer and its map */
+body:has(.ness-dark) .site-footer { background: rgba(7, 28, 46, 0.6); border-top-color: rgba(142, 209, 230, 0.35); }
+@media (prefers-reduced-transparency: reduce) {
+  body:has(.ness-dark) .site-footer { background: #071c2e; }
+}
+body:has(.ness-dark) .footer-map { background: #071c2e; border-color: rgba(142, 209, 230, 0.35); }
+body:has(.ness-dark) .footer-map iframe { filter: invert(0.9) hue-rotate(180deg) brightness(0.9) contrast(0.95); }
+body:has(.ness-dark) .footer-grid a.footer-map-open { background: #071c2e; color: #8ed1e6; border: 1px solid rgba(142, 209, 230, 0.4); box-shadow: 0 1px 6px rgba(0, 0, 0, 0.4); }
+body:has(.ness-dark) .footer-grid a.footer-map-open:hover { background: #0a4a70; color: #ebf5f9; }
+
+/* ---------------------------------------------------------------------------------------------
+   NESS X half light, half dark (Mahmud, 25 Nov 2026), so it no longer looks like Photosphere.
+   The frame stays night (picture veil, header, footer, section titles); every box turns into a
+   light ice card with night text. Photosphere keeps dark boxes on dark.
+   Contrast: #071c2e on #ebf5f9 16:1, #0a4a70 on #ebf5f9 8.5:1, #ebf5f9 on #0a4a70 8.5:1.
+   --------------------------------------------------------------------------------------------- */
+body:has(.ness-dark) main .surface {
+  --starlight: #071c2e;
+  --haze: #2c5873;
+  --sprout: #0a4a70;
+  --sprout-light: #071c2e;
+  --line: rgba(10, 74, 112, 0.22);
+  --edge: rgba(10, 74, 112, 0.45);
+  color: #071c2e;
+  color-scheme: light;
+  background: linear-gradient(145deg, rgba(240, 248, 251, 0.9) 0%, rgba(214, 238, 246, 0.84) 60%, rgba(235, 245, 249, 0.9) 100%);
+  border: 1px solid rgba(142, 209, 230, 0.95);
+  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.32), inset 0 1px 0 rgba(255, 255, 255, 0.75);
+}
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  body:has(.ness-dark) main .surface { background: #e6f3f8; }
+}
+@media (prefers-reduced-transparency: reduce) {
+  body:has(.ness-dark) main .surface { background: #ebf5f9; }
+}
+body:has(.ness-dark) main .surface a:hover { color: #071c2e; text-decoration-color: #0a4a70; }
+body:has(.ness-dark) main .surface :focus-visible { outline-color: #0a4a70; }
+body:has(.ness-dark) main .surface .btn { background: #0a4a70; border-color: #0a4a70; color: #ebf5f9; }
+body:has(.ness-dark) main .surface .btn:hover { background: #071c2e; border-color: #071c2e; color: #ebf5f9; }
+body:has(.ness-dark) main .surface .btn-secondary { background: transparent; border-color: #0a4a70; color: #0a4a70; }
+body:has(.ness-dark) main .surface .btn-secondary:hover { background: #0a4a70; border-color: #0a4a70; color: #ebf5f9; }

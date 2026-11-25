@@ -51,10 +51,12 @@ async function call(endpoint: string, body: object) {
 }
 
 export default function RegisterForm({
-  endpoint, trial = false, fallback, googleForm, categories, segments, nessHref,
+  endpoint, trial = false, paused = false, fallback, googleForm, categories, segments, nessHref,
 }: {
   endpoint: string | null;
   trial?: boolean;
+  /** site.registration.paused: the whole page is shown but nothing can be typed or sent. */
+  paused?: boolean;
   fallback: { bkash: string; nagad: string | null; prices: Record<Pass, number> };
   googleForm: string | null;
   categories: { code: string; name: string; who: string }[];
@@ -87,6 +89,7 @@ export default function RegisterForm({
 
 
   async function submit(e: FormEvent<HTMLFormElement>) {
+    if (paused) { e.preventDefault(); return; }
     e.preventDefault();
     const f = new FormData(e.currentTarget);
     const v = (k: string) => String(f.get(k) || "").trim();
@@ -178,9 +181,12 @@ export default function RegisterForm({
           {googleForm && <> To register, use the <a href={googleForm} target="_blank" rel="noopener noreferrer">registration form</a>.</>}
         </div>
       )}
-      {!live.open && <div className="reg-draft" role="note"><strong>Registration is closed.</strong></div>}
+      {paused ? (
+        <div className="reg-draft" role="note"><strong>Registration is paused for now.</strong> Please check back soon.</div>
+      ) : !live.open && <div className="reg-draft" role="note"><strong>Registration is closed.</strong></div>}
 
-      <form className="form reg-form" onSubmit={submit} noValidate>
+      <form className="form reg-form" onSubmit={submit} noValidate aria-disabled={paused || undefined}>
+        <fieldset className="reg-lock" disabled={paused}>
         <div className="hp-trap" aria-hidden="true">
           <label>Leave this empty <input type="text" name="hp_field" tabIndex={-1} autoComplete="off" defaultValue="" /></label>
         </div>
@@ -305,22 +311,24 @@ export default function RegisterForm({
         </div>
 
         <div className="actions">
-          <button className="btn" type="submit" disabled={busy || !live.open}>{busy ? "Sending..." : pass === "online" ? "Register" : "Register and confirm payment"}</button>
+          <button className="btn" type="submit" disabled={busy || !live.open || paused}>{busy ? "Sending..." : pass === "online" ? "Register" : "Register and confirm payment"}</button>
         </div>
+        </fieldset>
       </form>
 
-      <StatusCheck endpoint={endpoint} />
+      <StatusCheck endpoint={endpoint} paused={paused} />
     </div>
   );
 }
 
-function StatusCheck({ endpoint }: { endpoint: string | null }) {
+function StatusCheck({ endpoint, paused = false }: { endpoint: string | null; paused?: boolean }) {
   const [msg, setMsg] = useState("");
   const [busy, setBusy] = useState(false);
   async function check(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     const f = new FormData(e.currentTarget);
     const resend = f.get("resend") === "on";
+    if (paused) return;
     if (!endpoint) { setMsg("This page is a draft, so there is nothing to check yet."); return; }
     setBusy(true);
     try {
@@ -338,7 +346,8 @@ function StatusCheck({ endpoint }: { endpoint: string | null }) {
   return (
     <section className="reg-status" aria-labelledby="status-h">
       <h2 id="status-h">Check my registration</h2>
-      <form className="form" onSubmit={(e) => check(e)}>
+      <form className="form" onSubmit={(e) => check(e)} aria-disabled={paused || undefined}>
+        <fieldset className="reg-lock" disabled={paused}>
         <div className="reg-grid">
           <div><label htmlFor="sphone">Mobile number</label><input id="sphone" name="sphone" inputMode="tel" /></div>
           <div><label htmlFor="strx">TrxID (if you paid)</label><input id="strx" name="strx" style={{ textTransform: "uppercase" }} /></div>
@@ -349,6 +358,7 @@ function StatusCheck({ endpoint }: { endpoint: string | null }) {
           <button className="btn btn-secondary" type="submit" disabled={busy}>Check status</button>
         </div>
         <p aria-live="polite" className="reg-status-msg">{msg}</p>
+        </fieldset>
       </form>
     </section>
   );

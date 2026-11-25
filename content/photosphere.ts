@@ -6,10 +6,7 @@ export const photosphereBanner = {
   widths: [768, 1280, 1920],
   height: 1005,
   social: "/ness/photosphere-7-og.jpg",
-  alt: {
-    en: "Photosphere 7.0, presented by NDESC, 28–30 January 2027: snowy mountains reflected in still water under green auroras and the Milky Way, with the Notre Dame College and club logos.",
-    bn: "Photosphere 7.0, NDESC, ২৮–৩০ জানুয়ারি ২০২৭: সবুজ মেরুজ্যোতি ও আকাশগঙ্গার নিচে স্থির জলে প্রতিফলিত তুষারঢাকা পাহাড়, সঙ্গে নটর ডেম কলেজ ও ক্লাবের লোগো।",
-  },
+  alt: "Photosphere 7.0, presented by NDESC, 28–30 January 2027: snowy mountains reflected in still water under green auroras and the Milky Way, with the Notre Dame College and club logos.",
 };
 
 export const photosphere = {

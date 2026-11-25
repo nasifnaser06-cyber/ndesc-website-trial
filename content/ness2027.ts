@@ -2,12 +2,17 @@
 // From the club's official announcement (sent by Mahmud, 18 Nov 2026).
 // The site is English only for now, so these are plain English strings.
 
+import { photosphere } from "./photosphere";
+
+/** A Photosphere segment's submission form, kept once in photosphere.ts. */
+const psForm = (name: string) => photosphere.segments.find((s) => s.name === name)?.form;
+
 export const nessx = {
   name: "NESS X",
   fullName: "10th National Earth and Space Summit",
   intro:
     "NESS X opens a portal between the terrestrial and the cosmic. From the microscopic wonders of Earth's biology to the mysteries of distant nebulae, it brings dreamers, thinkers and innovators together to redefine the future.",
-  registerUrl: "https://forms.gle/QAYuy9RbyRtvFyzC7",
+  registerUrl: "https://docs.google.com/forms/d/e/1FAIpQLSdodZ963ojsNZQ1HIoSFq_qBtl-7dgccnFdbsj9OGxNVMWiMQ/viewform",
 };
 
 export const passes: { name: string; price: string; detail: string }[] = [
@@ -22,11 +27,30 @@ export const passes: { name: string; price: string; detail: string }[] = [
 
 export const passNote = "Either pass also gets you into the exhibitions and programmes.";
 
-export const registerWays: { who: string; how: string }[] = [
+/** `link` turns the given words of `how` into a link (e.g. to the Campus Ambassador section). */
+export const registerWays: { who: string; how: string; link?: { text: string; href: string } }[] = [
   { who: "Notre Dame College students", how: "Register in person at the registration booths in front of the Archbishop Ganguly Building." },
-  { who: "Students from other institutions", how: "Register through our club partners, campus ambassadors, or the NESS X booth at your institution (if there is one)." },
+  {
+    who: "Students from other institutions",
+    how: "Register through our club partners, campus ambassadors, or the NESS X booth at your institution (if there is one).",
+    link: { text: "campus ambassadors", href: "#campus-ambassadors" },
+  },
   { who: "Anyone, online", how: "Fill in the online registration form." },
 ];
+
+/** Campus Ambassador recruitment, from the club's Facebook post on the NESS X event (Mahmud, 24 Nov 2026). */
+export const campusAmbassadors = {
+  label: "For students at other institutions",
+  title: "Become a Campus Ambassador",
+  intro:
+    "Ready to represent your institution at NESS X? The club is recruiting Campus Ambassadors (CAs): the direct link between our organising team and your institution, bringing the summit experience to your campus.",
+  gains: [
+    "Put your leadership, coordination, adaptability and communication skills into real action.",
+    "Gain hands-on experience and official recognition for your contribution to the event.",
+  ],
+  protocol: "Ambassadors are expected to keep a professional manner and help their peers through the registration process.",
+  applyUrl: "https://forms.gle/FjfnMng2HM7xyiKP9",
+};
 
 export const categories: { code: string; name: string; who: string }[] = [
   { code: "P", name: "Primary", who: "Nursery to Class 5" },
@@ -43,7 +67,9 @@ export const winnersNote =
   "Each category has three winners: Champion, 1st Runner-Up and 2nd Runner-Up. A segment open to P, J, S and HS has three winners in each of those categories. A Combined segment picks three winners from everyone. In team segments, all three members of a winning team get their own certificate and crest.";
 
 export type Segment = {
-  page?: string; name: string; cats: string[]; online?: boolean; desc: string[]; parts?: { name: string; cats: string[]; desc: string }[] };
+  page?: string; name: string; cats: string[]; online?: boolean; desc: string[];
+  /** `form`: the part's own submission form, shown as a Submit link. */
+  parts?: { name: string; cats: string[]; desc: string; form?: string }[] };
 
 export const soloSegments: Segment[] = [
   // First in the list so younger children see their segment straight away (Mahmud, 20 Nov 2026).
@@ -152,10 +178,10 @@ export const soloSegments: Segment[] = [
       "The visual art competition and exhibition of NESS X. Free to submit, up to 5 works per segment, through each segment's Google Form. PS-J is Class 6 to 10, PS-S is Class 11, 12 and university, and PS-C is everyone competing together. Selected work is shown at the summit.",
     ],
     parts: [
-      { name: "Astro Photography", cats: ["PS-J", "PS-S"], desc: "Star trails, constellations, galaxies, nebulae: whatever in the night sky has mesmerised you most." },
-      { name: "Eco Photography", cats: ["PS-J", "PS-S"], desc: "The raw, intricate nature of our Earth from your own perspective." },
-      { name: "Poster Designing", cats: ["PS-C"], desc: "Posters that turn complex scientific or environmental ideas into striking, easy-to-grasp visuals." },
-      { name: "AI Art", cats: ["PS-C"], desc: "Human imagination paired with generative AI, blending science and creativity in a single frame." },
+      { name: "Astro Photography", cats: ["PS-J", "PS-S"], desc: "Star trails, constellations, galaxies, nebulae: whatever in the night sky has mesmerised you most.", form: psForm("Astro Photography") },
+      { name: "Eco Photography", cats: ["PS-J", "PS-S"], desc: "The raw, intricate nature of our Earth from your own perspective.", form: psForm("Eco Photography") },
+      { name: "Poster Designing", cats: ["PS-C"], desc: "Posters that turn complex scientific or environmental ideas into striking, easy-to-grasp visuals.", form: psForm("Poster Designing") },
+      { name: "AI Art", cats: ["PS-C"], desc: "Human imagination paired with generative AI, blending science and creativity in a single frame.", form: psForm("AI Art") },
     ],
   },
 ];

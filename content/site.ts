@@ -3,13 +3,10 @@
 
 export const site = {
   shortName: "NDESC",
-  name: { en: "Notre Dame Eco and Space Club", bn: "নটর ডেম ইকো অ্যান্ড স্পেস ক্লাব" },
+  name: "Notre Dame Eco and Space Club",
   founded: "1992-10-28",
-  college: { en: "Notre Dame College, Dhaka", bn: "নটর ডেম কলেজ, ঢাকা" },
-  address: {
-    en: "Notre Dame College, Toyenbee Circular Road, Motijheel, Dhaka 1000",
-    bn: "নটর ডেম কলেজ, টয়েনবি সার্কুলার রোড, মতিঝিল, ঢাকা ১০০০",
-  },
+  college: "Notre Dame College, Dhaka",
+  address: "Notre Dame College, Toyenbee Circular Road, Motijheel, Dhaka 1000",
   mapUrl: "https://maps.app.goo.gl/N4N3Rvg5j3EB2ua16",
   /** Google map of the college shown in the footer ("Visit us"): a pin on the campus (23.7304 N, 90.4207 E). No API key needed. */
   mapEmbed: "https://maps.google.com/maps?q=23.7304,90.4207&z=16&output=embed",
@@ -23,16 +20,18 @@ export const site = {
   },
 
   /**
-   * Where every "Register" button goes (header, home page, NESS page):
-   *   "page" = the website's own Register page, /en/ness/register/ (since 20 Nov 2026)
-   *   "form" = the NESS X Google Form below (kept so it can come back at any time)
+   * Where every "Register" button goes (the NESS X page's "Register now" and the header's
+   * "Register for NESS X"):
+   *   "page" = the website's own Register page, /ness/register/ (20 to 24 Nov 2026)
+   *   "form" = the NESS X Google Form below (since 24 Nov 2026, Mahmud: the Register page stays
+   *            paused and the NESS X page's Register now goes to the Google Form)
    */
-  registerWith: "page" as "page" | "form",
+  registerWith: "form" as "page" | "form",
 
   /** Links to the club's forms (Google Forms or similar). */
   forms: {
-    /** NESS X Google Form. Not linked anywhere while registerWith is "page", but kept here. */
-    nessRegister: "https://forms.gle/QAYuy9RbyRtvFyzC7" as string | null,
+    /** NESS X Google Form (link from Mahmud, 24 Nov 2026). Used by every Register button while registerWith is "form". */
+    nessRegister: "https://docs.google.com/forms/d/e/1FAIpQLSdodZ963ojsNZQ1HIoSFq_qBtl-7dgccnFdbsj9OGxNVMWiMQ/viewform" as string | null,
     nessExhibit: null as string | null,
     join: null as string | null,
     /** A form endpoint that accepts POST (e.g. Formspree). Leave null to hide the form. */
@@ -49,6 +48,9 @@ export const site = {
    * notice. Set false (live) on 20 Nov 2026, using the sheet in nasifnaser06@gmail.com.
    */
   registration: {
+    /** true: the Register page shows "Registration is paused" and nothing on it can be typed in or sent
+        (Mahmud, 23 Nov 2026). Set back to false to reopen. */
+    paused: true,
     // Trial copy: disconnected so test sign-ups never reach the real registration sheet.
     endpoint: null as string | null,
     trial: false,

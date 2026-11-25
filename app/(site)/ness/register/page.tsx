@@ -5,11 +5,8 @@ import { categories, soloSegments, teamSegments } from "@/content/ness2027";
 import { getEvent } from "@/content/events";
 import RegisterForm, { type SegOption } from "@/components/RegisterForm";
 
-const title = { en: "Registration for 10th National Earth and Space Summit", bn: "১০ম ন্যাশনাল আর্থ অ্যান্ড স্পেস সামিটে নিবন্ধন" };
-const lead = {
-  en: "Pick your pass, pay by bKash, and get your pass by email.",
-  bn: "পাস বেছে নিন, বিকাশে পেমেন্ট করুন, ইমেইলে পাস পান।",
-};
+const title = "Registration for 10th National Earth and Space Summit";
+const lead = "Pick your pass, pay by bKash, and get your pass by email.";
 
 export async function generateMetadata() {
   const lang: Locale = "en";
@@ -72,6 +69,7 @@ export default async function Register() {
         <RegisterForm
           endpoint={site.registration.endpoint}
           trial={site.registration.trial}
+          paused={site.registration.paused}
           fallback={{ bkash: site.registration.bkash, nagad: site.registration.nagad, prices: site.registration.prices }}
           googleForm={site.registerWith === "form" ? site.forms.nessRegister : null}
           categories={categories.filter((c) => c.code !== "C")}

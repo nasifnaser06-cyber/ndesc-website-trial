@@ -7,8 +7,8 @@ import { prepare, search, normalise, highlightRanges, distance, type SearchDoc }
 
 const sorted = [...events].sort((a, b) => b.start.localeCompare(a.start));
 const docs: SearchDoc[] = sorted.map((e) => ({
-  slug: e.slug, title: e.title.en, typeKey: e.type, typeLabel: eventTypes[e.type].en,
-  date: e.start, where: e.venue.en, summary: e.summary.en, start: e.start, end: e.end,
+  slug: e.slug, title: e.title, typeKey: e.type, typeLabel: eventTypes[e.type],
+  date: e.start, where: e.venue, summary: e.summary, start: e.start, end: e.end,
 }));
 const P = prepare(docs);
 const titles = (q: string) => search(P, q).map((h) => docs.find((d) => d.slug === h.slug)!.title);

@@ -5,11 +5,8 @@ import { photosphere, photosphereBanner } from "@/content/photosphere";
 import { ContactLink, FormButton } from "@/components/bits";
 import BgDrift from "@/components/BgDrift";
 
-const title = { en: "Photosphere 7.0", bn: "Photosphere 7.0" };
-const lead = {
-  en: "The visual art competition and exhibition of NESS X. Astro and eco photography, poster design and AI art. Free to submit.",
-  bn: "NESS X-এর দৃশ্যশিল্প প্রতিযোগিতা ও প্রদর্শনী। অ্যাস্ট্রো ও ইকো ফটোগ্রাফি, পোস্টার ডিজাইন ও এআই আর্ট। জমা দেওয়া বিনামূল্যে।",
-};
+const title = "Photosphere 7.0";
+const lead = "The visual art competition and exhibition of NESS X. Astro and eco photography, poster design and AI art. Free to submit.";
 
 export async function generateMetadata() {
   const lang: Locale = "en";

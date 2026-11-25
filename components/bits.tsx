@@ -1,6 +1,6 @@
 import Link from "next/link";
 import type { ReactNode } from "react";
-import { type L, type Locale, tr, path } from "@/lib/i18n";
+import { type Locale, path } from "@/lib/i18n";
 import { ui } from "@/content/ui";
 import { site } from "@/content/site";
 
@@ -29,9 +29,8 @@ export function Txt({ children }: { children: string }) {
     </>
   );
 }
-
-export function T({ text, lang }: { text: L; lang: Locale }) {
-  return <Txt>{tr(text, lang)}</Txt>;
+export function T({ text, lang }: { text: string; lang: Locale }) {
+  return <Txt>{text}</Txt>;
 }
 
 const bp = () => process.env.NEXT_PUBLIC_BASE_PATH ?? "";
@@ -72,13 +71,13 @@ export function Stars() {
   return <span className="stars" aria-hidden="true" />;
 }
 
-export function PhotoSlot({ label, lang, className = "", tall = false }: { label: L; lang: Locale; className?: string; tall?: boolean }) {
+export function PhotoSlot({ label, lang, className = "", tall = false }: { label: string; lang: Locale; className?: string; tall?: boolean }) {
   return (
-    <div className={`photo-slot ${tall ? "tall" : ""} ${className}`} role="img" aria-label={`${tr(ui.photoSoon, lang)}: ${tr(label, lang)}`}>
+    <div className={`photo-slot ${tall ? "tall" : ""} ${className}`} role="img" aria-label={`${ui.photoSoon}: ${label}`}>
       <span>
-        {tr(ui.photoSoon, lang)}
+        {ui.photoSoon}
         <br />
-        <small>{tr(label, lang)}</small>
+        <small>{label}</small>
       </span>
     </div>
   );
@@ -90,33 +89,33 @@ export function FormButton({ href, children, lang, secondary = false }: { href: 
     return (
       <span className={`btn ${secondary ? "btn-secondary" : ""} is-disabled`} aria-disabled="true">
         {children}
-        <small className="btn-note">{tr(ui.formSoon, lang)}</small>
+        <small className="btn-note">{ui.formSoon}</small>
       </span>
     );
   }
   return (
     <a className={`btn ${secondary ? "btn-secondary" : ""}`} href={href} target="_blank" rel="noopener noreferrer">
       {children}
-      <span className="visually-hidden"> {tr(ui.newTab, lang)}</span>
+      <span className="visually-hidden"> {ui.newTab}</span>
     </a>
   );
 }
 
-export function PageHead({ kicker, title, lead, lang, crumbs }: { kicker?: L; title: L; lead?: L; lang: Locale; crumbs?: { label: L; to: string }[] }) {
+export function PageHead({ kicker, title, lead, lang, crumbs }: { kicker?: string; title: string; lead?: string; lang: Locale; crumbs?: { label: string; to: string }[] }) {
   return (
     <header className="page-head wrap">
       {crumbs && crumbs.length > 0 && (
-        <nav aria-label={tr(ui.breadcrumb, lang)} className="crumbs">
+        <nav aria-label={ui.breadcrumb} className="crumbs">
           <ol>
             {crumbs.map((c) => (
               <li key={c.to}>
-                <Link href={path(lang, c.to)}>{tr(c.label, lang)}</Link>
+                <Link href={path(lang, c.to)}>{c.label}</Link>
               </li>
             ))}
           </ol>
         </nav>
       )}
-      {kicker && <p className="label">{tr(kicker, lang)}</p>}
+      {kicker && <p className="label">{kicker}</p>}
       <h1>
         <T text={title} lang={lang} />
       </h1>
@@ -129,11 +128,11 @@ export function PageHead({ kicker, title, lead, lang, crumbs }: { kicker?: L; ti
   );
 }
 
-export function SectionHead({ title, link, lang }: { title: L; link?: { label: L; to: string }; lang: Locale }) {
+export function SectionHead({ title, link, lang }: { title: string; link?: { label: string; to: string }; lang: Locale }) {
   return (
     <div className="section-head">
-      <h2>{tr(title, lang)}</h2>
-      {link && <Link href={path(lang, link.to)}>{tr(link.label, lang)}</Link>}
+      <h2>{title}</h2>
+      {link && <Link href={path(lang, link.to)}>{link.label}</Link>}
     </div>
   );
 }
@@ -143,15 +142,15 @@ export function ExternalLink({ href, children, lang, className }: { href: string
   return (
     <a href={href} className={className} target="_blank" rel="noopener noreferrer">
       {children}
-      <span className="visually-hidden"> {tr(ui.newTab, lang)}</span>
+      <span className="visually-hidden"> {ui.newTab}</span>
     </a>
   );
 }
 
 /** A person's card on the Executives and About pages. Photos only with consent. */
-export function PersonCard({ name, post, department, photo, poster, lang }: { name: L; post: L; department?: L; photo?: string; poster?: string; lang: Locale }) {
+export function PersonCard({ name, post, department, photo, poster, lang }: { name: string; post: string; department?: string; photo?: string; poster?: string; lang: Locale }) {
   const bp = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
-  const role = department ? `${tr(post, lang)}, ${tr(department, lang)}` : tr(post, lang);
+  const role = department ? `${post}, ${department}` : post;
   return (
     <div className="person">
       {poster ? (
@@ -161,7 +160,7 @@ export function PersonCard({ name, post, department, photo, poster, lang }: { na
           src={`${bp}${poster}-480.webp`}
           srcSet={`${bp}${poster}-480.webp 480w, ${bp}${poster}-960.webp 960w`}
           sizes="(min-width: 1280px) 290px, (min-width: 600px) 30vw, 46vw"
-          alt={`${lang === "en" ? "Poster" : "পোস্টার"}: ${tr(name, lang)}, ${role}`}
+          alt={`${"Poster"}: ${name}, ${role}`}
           loading="lazy"
           decoding="async"
           width={960}
@@ -174,14 +173,14 @@ export function PersonCard({ name, post, department, photo, poster, lang }: { na
           src={`${bp}${photo}-400.webp`}
           srcSet={`${bp}${photo}-400.webp 400w, ${bp}${photo}-800.webp 800w`}
           sizes="(min-width: 1280px) 220px, (min-width: 600px) 25vw, 46vw"
-          alt={tr(name, lang)}
+          alt={name}
           loading="lazy"
           decoding="async"
           width={800}
           height={1000}
         />
       ) : (
-        <PhotoSlot lang={lang} label={{ en: "photo", bn: "ছবি" }} />
+        <PhotoSlot lang={lang} label={"photo"} />
       )}
       <h3><T text={name} lang={lang} /></h3>
       <p className="small muted">
@@ -193,7 +192,7 @@ export function PersonCard({ name, post, department, photo, poster, lang }: { na
 }
 
 /** A responsive banner or poster image (16:9 WebP files at several widths in public/). */
-export function Banner({ name, widths, alt, lang, sizes = "(min-width: 1280px) 1216px, 100vw", priority = false, className = "", height = 1080 }: { name: string; widths: number[]; alt: L; lang: Locale; sizes?: string; priority?: boolean; className?: string; height?: number; social?: string }) {
+export function Banner({ name, widths, alt, lang, sizes = "(min-width: 1280px) 1216px, 100vw", priority = false, className = "", height = 1080 }: { name: string; widths: number[]; alt: string; lang: Locale; sizes?: string; priority?: boolean; className?: string; height?: number; social?: string }) {
   const bp = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
   const largest = Math.max(...widths);
   return (
@@ -203,7 +202,7 @@ export function Banner({ name, widths, alt, lang, sizes = "(min-width: 1280px) 1
       src={`${bp}${name}-${largest}.webp`}
       srcSet={widths.map((w) => `${bp}${name}-${w}.webp ${w}w`).join(", ")}
       sizes={sizes}
-      alt={tr(alt, lang)}
+      alt={alt}
       width={1920}
       height={height}
       style={height !== 1080 ? ({ ["--banner-ratio" as string]: `1920 / ${height}` } as React.CSSProperties) : undefined}
@@ -226,11 +225,11 @@ const contactIcons: Record<ContactKind, ReactNode> = {
   instagram: <><rect width="20" height="20" x="2" y="2" rx="5" ry="5" /><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" /><line x1="17.5" x2="17.51" y1="6.5" y2="6.5" /></>,
 };
 
-const contactNames: Record<ContactKind, L> = {
-  phone: { en: "Call", bn: "কল করুন" },
-  email: { en: "Email", bn: "ইমেইল" },
-  facebook: { en: "Facebook", bn: "ফেসবুক" },
-  instagram: { en: "Instagram", bn: "ইনস্টাগ্রাম" },
+const contactNames: Record<ContactKind, string> = {
+  phone: "Call",
+  email: "Email",
+  facebook: "Facebook",
+  instagram: "Instagram",
 };
 
 export function ContactIcon({ kind }: { kind: ContactKind }) {
@@ -248,7 +247,7 @@ export function handleOf(url: string) {
 
 export function ContactLink({ kind, value, lang, className }: { kind: ContactKind; value: string; lang: Locale; className?: string }) {
   const cls = `contact-link${className ? ` ${className}` : ""}`;
-  const name = <span className="visually-hidden">{tr(contactNames[kind], lang)}: </span>;
+  const name = <span className="visually-hidden">{contactNames[kind]}: </span>;
   if (kind === "phone") {
     return <a className={cls} href={`tel:${value.replace(/[^+\d]/g, "")}`}><ContactIcon kind="phone" />{name}<span>{value}</span></a>;
   }
@@ -267,7 +266,7 @@ export function ContactLink({ kind, value, lang, className }: { kind: ContactKin
     <a className={cls} href={value} target="_blank" rel="noopener noreferrer">
       <ContactIcon kind={kind} />{name}
       <span>{handle}</span>
-      <span className="visually-hidden"> {tr(ui.newTab, lang)}</span>
+      <span className="visually-hidden"> {ui.newTab}</span>
     </a>
   );
 }
